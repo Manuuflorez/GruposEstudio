@@ -1,59 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css"
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Register</title>
-  </head>
-  <body>
-    <h1>Register</h1>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Register</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
 
+  form {
+    width: 300px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="id"],
+  select {
+    width: calc(100% - 30px); /* Ancho del campo menos el ancho del icono y el espacio */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding-left: 30px; /* Espacio adicional para el icono */
+    position: relative; /* Añadido para posicionar el icono correctamente */
+  }
+
+  .input-icon {
+    position: absolute;
+    left: 5px; /* Ajusta el espacio entre el icono y el borde izquierdo del campo */
+    top: 10px; /* Centra verticalmente el icono */
+    
+  }
+
+  input[type="submit"] {
+    width: 100%;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  input[type="submit"]:hover {
+    background-color: #333;
+  }
+
+  a {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: #555;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: #ff0000;
+  }
+
+  li {
+    margin-bottom: 5px;
+  }
+</style>
+</head>
+<body>
+  
+  <form action="/users/register" method="POST">
+    <h1>Registro</h1>
     <ul>
       <% if (typeof errors != 'undefined') { %> <% errors.forEach(error => { %>
       <li><%= error.message %></li>
       <% }) %> <% } %>
     </ul>
-    <form action="/users/register" method="POST">
-      <div>
-        <input type="text" id="name" name="name" placeholder="Name" required />
-      </div>
-      <div>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="Email"
-          required
-        />
-      </div>
-      <div>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="Password"
-          required
-        />
-      </div>
-      <div>
-        <input
-          type="password"
-          id="password2"
-          name="password2"
-          placeholder="Confirm Password"
-          required
-        />
-      </div>
-      <div>
-        <input type="submit" value="Register" />
-      </div>
-
-      <a href="/users/login">Already registered? Login here</a>
-    </form>
-  </body>
+    <div style="position: relative;">
+      <input type="text" id="name" name="name" placeholder="Nombre" required>
+      <i class="fa-solid fa-user input-icon"></i>
+    </div>
+    <div style="position: relative;">
+      <input type="id" id="lastname" name="lastname" placeholder="Apellido" required>
+      <i class="fa-solid fa-user input-icon"></i>
+    </div>
+    <div style="position: relative;">
+      <select id="document_type" name="document_type" required>
+        <option value="" disabled selected>Tipo de Documento</option>
+        <option value="CC">C.C</option>
+        <option value="TI">T.I</option>
+        <option value="CE">C.E</option>
+      </select>
+      <i class="fa-regular fa-address-card input-icon"></i>
+    </div>
+    <div style="position: relative;">
+      <input type="id" id="id" name="id" placeholder="Documento" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+      <i class="fa-regular fa-address-card input-icon"></i>
+    </div>
+    <div style="position: relative;">
+      <input type="email" id="email" name="email" placeholder="Email" required>
+      <i class="fa-solid fa-envelope input-icon"></i>
+    </div>
+    <div style="position: relative;">
+      <select id="program" name="program" required>
+        <option value="" disabled selected>Carrera</option>
+        <option value="AdminEmpresDistancia">Administración de Empresas </option>
+        <option value="ComSocialPresencial">Comunicación Social </option>
+        <option value="ContaduriaPresencial">Contaduría Pública </option>
+        <option value="DerechoPresencial">Derecho </option>
+        <option value="DesarrolloFamiliarPresencial">Desarrollo Familiar </option>
+        <option value="DisenoGraficoPresencial">Diseño Gráfico </option>
+        <option value="FilosofiaPresencial">Filosofía </option>
+        <option value="GastronomiaPresencial">Gastronomía </option>
+        <option value="IngSistemasPresencial">Ingeniería de Sistemas </option>
+        <option value="LicEducacionInfantilPresencial">Licenciatura en Educación Infantil </option>
+        <option value="LicLenguasExtranjerasPresencial">Licenciatura en Lenguas Extranjeras </option>
+        <option value="NegociosInternacionalesPresencial">Negocios Internacionales </option>
+        <option value="PsicologiaDistancia">Psicología </option>
+        <option value="PsicologiaPresencial">Psicología </option>
+        <option value="PublicidadPresencial">Publicidad </option>
+        <option value="TeologiaPresencial">Teología </option>
+        <option value="TrabajoSocialDistancia">Trabajo Social </option>
+      </select>
+      <i class="fa-regular fa-address-card input-icon"></i>
+    </div>
+    <div style="position: relative;">
+      <input type="password" id="password" name="password" placeholder="Contraseña" required>
+      <i class="fa-solid fa-lock input-icon"></i>
+    </div>
+    <div style="position: relative;">
+      <input type="password" id="password2" name="password2" placeholder="Confirmar contraseña" required>
+      <i class="fa-solid fa-lock input-icon"></i>
+    </div>
+    <div>
+      <input type="submit" value="Registro">
+    </div>
+    <a href="/users/login">Ya estás registrado? Inicia sesión aquí</a>
+  </form>
+</body>
 </html>
