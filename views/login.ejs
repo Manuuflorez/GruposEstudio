@@ -6,12 +6,178 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Login</title>
+
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          background-color: #f0f0f0;
+        }
+      
+        form {
+          width: 300px;
+          padding: 20px;
+          background-color: #fff;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        form.title {
+          color: #252525;
+          font-size: 35px;
+          font-weight: 800;
+          margin-bottom: 30px;
+        }
+
+        h1 {
+          text-align: center;
+          margin-bottom: 20px;
+        }
+
+        
+
+        .input-icon {
+          position: absolute;
+          left: 5px; /* Ajusta el espacio entre el icono y el borde izquierdo del campo */
+          top: 36%; /* Centra verticalmente el icono */
+          transform: translateY(-50%); /* Ajusta la posición vertical del icono */
+          z-index: 1; /* Asegura que el icono esté en la capa superior */
+        }
+        
+        /* Agrega un poco de espacio a la derecha del campo de entrada */
+        input[type="email"],
+        input[type="password"] {
+          padding-left: 25px;
+          width: calc(100% - 20px); /* Resta el doble del padding del formulario al 100% del ancho */
+          box-sizing: border-box;
+        }
+
+        
+
+        input[type="submit"] {
+          width: 100%;
+          background-color: #333;
+          color: #fff;
+          padding: 10px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          line-height: normal; /* Ajusta la altura de línea al valor deseado */
+        }
+        
+        /* Ajusta el espacio entre el texto y el borde inferior del botón */
+        input[type="submit"]:hover {
+          background-color: grey;
+          line-height: normal; /* Ajusta la altura de línea al valor deseado */
+        }
+        #new-account-button {
+          width: 100%;
+          background-color: #333;
+          color: #fff;
+          padding: 10px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          line-height: normal; /* Ajusta la altura de línea al valor deseado */
+          transition: background-color 0.3s ease; /* Transición de color al hacer clic */
+        }
+    
+        #new-account-button:hover {
+          background-color: grey; /* Cambia el color al hacer clic */
+        }
+
+        #remember-container {
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+        }
+    
+        #remember-switch {
+          width: 40px;
+          height: 20px;
+          position: relative;
+          cursor: pointer;
+          background-color: #ccc;
+          border-radius: 10px;
+          transition: background-color 0.3s ease; /* Transición de color al pasar el ratón sobre el switch */
+        }
+    
+        #switch-slider {
+          width: 20px;
+          height: 20px;
+          background-color: #fff;
+          border-radius: 50%;
+          transform: translateX(0);
+          transition: transform 0.3s ease; /* Transición de posición al hacer clic */
+        }
+    
+        #remember-checkbox {
+          display: none; /* Oculta el checkbox por defecto */
+        }
+    
+        #remember-container:hover #remember-switch {
+          background-color: #ddd; /* Cambia el color al pasar el ratón sobre el switch */
+        }
+    
+        #remember-checkbox:checked + #remember-switch #switch-slider {
+          transform: translateX(100%); /* Mueve el slider a la posición de "encendido" cuando el checkbox está marcado */
+        }
+    
+        #remember-checkbox:checked + #remember-switch {
+          background-color: grey; /* Cambia el color del switch a rojo cuando el checkbox está marcado */
+        }
+    
+        #remember-container #remember-text {
+          font-size: 16px;
+          margin-left: 10px;
+        }
+
+        .divisor {
+          border-top: 1px solid #ccc; /* Línea horizontal de 1 píxel de grosor y color gris */
+          margin: 10px 0; /* Ajusta el espacio antes y después de la línea */
+        }
+
+        a {
+          display: block;
+          
+          margin-top: 10px;
+          color: black;
+          text-decoration: none;
+        }
+      
+        a:hover {
+          
+          color: red;
+          
+        }
+
+        
+      
+        ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          color: #ff0000;
+        }
+      
+        li {
+          margin-bottom: 5px;
+        }
+    </style>
   </head>
   <body>
-    <h1>Login</h1>
+    
 
     <ul>
       <% if (typeof errors != 'undefined') { %> <% errors.forEach(error => { %>
@@ -32,29 +198,43 @@
     </ul>
 
     <form action="/users/login" method="POST">
-      <div>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="Email"
-          required
-        />
+      <h1>Login</h1>
+      <div style="position: relative;" class="email">
+        <input type="email" id="email" name="email" placeholder="Email" required/>
+        <i class="fa-solid fa-envelope input-icon"></i>
+      </div>
+      <div style="position: relative;">
+        <input type="password" id="password" name="password" placeholder="Password" required/>
+        <i class="fa-solid fa-lock input-icon"></i>
       </div>
       <div>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="Password"
-          required
-        />
+        <a href="#">¿Has olvidado tu contraseña?</a>
       </div>
+      
       <div>
         <input type="submit" value="Login" />
       </div>
 
-      <a href="/users/register">Register</a>
+      <div id="remember-container">
+        <input type="checkbox" id="remember-checkbox">
+        <label id="remember-switch" for="remember-checkbox">
+          <div id="switch-slider"></div>
+        </label>
+        <span id="remember-text">Recuérdame</span>
+      </div>
+      <div class="divisor"></div>
+      <div>
+        <button id="new-account-button" onclick="navigateTo('register')">Nueva cuenta</button>
+      </div>
+
+
+      
     </form>
+    <script>
+      
+      function navigateTo(url) {
+        window.location.href = url;
+      }
+    </script>
   </body>
 </html>
