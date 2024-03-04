@@ -15,23 +15,23 @@ initializePassport(passport);
 
 // Middleware
 
-// Parses details from a form
+// Parsea los detalles de un formulario
 app.use(express.urlencoded({ extended: false }));
 app.set("view engine", "ejs");
 
 app.use(
   session({
-    // Key we want to keep secret which will encrypt all of our information
+    // Clave que queremos mantener en secreto y que cifrará toda nuestra información
     secret: process.env.SESSION_SECRET,
-    // Should we resave our session variables if nothing has changes which we dont
+    // ¿Deberíamos guardar nuestras variables de sesión si no ha habido cambios? No queremos hacerlo
     resave: false,
-    // Save empty value if there is no vaue which we do not want to do
+    // Guardar un valor vacío si no hay valor, lo cual no queremos hacer
     saveUninitialized: false
   })
 );
-// Funtion inside passport which initializes passport
+// Función dentro de passport que inicializa passport
 app.use(passport.initialize());
-// Store our variables to be persisted across the whole session. Works with app.use(Session) above
+// Almacena nuestras variables para que persistan en toda la sesión. Funciona con app.use(Session) arriba
 app.use(passport.session());
 app.use(flash());
 
@@ -44,7 +44,7 @@ app.get("/users/register", checkAuthenticated, (req, res) => {
 });
 
 app.get("/users/login", checkAuthenticated, (req, res) => {
-  // flash sets a messages variable. passport sets the error message
+  // flash establece una variable de mensajes. Passport establece el mensaje de error
   console.log(req.session.flash.error);
   res.render("login.ejs");
 });
@@ -56,7 +56,7 @@ app.get("/users/dashboard", checkNotAuthenticated, (req, res) => {
 
 app.get("/users/logout", (req, res) => {
   req.logout();
-  res.render("index", { message: "You have logged out successfully" });
+  res.render("index", { message: "Has cerrado sesión exitosamente" });
 });
 
 app.post("/users/register", async (req, res) => {
@@ -76,15 +76,15 @@ app.post("/users/register", async (req, res) => {
   });
 
   if (!name || !lastname || !document_type || !id_number || !email || !program || !password || !password2) {
-    errors.push({ message: "Please enter all fields" });
+    errors.push({ message: "Por favor completa todos los campos" });
   }
 
   if (password.length < 6) {
-    errors.push({ message: "Password must be a least 6 characters long" });
+    errors.push({ message: "La contraseña debe tener al menos 6 caracteres" });
   }
 
   if (password !== password2) {
-    errors.push({ message: "Passwords do not match" });
+    errors.push({ message: "Las contraseñas no coinciden" });
   }
 
   if (errors.length > 0) {
@@ -92,7 +92,7 @@ app.post("/users/register", async (req, res) => {
   } else {
     hashedPassword = await bcrypt.hash(password, 10);
     console.log(hashedPassword);
-    // Validation passed
+    // Validación superada
     pool.query(
       `SELECT * FROM users
         WHERE email = $1`,
@@ -105,7 +105,7 @@ app.post("/users/register", async (req, res) => {
 
         if (results.rows.length > 0) {
           return res.render("register", {
-            message: "Email already registered"
+            message: "El correo electrónico ya está registrado"
           });
         } else {
           pool.query(
@@ -152,5 +152,5 @@ function checkNotAuthenticated(req, res, next) {
 }
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
 });
