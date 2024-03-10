@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const flash = require("express-flash");
 const session = require("express-session");
+const path = require('path');
 require("dotenv").config();
 const app = express();
 
@@ -14,9 +15,10 @@ const initializePassport = require("./passportConfig");
 initializePassport(passport);
 
 // Middleware
-
+app.use(express.static(path.join(__dirname, 'public')));
 // Parsea los detalles de un formulario
 app.use(express.urlencoded({ extended: false }));
+
 app.set("view engine", "ejs");
 
 app.use(
