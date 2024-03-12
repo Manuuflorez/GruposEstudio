@@ -85,6 +85,12 @@ app.post("/users/register", async (req, res) => {
     errors.push({ message: "La contraseña debe tener al menos 6 caracteres" });
   }
 
+  // Validación de contraseña con al menos una mayúscula, una minúscula y un número
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+  if (!passwordRegex.test(password)) {
+    errors.push({ message: "La contraseña debe contener al menos una mayúscula, una minúscula y un número" });
+  }
+
   if (password !== password2) {
     errors.push({ message: "Las contraseñas no coinciden" });
   }
