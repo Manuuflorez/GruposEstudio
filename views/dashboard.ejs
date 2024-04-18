@@ -1,20 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/8133639c1c.js" crossorigin="anonymous"></script>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        emailjs.init('Zh5Xh3x-J1rmUjEuJ')
+    </script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css"
     />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Inicio</title>
-  </head>
+    
+    <title>StudyCoop</title>
+</head>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+header {
+    height: 100px;
+    /*background: rgb(108, 118, 118);*/
+    background: #4d4d5c;
+    padding: 0 50px;
+    color: aliceblue;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    text-transform: uppercase;
+    font-weight: 200;
+    color: whitesmoke;
+}
+
+.menu a {
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    padding: 0 10px;
+    transition: 0.4s;
+    
+}
+
+.mostrar-menu,
+.esconder-menu {
+    font-size: 30px;
+    cursor: pointer;
+    transition: 0.4s;
+    display: none;
+}
+
+.mostrar-menu {
+    order: 1;
+}
+
+.menu a:hover,
+.mostrar-menu:hover,
+.esconder-menu:hover {
+    color: #666666;
+}
+
+#check {
+    display: none;
+}
+
+@media(max-width:768px) {
+    .mostrar-menu,
+    .esconder-menu {
+        display: block;
+    }
+    .menu {
+        position: fixed;
+        height: 100vh;
+        z-index: 100;
+        width: 100%;
+        background: rgb(86, 87, 87);
+        /*left: 0;*/
+        right: -100%;
+        top: 0;
+        text-align: center;
+        padding: 100px 0px;
+        z-index: 100;
+        transition: o.8s;
+    }
+    .menu a {
+        display: block;
+        padding: 20px;
+    }
+    .esconder-menu {
+        position: absolute;
+        top: 40px;
+        right: 40px;
+    }
+    #check:checked~.menu {
+        right: 0;
+    }
+    #personas {
+        flex-direction: column;
+    }
+    .contenido-icono {
+        flex-direction: column;
+    }
+    .contenido-icono div {
+        border: none !important;
+    }
+    .datos-form {
+        flex-direction: column;
+    }
+    .boton-empezar {
+      text-decoration: none;
+      transition: all 0.6s;
+      color: #fff;
+      border: 1px solid grey;
+      padding: 20px 40px;
+      align-self: baseline;
+  }
+  
+  .boton-empezar:hover {
+      background-color: grey;
+      color: black;
+  }
+
+  .servicio-text{
+      text-align: center;
+  }
+}
+
+</style>
   <body>
-    <h1>Bienvenido!</h1>
+    <header>
+      <h2 class="logo">@ StudyCoop</h2>
+      <input type="checkbox" id="check">
+      <label for="check" class="mostrar-menu">
+          &#8801
+      </label>
+      <nav class="menu">
+          <a href="/users/visualizarusuario">Mi cuenta</a>
+          <a href="/users/logout">Cerrar sesión</a>
+          <label for="check" class="esconder-menu">
+              &#215
+          </label>
 
-    <a href="/users/logout">Cerrar sesión</a>
+      </nav>
+  </header>
+  <h1>Bienvenido!</h1>
+  <h4>Hola <%= user %></h4>
 
-    <h4>Hola <%= user %></h4>
+  <p class="servicio-text">Quieres enseñar algún tema en específico? pues comencemos</p>
+
+    <a href="/users/registrarservicio" class="boton-empezar">Crear Servicio</a>
+
+    <p class="servicio-text">Necesitas aprender acerca de un tema en específico? <br> Solicita tu tema de interés</p>
+
+    <a href="/users/solicitarservicio" class="boton-empezar">Solicita tu servicio</a>
+
+    <p class="servicio-text">Quieres ver los servicios disponibles? <br> Miremos si hay algún tema de interés</p>
+    
+    <a href="/users/visualizarservicio" class="boton-empezar">Mirar servicios</a>
+   
   </body>
 </html>

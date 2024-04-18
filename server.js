@@ -45,6 +45,26 @@ app.get("/users/register", checkAuthenticated, (req, res) => {
   res.render("register.ejs");
 });
 
+app.get("/users/homepage", checkAuthenticated, (req, res) => {
+  res.render("homepage.ejs");
+});
+
+app.get("/users/registrarservicio", checkAuthenticated, (req, res) => {
+  res.render("registrarservicio.ejs");
+});
+
+app.get("/users/visualizarusuario", checkAuthenticated, (req, res) => {
+  res.render("visualizarusuario.ejs");
+});
+
+app.get("/users/solicitarservicio", checkAuthenticated, (req, res) => {
+  res.render("solicitarservicio.ejs");
+});
+
+app.get("/users/visualizarservicio", checkAuthenticated, (req, res) => {
+  res.render("visualizarservicio.ejs");
+});
+
 app.get("/users/login", checkAuthenticated, (req, res) => {
   // flash establece una variable de mensajes. Passport establece el mensaje de error
   console.log(req.session.flash.error);
