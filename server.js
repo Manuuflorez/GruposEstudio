@@ -49,21 +49,21 @@ app.get("/users/homepage", checkAuthenticated, (req, res) => {
   res.render("homepage.ejs");
 });
 
-app.get("/users/registrarservicio", checkAuthenticated, (req, res) => {
-  res.render("registrarservicio.ejs");
+app.get("/users/registrarservicio",  (req, res) => {
+  res.render("registrarservicio.ejs", { user: req.user });
 });
 
-app.get("/users/visualizarusuario", checkAuthenticated, (req, res) => {
-  res.render("visualizarusuario.ejs");
+app.get("/users/visualizarusuario",  (req, res) => {
+  res.render("visualizarusuario.ejs", { user: req.user });
 });
 
-app.get("/users/solicitarservicio", checkAuthenticated, (req, res) => {
+app.get("/users/solicitarservicio",  (req, res) => {
   res.render("solicitarservicio.ejs");
 });
 
-app.get("/users/visualizarservicio", checkAuthenticated, (req, res) => {
+/*app.get("/solicitud/visualizar", (req, res) => {
   res.render("visualizarservicio.ejs");
-});
+});*/
 
 app.get("/users/login", checkAuthenticated, (req, res) => {
   // flash establece una variable de mensajes. Passport establece el mensaje de error
@@ -73,7 +73,7 @@ app.get("/users/login", checkAuthenticated, (req, res) => {
 
 app.get("/users/dashboard", checkNotAuthenticated, (req, res) => {
   console.log(req.isAuthenticated());
-  res.render("dashboard", { user: req.user.name });
+  res.render("dashboard", { user: req.user });
 });
 
 app.get("/users/logout", (req, res) => {
@@ -155,6 +155,68 @@ app.post("/users/register", async (req, res) => {
     );
   }
 });
+
+app.get("/dashboard/publicar", async (req, res) => {
+  res.render("dashboard.ejs"); // Renderiza el formulario de publicación en el dashboard
+});
+
+// Dentro del endpoint de publicación de solicitudes
+app.post("/dashboard/publicar", (req, res) => {
+  const { tipo, materia, tema, fecha } = req.body;
+  const usuario_id = req.user.id;
+
+  // Construir el objeto JSON con los datos del usuario
+  const userData = {
+    id: req.user.id,
+    name: req.user.name,
+    lastname: req.user.lastname,
+    email: req.user.email,
+    document_type: req.user.document_type,
+    id_number: req.user.id_number,
+    program: req.user.program,
+    // Agrega más datos del usuario si es necesario
+  };
+
+  // Insertar la nueva solicitud en la base de datos
+  pool.query(
+    `INSERT INTO solicitudes (user_data, tipo_servicio, materia, tema_interes, fecha_reunion)
+     VALUES ($1, $2, $3, $4, $5)
+     RETURNING solicitud_id`,
+    [userData, tipo, materia, tema, fecha],
+    (err, results) => {
+      if (err) {
+        console.error("Error al insertar solicitud:", err);
+        req.flash("error_msg", "Error al crear la solicitud");
+        return res.redirect("/dashboard/publicar");
+      }
+
+      req.flash("success_msg", "Solicitud creada exitosamente");
+      res.redirect("/dashboard");
+    }
+  );
+});
+
+
+
+app.get("/solicitud/visualizar", async (req, res) => {
+  try {
+    const solicitudesData = await pool.query(`
+      SELECT s.solicitud_id, s.tipo_servicio, s.materia, s.tema_interes, s.fecha_reunion, s.fecha_solicitud, u.name AS usuario_nombre
+      FROM solicitudes s
+      JOIN users u ON s.usuario_id = u.id
+      WHERE s.usuario_id = $1`, 
+      [req.user.id]
+    );
+    const solicitudes = solicitudesData.rows;
+    res.render("visualizarservicio.ejs", { solicitudes });
+  } catch (error) {
+    console.error("Error al obtener las solicitudes:", error);
+    res.status(500).send("Error al obtener las solicitudes");
+  }
+});
+
+
+
 
 app.post(
   "/users/login",

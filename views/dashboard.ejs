@@ -24,7 +24,7 @@
             &#8801
         </label>
         <nav class="menu">
-            <a href="/users/perfil">Mi cuenta</a>
+            <a href="/users/perfil">Mi cuenta <%= user.name %> <%= user.lastname %></a>
             <a href="/users/logout">Cerrar sesión</a>
             <label for="check" class="esconder-menu">
                 &#215
@@ -70,7 +70,8 @@
         <button onclick="toggleForm()"
             style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #555;cursor: pointer;">&times;</button>
         <!-- Fin del botón de cerrar -->
-        <form action="#" method="post">
+        <form action="/dashboard/publicar" method="post">
+            <input type="hidden" id="user_data" name="user_data" value="<%= user %>">
             <label for="tipo">Tipo de Publicación:</label><br>
             <select id="tipo" name="tipo"
                 style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
