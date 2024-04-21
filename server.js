@@ -191,7 +191,7 @@ app.post("/dashboard/publicar", (req, res) => {
       }
 
       req.flash("success_msg", "Solicitud creada exitosamente");
-      res.redirect("/dashboard");
+      res.redirect("/users/dashboard");
     }
   );
 });

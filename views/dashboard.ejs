@@ -24,7 +24,8 @@
             &#8801
         </label>
         <nav class="menu">
-            <a href="/users/perfil">Mi cuenta <%= user.name %> <%= user.lastname %></a>
+            <a href="/users/perfil">Mi cuenta <%= user.name %>
+                    <%= user.lastname %></a>
             <a href="/users/logout">Cerrar sesión</a>
             <label for="check" class="esconder-menu">
                 &#215
@@ -79,15 +80,18 @@
                 <option value="ofrecer">Ofrecer Servicio</option>
             </select><br>
             <label for="materia">Materia:</label><br>
-            <input type="text" id="materia" name="materia"
-                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+            <select id="materia" name="materia"
+                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+                <option value="" disabled selected>Selecciona una materia</option>
+                <!-- Aquí se agregarán las opciones de las categorías dinámicamente -->
+            </select><br>
             <label for="fecha">Fecha:</label><br>
             <input type="date" id="fecha" name="fecha"
                 style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
             <label for="tema">Tema:</label><br>
             <input type="text" id="tema" name="tema"
                 style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br><br>
-            <button type="submit"
+            <button type="submit" onclick="toggleForm()"
                 style="width: 100%; padding: 15px; background-color: #4d4d5c; color: white; border: none; border-radius: 5px; cursor: pointer;">Enviar</button>
         </form>
         <!-- Botón de cerrar dentro del formulario -->
@@ -115,147 +119,173 @@
     <div class="publicaciones-container" style="padding: 25px; margin-bottom: 30px; text-align: center;">
         <div id="publicaciones-lista" style="display: inline-block;">
             <!-- Las publicaciones se agregarán aquí dinámicamente -->
-        </ul>
-    </div>
+            </ul>
+        </div>
 
 
-    <script>
-        var scrollInterval;
-        var publicaciones = [
-            {
-                titulo: "Asesor de matemáticas",
-                dia: "Miércoles",
-                horario: "7-8",
-            },
-            {
-                titulo: "Asesor de programacion",
-                dia: "Jueves",
-                horario: "12-2",
-            },
-            {
-                titulo: "Solicitud de ingles",
-                dia: "Lunes",
-                horario: "8-10",
-            },
-            {
-                titulo: "Solicitud de investigacion",
-                dia: "Viernes",
-                horario: "7-8",
-            },
-            {
-                titulo: "Asesor de ingles",
-                dia: "Lunes",
-                horario: "12-4",
-            },
-            {
-                titulo: "Solicitud de matemáticas",
-                dia: "Miércoles",
-                horario: "7-8",
-            },
-            {
-                titulo: "Solicitud de Programacion",
-                dia: "Jueves",
-                horario: "9-12",
-            },
-            // Aquí puedes agregar más publicaciones con la misma estructura
-        ];
+        <script>
+            var scrollInterval;
+            var publicaciones = [
+                {
+                    titulo: "Asesor de matemáticas",
+                    dia: "Miércoles",
+                    horario: "7-8",
+                },
+                {
+                    titulo: "Asesor de programacion",
+                    dia: "Jueves",
+                    horario: "12-2",
+                },
+                {
+                    titulo: "Solicitud de ingles",
+                    dia: "Lunes",
+                    horario: "8-10",
+                },
+                {
+                    titulo: "Solicitud de investigacion",
+                    dia: "Viernes",
+                    horario: "7-8",
+                },
+                {
+                    titulo: "Asesor de ingles",
+                    dia: "Lunes",
+                    horario: "12-4",
+                },
+                {
+                    titulo: "Solicitud de matemáticas",
+                    dia: "Miércoles",
+                    horario: "7-8",
+                },
+                {
+                    titulo: "Solicitud de Programacion",
+                    dia: "Jueves",
+                    horario: "9-12",
+                },
+                // Aquí puedes agregar más publicaciones con la misma estructura
+            ];
 
-        // Función para generar las publicaciones dinámicamente
-        // Función para generar las primeras 5 publicaciones dinámicamente
-function generarPublicaciones() {
-    var listaPublicaciones = document.getElementById("publicaciones-lista");
-    listaPublicaciones.innerHTML = ""; // Limpiamos la lista antes de agregar las publicaciones
+            // Función para generar las publicaciones dinámicamente
+            // Función para generar las primeras 5 publicaciones dinámicamente
+            function generarPublicaciones() {
+                var listaPublicaciones = document.getElementById("publicaciones-lista");
+                listaPublicaciones.innerHTML = ""; // Limpiamos la lista antes de agregar las publicaciones
 
-    // Iteramos sobre las primeras 5 publicaciones solamente
-    for (var i = 0; i < 5 && i < publicaciones.length; i++) {
-        var publicacion = publicaciones[i];
-        var div = document.createElement("div");
-        div.className = "publicacion-container";
+                // Iteramos sobre las primeras 5 publicaciones solamente
+                for (var i = 0; i < 5 && i < publicaciones.length; i++) {
+                    var publicacion = publicaciones[i];
+                    var div = document.createElement("div");
+                    div.className = "publicacion-container";
 
-        var titulo = document.createElement("h3");
-        titulo.textContent = publicacion.titulo;
+                    var titulo = document.createElement("h3");
+                    titulo.textContent = publicacion.titulo;
 
-        var info = document.createElement("p");
-        info.textContent = "Día: " + publicacion.dia + ", Horario: " + publicacion.horario;
+                    var info = document.createElement("p");
+                    info.textContent = "Día: " + publicacion.dia + ", Horario: " + publicacion.horario;
 
-        var botonDetalle = document.createElement("button");
-        botonDetalle.textContent = "Ver Detalles";
-        botonDetalle.className = "boton-detalles";
-        botonDetalle.onclick = function () {
-            // Lógica para manejar el click en el botón de detalles
-            console.log("Haz clic en Ver Detalles para:", publicacion.titulo);
-            // Aquí puedes redirigir al usuario a la página de detalles de la publicación
-        };
+                    var botonDetalle = document.createElement("button");
+                    botonDetalle.textContent = "Ver Detalles";
+                    botonDetalle.className = "boton-detalles";
+                    botonDetalle.onclick = function () {
+                        // Lógica para manejar el click en el botón de detalles
+                        console.log("Haz clic en Ver Detalles para:", publicacion.titulo);
+                        // Aquí puedes redirigir al usuario a la página de detalles de la publicación
+                    };
 
-        div.appendChild(titulo);
-        div.appendChild(info);
-        div.appendChild(botonDetalle);
-        listaPublicaciones.appendChild(div);
-    }
-}
-
-        // Función para iniciar el desplazamiento continuo
-        function startScrolling(amount) {
-            scrollInterval = setInterval(function () {
-                scrollCategorias(amount);
-            }, 100); // Intervalo de tiempo en milisegundos
-        }
-
-        // Función para detener el desplazamiento continuo
-        function stopScrolling() {
-            clearInterval(scrollInterval);
-        }
-
-        function openTab(evt, tabName) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
+                    div.appendChild(titulo);
+                    div.appendChild(info);
+                    div.appendChild(botonDetalle);
+                    listaPublicaciones.appendChild(div);
+                }
             }
-            tablinks = document.getElementsByClassName("tablinks");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
+
+            // Función para iniciar el desplazamiento continuo
+            function startScrolling(amount) {
+                scrollInterval = setInterval(function () {
+                    scrollCategorias(amount);
+                }, 100); // Intervalo de tiempo en milisegundos
             }
-            document.getElementById(tabName).style.display = "block";
-            evt.currentTarget.className += " active";
-        }
 
-        function toggleForm() {
-            var form = document.getElementById("publicarForm");
-            if (form.style.display === "none") {
-                form.style.display = "block";
-            } else {
-                form.style.display = "none";
+            // Función para detener el desplazamiento continuo
+            function stopScrolling() {
+                clearInterval(scrollInterval);
             }
-        }
 
-        function scrollCategorias(amount) {
-            const container = document.querySelector('.categorias-container2');
-            container.scrollBy({ left: amount, behavior: 'smooth' });
-        }
+            function openTab(evt, tabName) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(tabName).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
 
-        var categorias = ["Categoria 1", "Categoria 2", "Categoria 3", "Categoria 4", "Categoria 5", "Categoria 6",
-            "Categoria 7", "Categoria 8", "Categoria 9", "Categoria 10"];
+            function toggleForm() {
+                var form = document.getElementById("publicarForm");
+                if (form.style.display === "none") {
+                    form.style.display = "block";
+                } else {
+                    form.style.display = "none";
+                }
+            }
 
-        // Función para generar las categorías dinámicamente
-        function generarCategorias() {
-            var listaCategorias = document.getElementById("categorias-lista");
-            listaCategorias.innerHTML = ""; // Limpiamos la lista antes de agregar las categorías
+            function scrollCategorias(amount) {
+                const container = document.querySelector('.categorias-container2');
+                container.scrollBy({ left: amount, behavior: 'smooth' });
+            }
 
-            categorias.forEach(function (categoria) {
-                var li = document.createElement("li");
-                li.textContent = categoria;
-                li.className = "categoria";
-                listaCategorias.appendChild(li);
-            });
-        }
+            var categorias = ["Matemáticas", "Física", "Programación", "Idiomas", "Derecho", "Pedagogía",
+                "Comunicación", "Administración ", "Estadistica", "Otros"];
 
-        // Llamamos a las funciones para generar las categorías y las publicaciones al cargar la página
-        window.onload = function () {
-            generarCategorias();
-            generarPublicaciones();
-        };
-    </script>
+            // Función para generar las categorías dinámicamente
+            function generarCategorias() {
+                var listaCategorias = document.getElementById("categorias-lista");
+                listaCategorias.innerHTML = ""; // Limpiamos la lista antes de agregar las categorías
+
+                categorias.forEach(function (categoria) {
+                    var li = document.createElement("li");
+                    li.textContent = categoria;
+                    li.className = "categoria";
+                    listaCategorias.appendChild(li);
+                });
+            }
+
+            // Función para generar las opciones del select de materias dinámicamente
+            function generarOpcionesMaterias() {
+                var selectMateria = document.getElementById("materia");
+
+                // Limpiamos las opciones existentes antes de agregar las nuevas
+                selectMateria.innerHTML = "";
+
+                // Agregamos la opción predeterminada deshabilitada y seleccionada
+                var defaultOption = document.createElement("option");
+                defaultOption.value = "";
+                defaultOption.textContent = "Selecciona una materia";
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                selectMateria.appendChild(defaultOption);
+
+                // Iteramos sobre las categorías y agregamos cada una como una opción
+                categorias.forEach(function (categoria) {
+                    var option = document.createElement("option");
+                    option.value = categoria;
+                    option.textContent = categoria;
+                    selectMateria.appendChild(option);
+                });
+            }
+
+            // Llamamos a la función para generar las opciones de materias al cargar la página
+            window.onload = function () {
+                generarCategorias();
+                generarOpcionesMaterias();
+                generarPublicaciones();
+            };
+
+        </script>
 
 </body>
 
@@ -276,19 +306,21 @@ function generarPublicaciones() {
         white-space: nowrap;
         padding: 10px 0;
     }
+
     .publicaciones-lista {
-    white-space: nowrap;
-    overflow-x: auto;
-}
+        white-space: nowrap;
+        overflow-x: auto;
+    }
 
     .publicacion-container {
-    display: inline-block;
-    margin-right: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    width: 300px; /* Ajusta el ancho de cada publicación según sea necesario */
-}   
+        display: inline-block;
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        width: 300px;
+        /* Ajusta el ancho de cada publicación según sea necesario */
+    }
 
     .boton-detalles {
         display: block;
