@@ -48,11 +48,57 @@
 
     <!-- Contenido de las pestañas -->
     <div id="Servicios" class="tabcontent">
-        <p>Contenido...</p>
-    </div>
+        <ul id="ultimas-ofrecer">
+            <!-- Aquí se mostrarán las últimas solicitudes -->
+          </ul>
+        
+          <!-- Script para obtener las últimas solicitudes -->
+          <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              fetch("/api/ultimas-ofrecer")
+                .then(response => response.json())
+                .then(data => {
+                  // Aquí puedes manipular los datos como desees
+                  console.log("Últimas 5 solicitudes:", data);
+                  // Por ejemplo, podrías mostrar las solicitudes en una lista
+                  const list = document.getElementById("ultimas-ofrecer");
+                  data.forEach(solicitud => {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `${solicitud.tipo_servicio}: ${solicitud.materia}`;
+                    list.appendChild(listItem);
+                  });
+                })
+                .catch(error => console.error("Error al obtener las solicitudes:", error));
+            });
+          </script>
 
+    </div>
     <div id="Solicitudes" class="tabcontent">
-        <p>Contenido...</p>
+    
+        <ul id="ultimas-solicitudes">
+            <!-- Aquí se mostrarán las últimas solicitudes -->
+          </ul>
+        
+          <!-- Script para obtener las últimas solicitudes -->
+          <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              fetch("/api/ultimas-solicitudes")
+                .then(response => response.json())
+                .then(data => {
+                  // Aquí puedes manipular los datos como desees
+                  console.log("Últimas 5 solicitudes:", data);
+                  // Por ejemplo, podrías mostrar las solicitudes en una lista
+                  const list = document.getElementById("ultimas-solicitudes");
+                  data.forEach(solicitud => {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `${solicitud.tipo_servicio}: ${solicitud.materia}`;
+                    list.appendChild(listItem);
+                  });
+                })
+                .catch(error => console.error("Error al obtener las solicitudes:", error));
+            });
+          </script>
+
     </div>
 
     <h1 style="text-align: center; margin-top: 50px; margin-bottom: 70px; color: #3c3c45;">Ofrece tus servicios o

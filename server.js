@@ -198,20 +198,36 @@ app.post("/dashboard/publicar", (req, res) => {
 
 
 
-app.get("/solicitud/visualizar", async (req, res) => {
+app.get("/api/ultimas-solicitudes", async (req, res) => {
   try {
-    const solicitudesData = await pool.query(`
-      SELECT s.solicitud_id, s.tipo_servicio, s.materia, s.tema_interes, s.fecha_reunion, s.fecha_solicitud, u.name AS usuario_nombre
-      FROM solicitudes s
-      JOIN users u ON s.usuario_id = u.id
-      WHERE s.usuario_id = $1`, 
-      [req.user.id]
+    // Realizamos la consulta para obtener las últimas 5 solicitudes
+    const solicitudesData = await pool.query(
+      "SELECT * FROM solicitudes WHERE tipo_servicio = 'solicitar' ORDER BY fecha_solicitud DESC LIMIT 5;"
     );
-    const solicitudes = solicitudesData.rows;
-    res.render("visualizarservicio.ejs", { solicitudes });
+
+    // Enviamos las solicitudes como respuesta en formato JSON
+    res.json(solicitudesData.rows);
   } catch (error) {
-    console.error("Error al obtener las solicitudes:", error);
-    res.status(500).send("Error al obtener las solicitudes");
+    console.error("Error al obtener las últimas solicitudes:", error);
+    // En caso de error, enviamos un mensaje de error al cliente
+    res.status(500).json({ error: "Error al obtener las últimas solicitudes" });
+  }
+});
+
+
+app.get("/api/ultimas-ofrecer", async (req, res) => {
+  try {
+    // Realizamos la consulta para obtener las últimas 5 solicitudes
+    const solicitudesData = await pool.query(
+      "SELECT * FROM solicitudes WHERE tipo_servicio = 'ofrecer' ORDER BY fecha_solicitud DESC LIMIT 5;"
+    );
+
+    // Enviamos las solicitudes como respuesta en formato JSON
+    res.json(solicitudesData.rows);
+  } catch (error) {
+    console.error("Error al obtener las últimas solicitudes:", error);
+    // En caso de error, enviamos un mensaje de error al cliente
+    res.status(500).json({ error: "Error al obtener las últimas solicitudes" });
   }
 });
 
