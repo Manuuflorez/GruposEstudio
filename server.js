@@ -260,3 +260,26 @@ function checkNotAuthenticated(req, res, next) {
 app.listen(PORT, () => {
   console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
 });
+
+
+app.get("/api/infouser/:id", async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const userData = await pool.query(
+      "SELECT * FROM users WHERE id = $1;",
+      [userId]
+    );
+
+    if (userData.rows.length === 0) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    res.json(userData.rows[0]);
+  } catch (error) {
+    console.error("Error al obtener información del usuario:", error);
+    res.status(500).json({ error: "Error al obtener información del usuario" });
+  }
+});
+
+
