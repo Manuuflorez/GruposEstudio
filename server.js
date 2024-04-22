@@ -28,7 +28,11 @@ app.use(
     // ¿Deberíamos guardar nuestras variables de sesión si no ha habido cambios? No queremos hacerlo
     resave: false,
     // Guardar un valor vacío si no hay valor, lo cual no queremos hacer
-    saveUninitialized: false
+    saveUninitialized: false,
+    rolling: true, // Habilitar renovación de sesión en cada solicitud
+    cookie: {
+      maxAge: 60 * 60 * 1000 // Duración de la sesión en milisegundos (1 hora)
+    }
   })
 );
 // Función dentro de passport que inicializa passport
