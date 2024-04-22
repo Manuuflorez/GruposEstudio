@@ -35,8 +35,8 @@
     </header>
 
     <!-- Barra de búsqueda -->
-    <form action="#" method="get" class="search-form">
-        <input type="text" name="search" id="search" placeholder="Buscar...">
+    <form id="searchForm" action="/search" method="get" class="search-form">
+        <input type="text" name="query" id="search" placeholder="Buscar...">
         <button type="submit"><i class="fas fa-search"></i></button>
     </form>
 
@@ -414,6 +414,54 @@
                 const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
                 return nombresMeses[numeroMes];
             }
+
+            document.addEventListener("DOMContentLoaded", () => {
+                // Evento para manejar la búsqueda
+                document.getElementById("searchForm").addEventListener("submit", function(event) {
+                    event.preventDefault(); // Prevenir el envío del formulario
+                    const query = document.getElementById("search").value;
+                    fetchSearchResults(query);
+                });
+            
+                // Función para obtener resultados de búsqueda
+                function fetchSearchResults(query) {
+                    fetch(`/api/search?query=${encodeURIComponent(query)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            updateSearchResults(data);
+                        })
+                        .catch(error => console.error("Error al buscar:", error));
+                }
+            
+                // Función para actualizar los resultados de búsqueda en la interfaz de usuario
+                function updateSearchResults(data) {
+                    // Actualizar la lista de servicios y solicitudes con los resultados de búsqueda
+                    const serviciosList = document.getElementById("ultimas-ofrecer");
+                    const solicitudesList = document.getElementById("ultimas-solicitudes");
+            
+                    serviciosList.innerHTML = '';
+                    solicitudesList.innerHTML = '';
+            
+                    data.forEach(solicitud => {
+                        const listItem = document.createElement("li");
+                        listItem.innerHTML = `
+                            <div class="solicitud-item">
+                                <p><strong>Tipo de Servicio:</strong> ${solicitud.tipo_servicio}</p>
+                                <p><strong>Materia:</strong> ${solicitud.materia}</p>
+                                <p><strong>Tema de Interés:</strong> ${solicitud.tema_interes}</p>
+                                <p><strong>Fecha de Reunión:</strong> ${solicitud.fecha_reunion}</p>
+                            </div>
+                            <hr>
+                        `;
+                        if (solicitud.tipo_servicio === 'ofrecer') {
+                            serviciosList.appendChild(listItem);
+                        } else if (solicitud.tipo_servicio === 'solicitar') {
+                            solicitudesList.appendChild(listItem);
+                        }
+                    });
+                }
+            });
+        
 
         </script>
 

@@ -253,7 +253,7 @@ app.get("/solicitud/visualizar", async (req, res) => {
       [req.user.id]
     );
     const solicitudes = solicitudesData.rows;
-    res.render("visualizarservicio.ejs", { solicitudes });
+    res.render("visualizarservicio.ejs", { solicitudes, user: req.user });
   } catch (error) {
     console.error("Error al obtener las solicitudes:", error);
     res.status(500).send("Error al obtener las solicitudes");
@@ -261,7 +261,20 @@ app.get("/solicitud/visualizar", async (req, res) => {
 });
 
 
+app.get("/api/search", async (req, res) => {
+  const query = req.query.query;
+  try {
+    const searchResults = await pool.query(`
+      SELECT * FROM solicitudes
+      WHERE materia ILIKE $1 OR tema_interes ILIKE $1
+    `, [`%${query}%`]);
 
+    res.json(searchResults.rows);
+  } catch (error) {
+    console.error("Error al realizar la búsqueda:", error);
+    res.status(500).json({ error: "Error al realizar la búsqueda" });
+  }
+});
 
 
 app.post(

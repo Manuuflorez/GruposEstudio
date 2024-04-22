@@ -130,6 +130,45 @@
             text-align: center;
         }
       }
+
+      .container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+        font-size: 32px;
+        color: #333;
+        margin-bottom: 20px;
+    }
+    
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    
+    li {
+        margin-bottom: 10px;
+    }
+    
+    p {
+        margin-bottom: 10px;
+    }
+    
+    a {
+        text-decoration: none;
+        color: #007bff;
+    }
+    
+    a:hover {
+        text-decoration: underline;
+        color: #0056b3;
+    }
+    
     
     </style>
 <body>
@@ -148,6 +187,8 @@
 
         </nav>
     </header>
+    
+    <div class="container">
     <h1>Solicitudes Creadas</h1>
     <% if (solicitudes && solicitudes.length > 0) { %>
         <table>
@@ -174,6 +215,8 @@
                 <% }); %>
             </tbody>
         </table>
+    </div>
+    
     <% } else { %>
         <p>No se encontraron solicitudes.</p>
     <% } %>
