@@ -140,7 +140,7 @@
             &#8801
         </label>
         <nav class="menu">
-            
+            <a href="/users/dashboard">Volver</a>
             <a href="/users/logout">Cerrar sesión</a>
             <label for="check" class="esconder-menu">
                 &#215
@@ -148,7 +148,35 @@
 
         </nav>
     </header>
-    <h1>Hola</h1>
+    <h1>Solicitudes Creadas</h1>
+    <% if (solicitudes && solicitudes.length > 0) { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tipo de Servicio</th>
+                    <th>Materia</th>
+                    <th>Tema de Interés</th>
+                    <th>Fecha de Reunión</th>
+                    <th>Fecha de Solicitud</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% solicitudes.forEach(solicitud => { %>
+                    <tr>
+                        <td><%= solicitud.solicitud_id %></td>
+                        <td><%= solicitud.tipo_servicio %></td>
+                        <td><%= solicitud.materia %></td>
+                        <td><%= solicitud.tema_interes %></td>
+                        <td><%= solicitud.fecha_reunion %></td>
+                        <td><%= solicitud.fecha_solicitud %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>No se encontraron solicitudes.</p>
+    <% } %>
     
 </body>
 </html>
