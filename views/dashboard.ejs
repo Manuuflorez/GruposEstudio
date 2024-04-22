@@ -33,7 +33,6 @@
         </nav>
     </header>
 
-
     <!-- Barra de búsqueda -->
     <form action="#" method="get" class="search-form">
         <input type="text" name="search" id="search" placeholder="Buscar...">
@@ -50,54 +49,50 @@
     <div id="Servicios" class="tabcontent">
         <ul id="ultimas-ofrecer">
             <!-- Aquí se mostrarán las últimas solicitudes -->
-          </ul>
-        
-          <!-- Script para obtener las últimas solicitudes -->
-          <script>
+        </ul>
+
+        <!-- Script para obtener las últimas solicitudes -->
+        <script>
             document.addEventListener("DOMContentLoaded", () => {
-              fetch("/api/ultimas-ofrecer")
-                .then(response => response.json())
-                .then(data => {
-                  // Aquí puedes manipular los datos como desees
-                  console.log("Últimas 5 solicitudes:", data);
-                  // Por ejemplo, podrías mostrar las solicitudes en una lista
-                  const list = document.getElementById("ultimas-ofrecer");
-                  data.forEach(solicitud => {
-                    const listItem = document.createElement("li");
-                    listItem.textContent = `${solicitud.tipo_servicio}: ${solicitud.materia}`;
-                    list.appendChild(listItem);
-                  });
-                })
-                .catch(error => console.error("Error al obtener las solicitudes:", error));
+                fetch("/api/ultimas-ofrecer")
+                    .then(response => response.json())
+                    .then(data => {
+                        // Por ejemplo, podrías mostrar las solicitudes en una lista
+                        const list = document.getElementById("ultimas-ofrecer");
+                        data.forEach(solicitud => {
+                            const listItem = document.createElement("li");
+                            listItem.textContent = `${solicitud.tipo_servicio}: ${solicitud.materia}`;
+                            list.appendChild(listItem);
+                        });
+                    })
+                    .catch(error => console.error("Error al obtener las solicitudes:", error));
             });
-          </script>
+        </script>
 
     </div>
     <div id="Solicitudes" class="tabcontent">
-    
+
         <ul id="ultimas-solicitudes">
             <!-- Aquí se mostrarán las últimas solicitudes -->
-          </ul>
-        
-          <!-- Script para obtener las últimas solicitudes -->
-          <script>
+        </ul>
+
+        <!-- Script para obtener las últimas solicitudes -->
+        <script>
             document.addEventListener("DOMContentLoaded", () => {
-              fetch("/api/ultimas-solicitudes")
-                .then(response => response.json())
-                .then(data => {
-                  // Aquí puedes manipular los datos como desees
-                  console.log("Últimas 5 solicitudes:", data);
-                  // Por ejemplo, podrías mostrar las solicitudes en una lista
-                  const list = document.getElementById("ultimas-solicitudes");
-                  data.forEach(solicitud => {
-                    const listItem = document.createElement("li");
-                    listItem.textContent = `${solicitud.tipo_servicio}: ${solicitud.materia}`;
-                    list.appendChild(listItem);
-                  });
-                })
-                .catch(error => console.error("Error al obtener las solicitudes:", error));
+                fetch("/api/ultimas-solicitudes")
+                    .then(response => response.json())
+                    .then(data => {
+                        // Por ejemplo, podrías mostrar las solicitudes en una lista
+                        const list = document.getElementById("ultimas-solicitudes");
+                        data.forEach(solicitud => {
+                            const listItem = document.createElement("li");
+                            listItem.textContent = `${solicitud.tipo_servicio}: ${solicitud.materia}`;
+                            list.appendChild(listItem);
+                        });
+                    })
+                    .catch(error => console.error("Error al obtener las solicitudes:", error));
             });
-          </script>
+        </script>
 
     </div>
 
@@ -147,6 +142,24 @@
     </div>
     <hr style="margin-top: 20px; border: none;margin-bottom: 30px; border-top: 1px solid #ccc;">
 
+    <!-- Detalles de la publicación -->
+    <div id="verDetalles" class="publicar-form"
+        style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
+        <h2 style="text-align: center; margin-bottom: 20px;">Detalles de la Publicación</h2>
+        <!-- Botón de cerrar -->
+        <button onclick="cerrarDetalles()"
+            style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #555;cursor: pointer;">&times;</button>
+        <!-- Fin del botón de cerrar -->
+        <div id="detallesContenido" style="margin-bottom: 20px;"></div>
+        <button type="submit" onclick="agendarServicio()"
+            style="width: 100%; padding: 15px; background-color: #4d4d5c; color: white; border: none; border-radius: 5px; cursor: pointer;">Agendar</button>
+
+        <!-- Botón de cerrar dentro del formulario -->
+        <button onclick="cerrarDetalles()"
+            style="margin-top: 20px; padding: 15px; width: 100%; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
+        <!-- Fin del botón de cerrar dentro del formulario -->
+    </div>
+
     <!-- Espacio para categorías -->
     <div class="categorias-container">
         <div class="flecha-izquierda" onmousedown="startScrolling(-100)" onmouseup="stopScrolling()">&#10094;</div>
@@ -165,83 +178,117 @@
     <div class="publicaciones-container" style="padding: 25px; margin-bottom: 30px; text-align: center;">
         <div id="publicaciones-lista" style="display: inline-block;">
             <!-- Las publicaciones se agregarán aquí dinámicamente -->
-            </ul>
         </div>
 
 
         <script>
             var scrollInterval;
-            var publicaciones = [
-                {
-                    titulo: "Asesor de matemáticas",
-                    dia: "Miércoles",
-                    horario: "7-8",
-                },
-                {
-                    titulo: "Asesor de programacion",
-                    dia: "Jueves",
-                    horario: "12-2",
-                },
-                {
-                    titulo: "Solicitud de ingles",
-                    dia: "Lunes",
-                    horario: "8-10",
-                },
-                {
-                    titulo: "Solicitud de investigacion",
-                    dia: "Viernes",
-                    horario: "7-8",
-                },
-                {
-                    titulo: "Asesor de ingles",
-                    dia: "Lunes",
-                    horario: "12-4",
-                },
-                {
-                    titulo: "Solicitud de matemáticas",
-                    dia: "Miércoles",
-                    horario: "7-8",
-                },
-                {
-                    titulo: "Solicitud de Programacion",
-                    dia: "Jueves",
-                    horario: "9-12",
-                },
-                // Aquí puedes agregar más publicaciones con la misma estructura
-            ];
 
-            // Función para generar las publicaciones dinámicamente
-            // Función para generar las primeras 5 publicaciones dinámicamente
-            function generarPublicaciones() {
-                var listaPublicaciones = document.getElementById("publicaciones-lista");
-                listaPublicaciones.innerHTML = ""; // Limpiamos la lista antes de agregar las publicaciones
+            document.addEventListener("DOMContentLoaded", () => {
+                fetch("/api/ultimas-publicaciones") // Cambia la ruta de la solicitud
+                    .then(response => response.json())
+                    .then(data => {
+                        const listaPublicaciones = document.getElementById("publicaciones-lista");
+                        listaPublicaciones.innerHTML = ""; // Limpiamos la lista antes de agregar las publicaciones
 
-                // Iteramos sobre las primeras 5 publicaciones solamente
-                for (var i = 0; i < 5 && i < publicaciones.length; i++) {
-                    var publicacion = publicaciones[i];
-                    var div = document.createElement("div");
-                    div.className = "publicacion-container";
+                        data.forEach(publicacion => {
+                            const div = document.createElement("div");
+                            div.className = "publicacion-container";
 
-                    var titulo = document.createElement("h3");
-                    titulo.textContent = publicacion.titulo;
+                            const titulo = document.createElement("h3");
+                            if (publicacion.tipo_servicio == "solicitar") {
+                                titulo.textContent = "Solicitud " + publicacion.materia
+                            } else {
+                                titulo.textContent = "Asesoria " + publicacion.materia
+                            }
 
-                    var info = document.createElement("p");
-                    info.textContent = "Día: " + publicacion.dia + ", Horario: " + publicacion.horario;
+                            const info = document.createElement("p");
+                            // Convertir la fecha en un objeto de fecha
+                            const fecha = new Date(publicacion.fecha_reunion);
+                            // Obtener el día de la semana
+                            const diaSemana = obtenerNombreDiaSemana(fecha.getDay());
+                            // Obtener el día del mes
+                            const diaMes = fecha.getDate();
+                            // Obtener el nombre del mes
+                            const nombreMes = obtenerNombreMes(fecha.getMonth());
+                            // Obtener el año
+                            const año = fecha.getFullYear();
+                            // Crear una cadena de fecha formateada
+                            const fechaFormateada = `${diaSemana} ${diaMes} de ${nombreMes}`;
+                            // Utilizar la fecha formateada en el contenido del párrafo
+                            info.textContent = `Día: ${fechaFormateada}`;
 
-                    var botonDetalle = document.createElement("button");
-                    botonDetalle.textContent = "Ver Detalles";
-                    botonDetalle.className = "boton-detalles";
-                    botonDetalle.onclick = function () {
-                        // Lógica para manejar el click en el botón de detalles
-                        console.log("Haz clic en Ver Detalles para:", publicacion.titulo);
-                        // Aquí puedes redirigir al usuario a la página de detalles de la publicación
-                    };
+                            const botonDetalle = document.createElement("button");
+                            botonDetalle.textContent = "Ver Detalles";
+                            botonDetalle.className = "boton-detalles";
+                            botonDetalle.onclick = function () {
+                                verDetallesPublicacion(publicacion);
+                                // Puedes agregar aquí la lógica para redirigir al usuario a la página de detalles de la publicación
+                            };
 
-                    div.appendChild(titulo);
-                    div.appendChild(info);
-                    div.appendChild(botonDetalle);
-                    listaPublicaciones.appendChild(div);
+                            const tema = document.createElement("p")
+                            tema.textContent = `Tema: ${publicacion.tema_interes}`;
+
+                            div.appendChild(titulo);
+                            div.appendChild(info);
+                            div.appendChild(tema);
+                            div.appendChild(botonDetalle);
+                            listaPublicaciones.appendChild(div);
+                        });
+                    })
+                    .catch(error => console.error("Error al obtener las publicaciones:", error));
+            });
+
+            function verDetallesPublicacion(publicacion) {
+                const detallesContenido = document.getElementById("detallesContenido");
+                detallesContenido.innerHTML = ""; // Limpiamos el contenido antes de agregar los detalles
+
+                const titulo = document.createElement("h3");
+                if (publicacion.tipo_servicio == "solicitar") {
+                    titulo.textContent = "Solicitud " + publicacion.materia
+                } else {
+                    titulo.textContent = "Asesoria " + publicacion.materia
                 }
+
+                const materia = document.createElement("p");
+                materia.textContent = `Materia: ${publicacion.materia}`;
+
+
+                const fecha = new Date(publicacion.fecha_reunion);
+                // Obtener el día de la semana
+                const diaSemana = obtenerNombreDiaSemana(fecha.getDay());
+                // Obtener el día del mes
+                const diaMes = fecha.getDate();
+                // Obtener el nombre del mes
+                const nombreMes = obtenerNombreMes(fecha.getMonth());
+                // Obtener el año
+                const año = fecha.getFullYear();
+                // Crear una cadena de fecha formateada
+                const fechaFormateada = `${diaSemana} ${diaMes} de ${nombreMes}`;
+                const info = document.createElement("p");
+                info.textContent = `Fecha: ${fechaFormateada}`;
+
+                const contenido = document.createElement("p");
+                contenido.textContent = `Tema: ${publicacion.tema_interes}`;
+
+                const usuario = document.createElement("p");
+                usuario.textContent = `Publicado por: ${publicacion.user_data.name} ${publicacion.user_data.lastname}`;
+
+
+                detallesContenido.appendChild(titulo);
+                detallesContenido.appendChild(usuario);
+                detallesContenido.appendChild(materia);
+                detallesContenido.appendChild(contenido);
+                detallesContenido.appendChild(info);
+
+                const verDetalles = document.getElementById("verDetalles");
+                verDetalles.style.display = "block"; // Mostramos los detalles
+            }
+
+            // Función para cerrar los detalles de la publicación
+            function cerrarDetalles() {
+                const verDetalles = document.getElementById("verDetalles");
+                verDetalles.style.display = "none"; // Ocultamos los detalles
             }
 
             // Función para iniciar el desplazamiento continuo
@@ -300,6 +347,9 @@
                 });
             }
 
+            function agendarServicio() {
+                console.log("En desarrollo")
+            }
             // Función para generar las opciones del select de materias dinámicamente
             function generarOpcionesMaterias() {
                 var selectMateria = document.getElementById("materia");
@@ -331,14 +381,23 @@
                 generarPublicaciones();
             };
 
+            // Función para obtener el nombre del día de la semana
+            function obtenerNombreDiaSemana(diaSemana) {
+                const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+                return diasSemana[diaSemana];
+            }
+
+            // Función para obtener el nombre del mes
+            function obtenerNombreMes(numeroMes) {
+                const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+                return nombresMeses[numeroMes];
+            }
+
         </script>
 
 </body>
 
 </html>
-
-
-
 
 <style>
     * {

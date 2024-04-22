@@ -196,6 +196,18 @@ app.post("/dashboard/publicar", (req, res) => {
   );
 });
 
+app.get("/api/ultimas-publicaciones", async (req, res) => {
+  try {
+    const solicitudesData = await pool.query(
+      "SELECT * FROM solicitudes ORDER BY fecha_solicitud DESC LIMIT 5;"
+    );
+    // Enviamos las últimas solicitudes como respuesta en formato JSON
+    res.json(solicitudesData.rows);
+  } catch (error) {
+    console.error("Error al obtener las últimas solicitudes:", error);
+    res.status(500).json({ error: "Error al obtener las últimas solicitudes" });
+  }
+});
 
 
 app.get("/api/ultimas-solicitudes", async (req, res) => {
