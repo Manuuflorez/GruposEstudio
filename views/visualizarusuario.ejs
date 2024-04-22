@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,165 +10,202 @@
         emailjs.init('Zh5Xh3x-J1rmUjEuJ')
     </script>
     <link rel="stylesheet" href="/Styles.css">
-    
+
     <title>StudyCoop</title>
-</head>
-    
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-    }
 
-    header {
-        height: 100px;
-        /*background: rgb(108, 118, 118);*/
-        background: #4d4d5c;
-        padding: 0 50px;
-        color: aliceblue;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
 
-    .logo {
-        text-transform: uppercase;
-        font-weight: 200;
-        color: whitesmoke;
-    }
+        header {
+            height: 100px;
+            background: #4d4d5c;
+            padding: 0 50px;
+            color: aliceblue;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .menu a {
-        color: #fff;
-        text-decoration: none;
-        text-transform: uppercase;
-        padding: 0 10px;
-        transition: 0.4s;  
-    }
+        .logo {
+            text-transform: uppercase;
+            font-weight: 200;
+            color: whitesmoke;
+        }
 
-    .mostrar-menu,
-    .esconder-menu {
-        font-size: 30px;
-        cursor: pointer;
-        transition: 0.4s;
-        display: none;
-    }
+        .menu a {
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            padding: 0 10px;
+            transition: 0.4s;
+        }
 
-    .mostrar-menu {
-        order: 1;
-    }
-
-    .menu a:hover,
-    .mostrar-menu:hover,
-    .esconder-menu:hover {
-        color: #666666;
-    }
-
-    #check {
-        display: none;
-    }
-
-    @media(max-width:768px) {
         .mostrar-menu,
         .esconder-menu {
-            display: block;
+            font-size: 30px;
+            cursor: pointer;
+            transition: 0.4s;
+            display: none;
         }
-        .menu {
-            position: fixed;
-            height: 100vh;
-            z-index: 100;
-            width: 100%;
-            background: rgb(86, 87, 87);
-            /*left: 0;*/
-            right: -100%;
-            top: 0;
-            text-align: center;
-            padding: 100px 0px;
-            z-index: 100;
-            transition: o.8s;
+
+        .mostrar-menu {
+            order: 1;
         }
-        .menu a {
-            display: block;
+
+        .edit-button {
+            border-radius: 5px;
+            padding: 10px 10px;
+            margin-bottom: 20px;
+            transition: background-color 0.3s;
+            background-color: #4d4d5c;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .menu a:hover,
+        .mostrar-menu:hover,
+        .esconder-menu:hover {
+            color: #666666;
+        }
+
+        #check {
+            display: none;
+        }
+
+        @media(max-width:768px) {
+
+            .mostrar-menu,
+            .esconder-menu {
+                display: block;
+            }
+
+            .menu {
+                position: fixed;
+                height: 100vh;
+                z-index: 100;
+                width: 100%;
+                background: rgb(86, 87, 87);
+                right: -100%;
+                top: 0;
+                text-align: center;
+                padding: 100px 0px;
+                z-index: 100;
+                transition: o.8s;
+            }
+
+            .menu a {
+                display: block;
+                padding: 20px;
+            }
+
+            .esconder-menu {
+                position: absolute;
+                top: 40px;
+                right: 40px;
+            }
+
+            #check:checked~.menu {
+                right: 0;
+            }
+
+            #personas {
+                flex-direction: column;
+            }
+
+            .contenido-icono {
+                flex-direction: column;
+            }
+
+            .contenido-icono div {
+                border: none !important;
+            }
+
+            .datos-form {
+                flex-direction: column;
+            }
+
+            .boton-empezar {
+                text-decoration: none;
+                transition: all 0.6s;
+                color: #fff;
+                border: 1px solid grey;
+                padding: 20px 40px;
+                align-self: baseline;
+            }
+
+            .boton-empezar:hover {
+                background-color: grey;
+                color: black;
+            }
+
+            .servicio-text {
+                text-align: center;
+            }
+        }
+
+        /* Styles for User Information Container */
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
             padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
-        .esconder-menu {
-            position: absolute;
-            top: 40px;
-            right: 40px;
+
+        .container2 {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
-        #check:checked~.menu {
-            right: 0;
+
+        h1 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 20px;
         }
-        #personas {
-            flex-direction: column;
+
+        ul {
+            list-style-type: none;
+            padding: 0;
         }
-        .contenido-icono {
-            flex-direction: column;
+
+        li {
+            margin-bottom: 10px;
         }
-        .contenido-icono div {
-            border: none !important;
+
+        p {
+            margin-bottom: 10px;
         }
-        .datos-form {
-            flex-direction: column;
-        }
-        .boton-empezar {
+
+        a {
             text-decoration: none;
-            transition: all 0.6s;
-            color: #fff;
-            border: 1px solid grey;
-            padding: 20px 40px;
-            align-self: baseline;
-        }
-        
-        .boton-empezar:hover {
-            background-color: grey;
-            color: black;
+            color: #007bff;
         }
 
-        .servicio-text {
-            text-align: center;
+        a:hover {
+            text-decoration: underline;
+            color: #0056b3;
         }
-    }
 
-    /* Styles for User Information Container */
-    .container {
-        max-width: 800px;
-        margin: 50px auto;
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    }
+        .delete-button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: red;
+            cursor: pointer;
+        }
+    </style>
 
-    h1 {
-        font-size: 32px;
-        color: #333;
-        margin-bottom: 20px;
-    }
-
-    ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    li {
-        margin-bottom: 10px;
-    }
-
-    p {
-        margin-bottom: 10px;
-    }
-
-    a {
-        text-decoration: none;
-        color: #007bff;
-    }
-
-    a:hover {
-        text-decoration: underline;
-        color: #0056b3;
-    }
-</style>
+</head>
 
 <body>
     <header>
@@ -182,19 +220,222 @@
     </header>
 
     <div class="container">
-        <h1>Bienvenido, <%= user.name %> <%= user.lastname %></h1>
-        <p>Email: <%= user.email %></p>
-        <!-- Puedes mostrar más detalles del usuario aquí -->
+        <h1>Bienvenido, <%= user.name %>
+                <%= user.lastname %>
+        </h1>
+        <p>Email: <%= user.email %>
+        </p>
         <ul>
-            <li>Nombre: <%= user.name %></li>
-            <li>Apellido: <%= user.lastname %></li>
-            <li>Tipo de Documento: <%= user.document_type %></li>
-            <li>Número de Documento: <%= user.id_number %></li>
-            <li>Programa: <%= user.program %></li>
-            <!-- Agrega más detalles si los tienes en la base de datos -->
+            <li>Nombre: <%= user.name %>
+            </li>
+            <li>Apellido: <%= user.lastname %>
+            </li>
+            <li>Tipo de Documento: <%= user.document_type %>
+            </li>
+            <li>Número de Documento: <%= user.id_number %>
+            </li>
+            <li>Programa: <%= user.program %>
+            </li>
         </ul>
     </div>
+
+    <h1 style="text-align: center;">Listado de tus publicaciones</h1>
+    <div class="container2"></div>
+
+    <!-- Contenedor del formulario de edición y del cuadro de confirmación -->
+    <div id="modalContainer"
+        style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
+        <h2 style="text-align: center; margin-bottom: 20px;">Confirmar eliminación</h2>
+        <p style="margin-bottom: 20px;">¿Estás seguro de que quieres eliminar esta publicación?</p>
+        <div style="display: flex; justify-content: space-around;">
+            <button onclick="cancelDelete()"
+                style="padding: 15px; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cancelar</button>
+            <button onclick="confirmDelete()"
+                style="padding: 15px; background-color: #ff4d4d; color: white; border: none; border-radius: 5px; cursor: pointer;">Eliminar</button>
+        </div>
+    </div>
+
+    <!-- Mensaje de eliminación exitosa -->
+    <div id="deleteSuccessMessage"
+        style="display: none; background-color: #4CAF50; color: white; text-align: center; padding: 20px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);">
+        <p>¡Publicación eliminada con éxito!</p>
+    </div>
+
+    <div id="editarForm" class="editar-form"
+        style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
+        <h2 style="text-align: center; margin-bottom: 20px;">Formulario de Edición</h2>
+        <button onclick="openEditForm()"
+            style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #555;cursor: pointer;">&times;</button>
+        <form id="editForm" method="post">
+            <input type="hidden" id="user_data" name="user_data" value="<%= JSON.stringify(user) %>">
+            <label for="tipo">Tipo de Publicación:</label><br>
+            <select id="tipo" name="tipo"
+                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+                <option value="solicitar">Solicitar Servicio</option>
+                <option value="ofrecer">Ofrecer Servicio</option>
+            </select><br>
+            <label for="materia">Materia:</label><br>
+            <select id="materia" name="materia"
+                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+                <option value="" disabled selected>Selecciona una materia</option>
+            </select><br>
+            <label for="fecha">Fecha:</label><br>
+            <input type="date" id="fecha" name="fecha"
+                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+            <label for="tema">Tema:</label><br>
+            <input type="text" id="tema" name="tema"
+                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br><br>
+            <button type="submit"
+                style="width: 100%; padding: 15px; background-color: #4d4d5c; color: white; border: none; border-radius: 5px; cursor: pointer;">Actualizar</button>
+        </form>
+        <button onclick="openEditForm()"
+            style="margin-top: 20px; padding: 15px; width: 100%; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
+    </div>
+
+
+    <script>
+        var categorias = ["Matemáticas", "Física", "Programación", "Idiomas", "Derecho", "Pedagogía",
+            "Comunicación", "Administración ", "Estadistica", "Otros"];
+        id = '<%= user.id %>'
+        fetch(`/api/publicaciones-usuario/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                const container = document.querySelector('.container2');
+                data.forEach(publicacion => {
+                    const div = document.createElement('div');
+                    const titulo = document.createElement('h3');
+                    const materia = document.createElement('p');
+                    const tema = document.createElement('p');
+                    const fecha = document.createElement('p');
+                    const editButton = document.createElement('button');
+                    const deleteButton = document.createElement('button'); // Nuevo botón de eliminar
+                    const separator = document.createElement('hr');
+
+                    titulo.textContent = publicacion.tipo_servicio === 'solicitar' ? `Solicitud: ${publicacion.materia}` : `Oferta: ${publicacion.materia}`;
+                    materia.textContent = `Materia: ${publicacion.materia}`;
+                    tema.textContent = `Tema: ${publicacion.tema_interes}`;
+                    fecha.textContent = `Fecha de reunión: ${publicacion.fecha_reunion}`;
+                    editButton.textContent = 'Editar';
+                    deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
+                    deleteButton.setAttribute('data-id', publicacion.solicitud_id); // Agregar ID de la publicación
+
+                    deleteButton.classList.add('delete-button');
+                    editButton.classList.add('edit-button');
+                    editButton.setAttribute('data-id', publicacion.solicitud_id);
+
+                    editButton.addEventListener('click', () => {
+                        const fechaReunion = new Date(publicacion.fecha_reunion);
+                        const fechaFormateada = fechaReunion.toISOString().split('T')[0];
+
+                        document.getElementById('tipo').value = publicacion.tipo_servicio;
+                        document.getElementById('materia').value = publicacion.materia;
+                        document.getElementById('fecha').value = fechaFormateada;
+                        document.getElementById('tema').value = publicacion.tema_interes;
+
+                        document.getElementById('editForm').action = `/api/publicacion/${publicacion.solicitud_id}`;
+
+                        openEditForm();
+
+                        console.log('Editar solicitud con ID:', publicacion.solicitud_id);
+                    });
+
+                    deleteButton.addEventListener('click', () => {
+                        showDeleteConfirmation();
+                        console.log('Eliminar solicitud con ID:', publicacion.solicitud_id);
+                        const modalContainer = document.getElementById("modalContainer");
+                        const confirmDeleteButton = document.querySelector("#modalContainer button:last-child");
+                        confirmDeleteButton.onclick = async () => {
+                            try {
+                                const response = await fetch(`/api/eliminar-publicacion/${publicacion.solicitud_id}`, {
+                                    method: 'DELETE'
+                                });
+                                if (response.ok) {
+                                    console.log("Publicación eliminada con éxito");
+                                    // Después de eliminar la publicación con éxito
+                                    document.getElementById('deleteSuccessMessage').style.display = 'block';
+                                    // Ocultar el mensaje después de unos segundos
+                                    setTimeout(() => {
+                                        document.getElementById('deleteSuccessMessage').style.display = 'none';
+                                    }, 3000); // Ocultar después de 3 segundos (3000 milisegundos)
+
+                                    // Actualizar la lista de publicaciones después de eliminar una
+                                    container.removeChild(div);
+                                } else {
+                                    console.error("Error al intentar eliminar la publicación");
+                                }
+                            } catch (error) {
+                                console.error("Error en la solicitud de eliminación:", error);
+                            } finally {
+                                modalContainer.style.display = "none";
+                            }
+                        };
+                    });
+
+                    div.appendChild(titulo);
+                    div.appendChild(materia);
+                    div.appendChild(tema);
+                    div.appendChild(fecha);
+                    div.appendChild(editButton);
+                    div.appendChild(deleteButton);
+                    div.appendChild(separator);
+                    container.appendChild(div);
+                });
+            })
+            .catch(error => console.error("Error al obtener las publicaciones del usuario:", error));
+
+
+        function openEditForm() {
+            var editForm = document.getElementById("editarForm");
+            if (editForm.style.display === "none") {
+                editForm.style.display = "block";
+            } else {
+                editForm.style.display = "none";
+            }
+        }
+
+        function cancelDelete() {
+            var modalContainer = document.getElementById("modalContainer");
+            modalContainer.style.display = "none";
+        }
+
+        function confirmDelete() {
+            // Aquí puedes colocar la lógica para eliminar la publicación
+            console.log("Publicación eliminada.");
+            var modalContainer = document.getElementById("modalContainer");
+            modalContainer.style.display = "none";
+        }
+
+        function showDeleteConfirmation() {
+            var modalContainer = document.getElementById("modalContainer");
+            modalContainer.style.display = "block";
+        }
+
+        function generarOpcionesMaterias() {
+            var selectMateria = document.getElementById("materia");
+
+            selectMateria.innerHTML = "";
+
+            var defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.textContent = "Selecciona una materia";
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
+            selectMateria.appendChild(defaultOption);
+
+            categorias.forEach(function (categoria) {
+                var option = document.createElement("option");
+                option.value = categoria;
+                option.textContent = categoria;
+                selectMateria.appendChild(option);
+            });
+        }
+
+        window.onload = function () {
+            generarOpcionesMaterias();
+        }
+
+
+    </script>
 </body>
+
 </html>
-
-

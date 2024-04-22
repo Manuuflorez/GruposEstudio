@@ -196,6 +196,87 @@ app.post("/dashboard/publicar", (req, res) => {
   );
 });
 
+// Eliminar una publicación por su ID
+app.delete('/api/eliminar-publicacion/:id', async (req, res) => {
+  try {
+    const publicacionId = req.params.id;
+    
+    // Realizar la consulta para eliminar la publicación por su ID
+    const result = await pool.query(
+      'DELETE FROM solicitudes WHERE solicitud_id = $1',
+      [publicacionId]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'La publicación no se encontró o ya ha sido eliminada' });
+    }
+
+    res.json({ message: 'Publicación eliminada correctamente' });
+  } catch (error) {
+    console.error('Error al eliminar la publicación:', error);
+    res.status(500).json({ error: 'Error al eliminar la publicación' });
+  }
+});
+
+
+//Publicaciones por id de usuario
+app.get("/api/publicaciones-usuario/:id", async (req, res) => {
+  const userId = req.params.id; // Obtener el id de la URL
+  try {
+    const solicitudesData = await pool.query(
+      "SELECT * FROM solicitudes WHERE user_data ->> 'id' = $1;",
+      [userId] // Pasar el id como parámetro
+    );
+    // Enviamos las últimas solicitudes como respuesta en formato JSON
+    res.json(solicitudesData.rows);
+  } catch (error) {
+    console.error("Error al obtener las últimas solicitudes:", error);
+    res.status(500).json({ error: "Error al obtener las últimas solicitudes" });
+  }
+});
+
+
+app.post('/api/publicacion/:id', async (req, res) => {
+  try {
+      const publicacionId = req.params.id;
+      const { tipo, materia, tema, fecha } = req.body;
+      // Obtén los datos del usuario de la solicitud
+      const userData = req.body.user_data;
+
+      // Realiza la actualización en la base de datos, incluyendo los datos del usuario
+      const result = await pool.query(
+          "UPDATE solicitudes SET tipo_servicio = $1, materia = $2, tema_interes = $3, fecha_reunion = $4, user_data = $5 WHERE solicitud_id = $6",
+          [tipo, materia, tema, fecha, userData, publicacionId]
+      );
+      
+      res.redirect("/users/visualizarusuario");
+  } catch (error) {
+      console.error("Error al actualizar la publicación:", error);
+      res.status(500).json({ error: "Error al actualizar la publicación" });
+  }
+});
+
+
+
+
+app.get("/api/publicacion/:id", async (req, res) => {
+  try {
+    const publicacionId = req.params.id;
+    const solicitudesData = await pool.query(
+      "SELECT * FROM solicitudes WHERE solicitud_id = $1;",
+      [publicacionId]
+    );
+    // Enviamos las últimas solicitudes como respuesta en formato JSON
+    res.json(solicitudesData.rows);
+  } catch (error) {
+    console.error("Error al obtener la solicitud:", error);
+    res.status(500).json({ error: "Error al obtener la solicitud" });
+  }
+});
+
+
+
+
 app.get("/api/ultimas-publicaciones", async (req, res) => {
   try {
     const solicitudesData = await pool.query(
