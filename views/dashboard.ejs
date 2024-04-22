@@ -24,7 +24,7 @@
             &#8801
         </label>
         <nav class="menu">
-            <a href="/users/perfil">Mi cuenta <%= user.name %>
+            <a href="visualizarusuario">Mi cuenta <%= user.name %>
                     <%= user.lastname %></a>
             <a href="/users/logout">Cerrar sesión</a>
             <label for="check" class="esconder-menu">
@@ -39,62 +39,83 @@
         <button type="submit"><i class="fas fa-search"></i></button>
     </form>
 
-    <!-- Pestañas -->
-    <div class="tab">
-        <button class="tablinks" onclick="openTab(event, 'Servicios')">Servicios</button>
-        <button class="tablinks" onclick="openTab(event, 'Solicitudes')">Solicitudes</button>
-    </div>
+<!-- Pestañas -->
+<div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'Servicios')">Servicios</button>
+    <button class="tablinks" onclick="openTab(event, 'Solicitudes')">Solicitudes</button>
+</div>
 
-    <!-- Contenido de las pestañas -->
-    <div id="Servicios" class="tabcontent">
-        <ul id="ultimas-ofrecer">
-            <!-- Aquí se mostrarán las últimas solicitudes -->
-        </ul>
+<!-- Contenido de las pestañas -->
+<div id="Servicios" class="tabcontent">
+    <ul id="ultimas-ofrecer">
+        <!-- Aquí se mostrarán las últimas solicitudes -->
+    </ul>
 
-        <!-- Script para obtener las últimas solicitudes -->
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                fetch("/api/ultimas-ofrecer")
-                    .then(response => response.json())
-                    .then(data => {
-                        // Por ejemplo, podrías mostrar las solicitudes en una lista
-                        const list = document.getElementById("ultimas-ofrecer");
-                        data.forEach(solicitud => {
-                            const listItem = document.createElement("li");
-                            listItem.textContent = `${solicitud.tipo_servicio}: ${solicitud.materia}`;
-                            list.appendChild(listItem);
-                        });
-                    })
-                    .catch(error => console.error("Error al obtener las solicitudes:", error));
-            });
-        </script>
+    <!-- Script para obtener las últimas solicitudes -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            fetch("/api/ultimas-ofrecer")
+                .then(response => response.json())
+                .then(data => {
+                    // Aquí puedes manipular los datos como desees
+                    console.log("Últimas 5 solicitudes:", data);
+                    // Por ejemplo, podrías mostrar las solicitudes en una lista
+                    const list = document.getElementById("ultimas-ofrecer");
+                    data.forEach(solicitud => {
+                        const listItem = document.createElement("li");
+                        listItem.innerHTML = `
+                            <div class="solicitud-item">
+                                <p><strong>Tipo de Servicio:</strong> ${solicitud.tipo_servicio}</p>
+                                <p><strong>Materia:</strong> ${solicitud.materia}</p>
+                                <p><strong>Tema de Interés:</strong> ${solicitud.tema_interes}</p>
+                                <p><strong>Fecha de Reunión:</strong> ${solicitud.fecha_reunion}</p>
+                            </div>
+                            <hr>
+                        `;
+                        list.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error("Error al obtener las solicitudes:", error));
+        });
+    </script>
 
-    </div>
-    <div id="Solicitudes" class="tabcontent">
+</div>
 
-        <ul id="ultimas-solicitudes">
-            <!-- Aquí se mostrarán las últimas solicitudes -->
-        </ul>
+<div id="Solicitudes" class="tabcontent">
 
-        <!-- Script para obtener las últimas solicitudes -->
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                fetch("/api/ultimas-solicitudes")
-                    .then(response => response.json())
-                    .then(data => {
-                        // Por ejemplo, podrías mostrar las solicitudes en una lista
-                        const list = document.getElementById("ultimas-solicitudes");
-                        data.forEach(solicitud => {
-                            const listItem = document.createElement("li");
-                            listItem.textContent = `${solicitud.tipo_servicio}: ${solicitud.materia}`;
-                            list.appendChild(listItem);
-                        });
-                    })
-                    .catch(error => console.error("Error al obtener las solicitudes:", error));
-            });
-        </script>
+    <ul id="ultimas-solicitudes">
+        <!-- Aquí se mostrarán las últimas solicitudes -->
+    </ul>
 
-    </div>
+    <!-- Script para obtener las últimas solicitudes -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            fetch("/api/ultimas-solicitudes")
+                .then(response => response.json())
+                .then(data => {
+                    // Aquí puedes manipular los datos como desees
+                    console.log("Últimas 5 solicitudes:", data);
+                    // Por ejemplo, podrías mostrar las solicitudes en una lista
+                    const list = document.getElementById("ultimas-solicitudes");
+                    data.forEach(solicitud => {
+                        const listItem = document.createElement("li");
+                        listItem.innerHTML = `
+                            <div class="solicitud-item">
+                                <p><strong>Tipo de Servicio:</strong> ${solicitud.tipo_servicio}</p>
+                                <p><strong>Materia:</strong> ${solicitud.materia}</p>
+                                <p><strong>Tema de Interés:</strong> ${solicitud.tema_interes}</p>
+                                <p><strong>Fecha de Solicitud:</strong> ${solicitud.fecha_solicitud}</p>
+                            </div>
+                            <hr>
+                        `;
+                        list.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error("Error al obtener las solicitudes:", error));
+        });
+    </script>
+
+</div>
 
     <h1 style="text-align: center; margin-top: 50px; margin-bottom: 70px; color: #3c3c45;">Ofrece tus servicios o
         Solicita uno</h1>
