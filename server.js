@@ -324,7 +324,38 @@ app.get("/api/ultimas-ofrecer", async (req, res) => {
   }
 });
 
+app.get("/solicitud/visualizar", async (req, res) => {
+  try {
+    const solicitudesData = await pool.query(`
+      SELECT solicitud_id, tipo_servicio, materia, tema_interes, fecha_reunion, fecha_solicitud, 
+             user_data->>'id' AS usuario_id, user_data->>'name' AS usuario_nombre
+      FROM solicitudes
+      WHERE user_data->>'id' = $1`, 
+      [req.user.id]
+    );
+    const solicitudes = solicitudesData.rows;
+    res.render("visualizarservicio.ejs", { solicitudes, user: req.user });
+  } catch (error) {
+    console.error("Error al obtener las solicitudes:", error);
+    res.status(500).send("Error al obtener las solicitudes");
+  }
+});
 
+
+app.get("/api/search", async (req, res) => {
+  const query = req.query.query;
+  try {
+    const searchResults = await pool.query(`
+      SELECT * FROM solicitudes
+      WHERE materia ILIKE $1 OR tema_interes ILIKE $1
+    `, [`%${query}%`]);
+
+    res.json(searchResults.rows);
+  } catch (error) {
+    console.error("Error al realizar la búsqueda:", error);
+    res.status(500).json({ error: "Error al realizar la búsqueda" });
+  }
+});
 
 
 app.post(
