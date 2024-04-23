@@ -71,18 +71,29 @@ app.get("/users/solicitarservicio",  (req, res) => {
 
 app.get("/users/login", checkAuthenticated, (req, res) => {
   // flash establece una variable de mensajes. Passport establece el mensaje de error
-  console.log(req.session.flash.error);
-  res.render("login.ejs");
+  const errors = req.flash('error');
+  res.render("login.ejs", { errors: errors || [] });
 });
-
 app.get("/users/dashboard", checkNotAuthenticated, (req, res) => {
   console.log(req.isAuthenticated());
   res.render("dashboard", { user: req.user });
 });
 
-app.get("/users/logout", (req, res) => {
-  req.logout();
-  res.render("index", { message: "Has cerrado sesión exitosamente" });
+app.get("/users/logout", checkNotAuthenticated, (req, res) => {
+  console.log(req.isAuthenticated());
+  res.render("dashboard", { user: req.user });
+});
+
+app.get('/logout', (req, res) => {
+  // Destruir la sesión
+  req.session.destroy(err => {
+    if (err) {
+      console.error("Error al cerrar sesión:", err);
+      return res.status(500).send("Error al cerrar sesión");
+    }
+    // Redireccionar al usuario a la página de inicio de sesión después de cerrar sesión
+    res.redirect('/users/login');
+  });
 });
 
 app.post("/users/register", async (req, res) => {
@@ -100,6 +111,7 @@ app.post("/users/register", async (req, res) => {
     password,
     password2
   });
+//
 
   if (!name || !lastname || !document_type || !id_number || !email || !program || !password || !password2) {
     errors.push({ message: "Por favor completa todos los campos" });
@@ -284,7 +296,7 @@ app.get("/api/publicacion/:id", async (req, res) => {
 app.get("/api/ultimas-publicaciones", async (req, res) => {
   try {
     const solicitudesData = await pool.query(
-      "SELECT * FROM solicitudes ORDER BY fecha_solicitud DESC LIMIT 5;"
+      "SELECT * FROM solicitudes ORDER BY fecha_solicitud DESC LIMIT 7;"
     );
     // Enviamos las últimas solicitudes como respuesta en formato JSON
     res.json(solicitudesData.rows);
@@ -299,7 +311,7 @@ app.get("/api/ultimas-solicitudes", async (req, res) => {
   try {
     // Realizamos la consulta para obtener las últimas 5 solicitudes
     const solicitudesData = await pool.query(
-      "SELECT * FROM solicitudes WHERE tipo_servicio = 'solicitar' ORDER BY fecha_solicitud DESC LIMIT 5;"
+      "SELECT * FROM solicitudes WHERE tipo_servicio = 'solicitar' ORDER BY fecha_solicitud DESC LIMIT 10;"
     );
 
     // Enviamos las solicitudes como respuesta en formato JSON
@@ -316,7 +328,7 @@ app.get("/api/ultimas-ofrecer", async (req, res) => {
   try {
     // Realizamos la consulta para obtener las últimas 5 solicitudes
     const solicitudesData = await pool.query(
-      "SELECT * FROM solicitudes WHERE tipo_servicio = 'ofrecer' ORDER BY fecha_solicitud DESC LIMIT 5;"
+      "SELECT * FROM solicitudes WHERE tipo_servicio = 'ofrecer' ORDER BY fecha_solicitud DESC LIMIT 10;"
     );
 
     // Enviamos las solicitudes como respuesta en formato JSON

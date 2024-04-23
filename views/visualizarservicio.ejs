@@ -180,17 +180,16 @@
         </label>
         <nav class="menu">
             <a href="/users/dashboard">Volver</a>
-            <a href="/users/logout">Cerrar sesión</a>
+            <a href="/logout">Cerrar sesión</a>
             <label for="check" class="esconder-menu">
                 &#215
             </label>
-
         </nav>
     </header>
     
     <div class="container">
-    <h1>Solicitudes Creadas</h1>
-    <% if (solicitudes && solicitudes.length > 0) { %>
+        <h1>Solicitudes Creadas</h1>
+        <% if (solicitudes && solicitudes.length > 0) { %>
         <table>
             <thead>
                 <tr>
@@ -204,22 +203,22 @@
             </thead>
             <tbody>
                 <% solicitudes.forEach(solicitud => { %>
-                    <tr>
-                        <td><%= solicitud.solicitud_id %></td>
-                        <td><%= solicitud.tipo_servicio %></td>
-                        <td><%= solicitud.materia %></td>
-                        <td><%= solicitud.tema_interes %></td>
-                        <td><%= solicitud.fecha_reunion %></td>
-                        <td><%= solicitud.fecha_solicitud %></td>
-                    </tr>
+                <tr>
+                    <td><%= solicitud.solicitud_id %></td>
+                    <td><%= solicitud.tipo_servicio %></td>
+                    <td><%= solicitud.materia %></td>
+                    <td><%= solicitud.tema_interes %></td>
+                    <td><%= new Date(solicitud.fecha_reunion).toLocaleString('es-ES', { dateStyle: 'medium', timeStyle: 'short' }) %></td>
+                    <td><%= new Date(solicitud.fecha_solicitud).toLocaleString('es-ES', { dateStyle: 'medium', timeStyle: 'short' }) %></td>
+                </tr>
                 <% }); %>
             </tbody>
         </table>
-    </div>
-    
-    <% } else { %>
+        </div>
+        
+        <% } else { %>
         <p>No se encontraron solicitudes.</p>
-    <% } %>
-    
-</body>
+        <% } %>
+        
+    </body>
 </html>

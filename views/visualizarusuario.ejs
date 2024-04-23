@@ -197,13 +197,17 @@
         }
 
         .delete-button {
-            background: none;
-            border: none;
-            font-size: 20px;
-            color: red;
-            cursor: pointer;
-        }
+        font-size: 16px; /* Tamaño de fuente más grande */
+        padding: 9px 19px; /* Padding mayor para hacerlo más grande */
+        margin-left: 50px; /* Margen a la derecha para desplazarlo */
+        display: inline-block;
+        color: red;
+    }
+    .button-spacing {
+        margin-right: 0px; /* Margen entre los botones */
+    }
     </style>
+    
 
 </head>
 
@@ -214,28 +218,20 @@
         <label for="check" class="mostrar-menu">&#8801</label>
         <nav class="menu">
             <a href="/users/dashboard">Volver</a>
-            <a href="/users/logout">Cerrar sesión</a>
+            <a href="/logout">Cerrar sesión</a>
             <label for="check" class="esconder-menu">&#215</label>
         </nav>
     </header>
 
     <div class="container">
-        <h1>Bienvenido, <%= user.name %>
-                <%= user.lastname %>
-        </h1>
-        <p>Email: <%= user.email %>
-        </p>
+        <h1>Bienvenido, <%= user.name %> <%= user.lastname %></h1>
+        <p>Email: <%= user.email %></p>
         <ul>
-            <li>Nombre: <%= user.name %>
-            </li>
-            <li>Apellido: <%= user.lastname %>
-            </li>
-            <li>Tipo de Documento: <%= user.document_type %>
-            </li>
-            <li>Número de Documento: <%= user.id_number %>
-            </li>
-            <li>Programa: <%= user.program %>
-            </li>
+            <li>Nombre: <%= user.name %></li>
+            <li>Apellido: <%= user.lastname %></li>
+            <li>Tipo de Documento: <%= user.document_type %></li>
+            <li>Número de Documento: <%= user.id_number %></li>
+            <li>Programa: <%= user.program %></li>
         </ul>
     </div>
 
@@ -243,60 +239,50 @@
     <div class="container2"></div>
 
     <!-- Contenedor del formulario de edición y del cuadro de confirmación -->
-    <div id="modalContainer"
-        style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
+    <div id="modalContainer" style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
         <h2 style="text-align: center; margin-bottom: 20px;">Confirmar eliminación</h2>
         <p style="margin-bottom: 20px;">¿Estás seguro de que quieres eliminar esta publicación?</p>
         <div style="display: flex; justify-content: space-around;">
-            <button onclick="cancelDelete()"
-                style="padding: 15px; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cancelar</button>
-            <button onclick="confirmDelete()"
-                style="padding: 15px; background-color: #ff4d4d; color: white; border: none; border-radius: 5px; cursor: pointer;">Eliminar</button>
+            <button onclick="cancelDelete()" style="padding: 15px; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cancelar</button>
+            <span>&nbsp;</span> 
+            <span>&nbsp;</span>
+            <span>&nbsp;</span>
+            <span>&nbsp;</span><!-- Espacio entre los botones -->
+            <button onclick="confirmDelete()" style="padding: 15px; background-color: #ff4d4d; color: white; border: none; border-radius: 5px; cursor: pointer;">Eliminar</button>
         </div>
     </div>
 
     <!-- Mensaje de eliminación exitosa -->
-    <div id="deleteSuccessMessage"
-        style="display: none; background-color: #4CAF50; color: white; text-align: center; padding: 20px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);">
+    <div id="deleteSuccessMessage" style="display: none; background-color: #4CAF50; color: white; text-align: center; padding: 20px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);">
         <p>¡Publicación eliminada con éxito!</p>
     </div>
 
-    <div id="editarForm" class="editar-form"
-        style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
+    <div id="editarForm" class="editar-form" style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
         <h2 style="text-align: center; margin-bottom: 20px;">Formulario de Edición</h2>
-        <button onclick="openEditForm()"
-            style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #555;cursor: pointer;">&times;</button>
+        <button onclick="openEditForm()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #555;cursor: pointer;">&times;</button>
         <form id="editForm" method="post">
             <input type="hidden" id="user_data" name="user_data" value="<%= JSON.stringify(user) %>">
             <label for="tipo">Tipo de Publicación:</label><br>
-            <select id="tipo" name="tipo"
-                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+            <select id="tipo" name="tipo" style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
                 <option value="solicitar">Solicitar Servicio</option>
                 <option value="ofrecer">Ofrecer Servicio</option>
             </select><br>
             <label for="materia">Materia:</label><br>
-            <select id="materia" name="materia"
-                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+            <select id="materia" name="materia" style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
                 <option value="" disabled selected>Selecciona una materia</option>
             </select><br>
             <label for="fecha">Fecha:</label><br>
-            <input type="date" id="fecha" name="fecha"
-                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+            <input type="date" id="fecha" name="fecha" style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
             <label for="tema">Tema:</label><br>
-            <input type="text" id="tema" name="tema"
-                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br><br>
-            <button type="submit"
-                style="width: 100%; padding: 15px; background-color: #4d4d5c; color: white; border: none; border-radius: 5px; cursor: pointer;">Actualizar</button>
+            <input type="text" id="tema" name="tema" style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br><br>
+            <button type="submit" style="width: 100%; padding: 15px; background-color: #4d4d5c; color: white; border: none; border-radius: 5px; cursor: pointer;">Actualizar</button>
         </form>
-        <button onclick="openEditForm()"
-            style="margin-top: 20px; padding: 15px; width: 100%; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
+        <button onclick="openEditForm()" style="margin-top: 20px; padding: 15px; width: 100%; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
     </div>
 
-
     <script>
-        var categorias = ["Matemáticas", "Física", "Programación", "Idiomas", "Derecho", "Pedagogía",
-            "Comunicación", "Administración ", "Estadistica", "Otros"];
-        id = '<%= user.id %>'
+        var categorias = ["Matemáticas", "Física", "Programación", "Idiomas", "Derecho", "Pedagogía", "Comunicación", "Administración ", "Estadistica", "Otros"];
+        id = '<%= user.id %>';
         fetch(`/api/publicaciones-usuario/${id}`)
             .then(response => response.json())
             .then(data => {
@@ -314,7 +300,7 @@
                     titulo.textContent = publicacion.tipo_servicio === 'solicitar' ? `Solicitud: ${publicacion.materia}` : `Oferta: ${publicacion.materia}`;
                     materia.textContent = `Materia: ${publicacion.materia}`;
                     tema.textContent = `Tema: ${publicacion.tema_interes}`;
-                    fecha.textContent = `Fecha de reunión: ${publicacion.fecha_reunion}`;
+                    fecha.textContent = `Fecha de reunión: ${formatDate(publicacion.fecha_reunion)}`; // Formatear fecha aquí
                     editButton.textContent = 'Editar';
                     deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
                     deleteButton.setAttribute('data-id', publicacion.solicitud_id); // Agregar ID de la publicación
@@ -325,8 +311,15 @@
 
                     editButton.addEventListener('click', () => {
                         const fechaReunion = new Date(publicacion.fecha_reunion);
-                        const fechaFormateada = fechaReunion.toISOString().split('T')[0];
-
+                        const options = {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            hour12: true // Para usar formato de 12 horas
+                        };
+                        const fechaFormateada = fechaReunion.toLocaleString('en-US', options);
                         document.getElementById('tipo').value = publicacion.tipo_servicio;
                         document.getElementById('materia').value = publicacion.materia;
                         document.getElementById('fecha').value = fechaFormateada;
@@ -434,7 +427,19 @@
             generarOpcionesMaterias();
         }
 
-
+        // Función para formatear la fecha
+        function formatDate(dateString) {
+            const fechaReunion = new Date(dateString);
+            const options = {
+                year: 'numeric',
+                month: 'short',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true // Para usar formato de 12 horas
+            };
+            return fechaReunion.toLocaleString('en-US', options);
+        }
     </script>
 </body>
 
