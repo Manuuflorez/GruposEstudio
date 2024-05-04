@@ -9,7 +9,6 @@
     <script type="text/javascript">
         emailjs.init('Zh5Xh3x-J1rmUjEuJ')
     </script>
-    <link rel="stylesheet" href="/styles.css">
 
     <title>StudyCoop</title>
 
@@ -20,17 +19,19 @@
         <h2 class="logo">@ StudyCoop</h2>
 
         <input type="checkbox" id="check">
-        <label for="check" class="mostrar-menu">
-            &#8801
-        </label>
+        <label for="check" class="mostrar-menu">&#8801</label>
         <nav class="menu">
-            <a href="visualizarusuario">Mi cuenta <%= user.name %>
-                    <%= user.lastname %></a>
-            <a href="/logout">Cerrar sesión</a>
-            <a href="/solicitud/visualizar">Mis servicios</a>
-            <label for="check" class="esconder-menu">
-                &#215
-            </label>
+            <a href="visualizarusuario">Mi cuenta</a>
+            <!-- Lista desplegable de ajustes -->
+            <div class="dropdown">
+                <a class="dropbtn"><i class="fas fa-cog"></i></a>
+                <div class="dropdown-content">
+                    <a href="/logout">Cerrar sesión</a>
+                    <a href="#">Ajustes avanzados</a>
+                </div>
+            </div>
+            <!-- Fin de lista desplegable -->
+            <label for="check" class="esconder-menu">&#215</label>
         </nav>
     </header>
 
@@ -40,31 +41,31 @@
         <button type="submit"><i class="fas fa-search"></i></button>
     </form>
 
-<!-- Pestañas -->
-<div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'Servicios')">Servicios</button>
-    <button class="tablinks" onclick="openTab(event, 'Solicitudes')">Solicitudes</button>
-</div>
+    <!-- Pestañas -->
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'Servicios')">Servicios</button>
+        <button class="tablinks" onclick="openTab(event, 'Solicitudes')">Solicitudes</button>
+    </div>
 
-<!-- Contenido de las pestañas -->
-<div id="Servicios" class="tabcontent">
-    <ul id="ultimas-ofrecer">
-        <!-- Aquí se mostrarán las últimas solicitudes -->
-    </ul>
+    <!-- Contenido de las pestañas -->
+    <div id="Servicios" class="tabcontent">
+        <ul id="ultimas-ofrecer">
+            <!-- Aquí se mostrarán las últimas solicitudes -->
+        </ul>
 
-    <!-- Script para obtener las últimas solicitudes -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            fetch("/api/ultimas-ofrecer")
-                .then(response => response.json())
-                .then(data => {
-                    // Aquí puedes manipular los datos como desees
-                    console.log("Últimas 5 solicitudes:", data);
-                    // Por ejemplo, podrías mostrar las solicitudes en una lista
-                    const list = document.getElementById("ultimas-ofrecer");
-                    data.forEach(solicitud => {
-                        const listItem = document.createElement("li");
-                        listItem.innerHTML = `
+        <!-- Script para obtener las últimas solicitudes -->
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                fetch("/api/ultimas-ofrecer")
+                    .then(response => response.json())
+                    .then(data => {
+                        // Aquí puedes manipular los datos como desees
+                        console.log("Últimas 5 solicitudes:", data);
+                        // Por ejemplo, podrías mostrar las solicitudes en una lista
+                        const list = document.getElementById("ultimas-ofrecer");
+                        data.forEach(solicitud => {
+                            const listItem = document.createElement("li");
+                            listItem.innerHTML = `
                             <div class="solicitud-item">
                                 <p><strong>Tipo de Servicio:</strong> ${solicitud.tipo_servicio}</p>
                                 <p><strong>Materia:</strong> ${solicitud.materia}</p>
@@ -73,34 +74,34 @@
                             </div>
                             <hr>
                         `;
-                        list.appendChild(listItem);
-                    });
-                })
-                .catch(error => console.error("Error al obtener las solicitudes:", error));
-        });
-    </script>
+                            list.appendChild(listItem);
+                        });
+                    })
+                    .catch(error => console.error("Error al obtener las solicitudes:", error));
+            });
+        </script>
 
-</div>
+    </div>
 
-<div id="Solicitudes" class="tabcontent">
+    <div id="Solicitudes" class="tabcontent">
 
-    <ul id="ultimas-solicitudes">
-        <!-- Aquí se mostrarán las últimas solicitudes -->
-    </ul>
+        <ul id="ultimas-solicitudes">
+            <!-- Aquí se mostrarán las últimas solicitudes -->
+        </ul>
 
-    <!-- Script para obtener las últimas solicitudes -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            fetch("/api/ultimas-solicitudes")
-                .then(response => response.json())
-                .then(data => {
-                    // Aquí puedes manipular los datos como desees
-                    console.log("Últimas 5 solicitudes:", data);
-                    // Por ejemplo, podrías mostrar las solicitudes en una lista
-                    const list = document.getElementById("ultimas-solicitudes");
-                    data.forEach(solicitud => {
-                        const listItem = document.createElement("li");
-                        listItem.innerHTML = `
+        <!-- Script para obtener las últimas solicitudes -->
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                fetch("/api/ultimas-solicitudes")
+                    .then(response => response.json())
+                    .then(data => {
+                        // Aquí puedes manipular los datos como desees
+                        console.log("Últimas 5 solicitudes:", data);
+                        // Por ejemplo, podrías mostrar las solicitudes en una lista
+                        const list = document.getElementById("ultimas-solicitudes");
+                        data.forEach(solicitud => {
+                            const listItem = document.createElement("li");
+                            listItem.innerHTML = `
                             <div class="solicitud-item">
                                 <p><strong>Tipo de Servicio:</strong> ${solicitud.tipo_servicio}</p>
                                 <p><strong>Materia:</strong> ${solicitud.materia}</p>
@@ -109,24 +110,24 @@
                             </div>
                             <hr>
                         `;
-                        list.appendChild(listItem);
-                    });
-                })
-                .catch(error => console.error("Error al obtener las solicitudes:", error));
-        });
+                            list.appendChild(listItem);
+                        });
+                    })
+                    .catch(error => console.error("Error al obtener las solicitudes:", error));
+            });
 
-        function formatDate(dateString) {
-        const options = {
-            year: 'numeric',
-            month: 'short',
-            day: '2-digit'
-        };
-        const fechaReunion = new Date(dateString);
-        return fechaReunion.toLocaleString('en-US', options);
-    }
-    </script>
+            function formatDate(dateString) {
+                const options = {
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit'
+                };
+                const fechaReunion = new Date(dateString);
+                return fechaReunion.toLocaleString('en-US', options);
+            }
+        </script>
 
-</div>
+    </div>
 
     <h1 style="text-align: center; margin-top: 50px; margin-bottom: 70px; color: #3c3c45;">Ofrece tus servicios o
         Solicita uno</h1>
@@ -485,6 +486,36 @@
         padding: 0;
         font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
+
+    .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            left: -160px; /* Ajuste para que el menú se abra hacia la izquierda */
+        }
+
+        .dropdown-content a {
+            color: #4d4d5c !important;
+            padding: 12px 16px !important; 
+            text-decoration: none !important;
+            display: block !important;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1e1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
 
     .publicaciones-container {
         overflow-x: auto;
