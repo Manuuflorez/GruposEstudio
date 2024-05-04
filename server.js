@@ -53,15 +53,15 @@ app.get("/users/homepage", checkAuthenticated, (req, res) => {
   res.render("homepage.ejs");
 });
 
-app.get("/users/registrarservicio",  (req, res) => {
+app.get("/users/registrarservicio", (req, res) => {
   res.render("registrarservicio.ejs", { user: req.user });
 });
 
-app.get("/users/visualizarusuario",  (req, res) => {
+app.get("/users/visualizarusuario", (req, res) => {
   res.render("visualizarusuario.ejs", { user: req.user });
 });
 
-app.get("/users/solicitarservicio",  (req, res) => {
+app.get("/users/solicitarservicio", (req, res) => {
   res.render("solicitarservicio.ejs");
 });
 
@@ -111,7 +111,7 @@ app.post("/users/register", async (req, res) => {
     password,
     password2
   });
-//
+  //
 
   if (!name || !lastname || !document_type || !id_number || !email || !program || !password || !password2) {
     errors.push({ message: "Por favor completa todos los campos" });
@@ -172,6 +172,34 @@ app.post("/users/register", async (req, res) => {
   }
 });
 
+// Actualizar user
+app.post("/users/update/:id", async (req, res) => {
+  const userId = req.params.id;
+  const { name, lastname, document_type, id_number, program } = req.body;
+  const { password, email } = req.user
+  try {
+    // Verifica si el usuario existe
+    const userExists = await pool.query(
+      "SELECT * FROM users WHERE id = $1",
+      [userId]
+    );
+
+    if (userExists.rows.length === 0) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Actualiza los datos del usuario
+    await pool.query(
+      "UPDATE users SET name = $1, lastname = $2, document_type = $3, id_number = $4, email = $5, program = $6, password = $7 WHERE id = $8",
+      [name, lastname, document_type, id_number, email, program, password, userId]
+    );
+    res.redirect("/users/visualizarusuario");
+  } catch (error) {
+    console.error("Error al actualizar el usuario:", error);
+    res.status(500).json({ error: "Error al actualizar el usuario" });
+  }
+});
+
 app.get("/dashboard/publicar", async (req, res) => {
   res.render("dashboard.ejs"); // Renderiza el formulario de publicación en el dashboard
 });
@@ -216,7 +244,7 @@ app.post("/dashboard/publicar", (req, res) => {
 app.delete('/api/eliminar-publicacion/:id', async (req, res) => {
   try {
     const publicacionId = req.params.id;
-    
+
     // Realizar la consulta para eliminar la publicación por su ID
     const result = await pool.query(
       'DELETE FROM solicitudes WHERE solicitud_id = $1',
@@ -254,21 +282,21 @@ app.get("/api/publicaciones-usuario/:id", async (req, res) => {
 
 app.post('/api/publicacion/:id', async (req, res) => {
   try {
-      const publicacionId = req.params.id;
-      const { tipo, materia, tema, fecha } = req.body;
-      // Obtén los datos del usuario de la solicitud
-      const userData = req.body.user_data;
+    const publicacionId = req.params.id;
+    const { tipo, materia, tema, fecha } = req.body;
+    // Obtén los datos del usuario de la solicitud
+    const userData = req.body.user_data;
 
-      // Realiza la actualización en la base de datos, incluyendo los datos del usuario
-      const result = await pool.query(
-          "UPDATE solicitudes SET tipo_servicio = $1, materia = $2, tema_interes = $3, fecha_reunion = $4, user_data = $5 WHERE solicitud_id = $6",
-          [tipo, materia, tema, fecha, userData, publicacionId]
-      );
-      
-      res.redirect("/users/visualizarusuario");
+    // Realiza la actualización en la base de datos, incluyendo los datos del usuario
+    const result = await pool.query(
+      "UPDATE solicitudes SET tipo_servicio = $1, materia = $2, tema_interes = $3, fecha_reunion = $4, user_data = $5 WHERE solicitud_id = $6",
+      [tipo, materia, tema, fecha, userData, publicacionId]
+    );
+
+    res.redirect("/users/visualizarusuario");
   } catch (error) {
-      console.error("Error al actualizar la publicación:", error);
-      res.status(500).json({ error: "Error al actualizar la publicación" });
+    console.error("Error al actualizar la publicación:", error);
+    res.status(500).json({ error: "Error al actualizar la publicación" });
   }
 });
 
@@ -346,7 +374,7 @@ app.get("/solicitud/visualizar", async (req, res) => {
       SELECT solicitud_id, tipo_servicio, materia, tema_interes, fecha_reunion, fecha_solicitud, 
              user_data->>'id' AS usuario_id, user_data->>'name' AS usuario_nombre
       FROM solicitudes
-      WHERE user_data->>'id' = $1`, 
+      WHERE user_data->>'id' = $1`,
       [req.user.id]
     );
     const solicitudes = solicitudesData.rows;

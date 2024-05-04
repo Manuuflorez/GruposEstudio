@@ -234,7 +234,8 @@
 
     <div class="container">
         <h1>Bienvenido, <%= user.name %>
-                <%= user.lastname %>
+                <%= user.lastname %> <button onclick="editUser()" class="edit-button" title="Editar Usuario"><i
+                            class="fas fa-pencil-alt"></i></button>
         </h1>
         <p>Email: <%= user.email %>
         </p>
@@ -308,6 +309,84 @@
         <button onclick="openEditForm()"
             style="margin-top: 20px; padding: 15px; width: 100%; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
     </div>
+    <div id="editarUsuarioForm"
+        style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5); max-width: 400px;">
+        <h2 style="text-align: center; margin-bottom: 20px;">Editar Usuario</h2>
+        <button onclick="closeEditForm()"
+            style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #555;cursor: pointer;">&times;</button>
+        <form id="editUserForm" method="POST" action="/users/update/<%= user.id %>">
+            <label for="name" style="margin-bottom: 10px;">Nombre:</label><br>
+            <input type="text" id="name" name="name" value="<%= user.name %>" required
+                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+            <label for="lastname" style="margin-bottom: 10px;">Apellido:</label><br>
+            <input type="text" id="lastname" name="lastname" value="<%= user.lastname %>" required
+                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+            <label for="document_type" style="margin-bottom: 10px;">Tipo de Documento:</label><br>
+            <div style="position: relative;">
+                <select id="document_type" name="document_type" required
+                    style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+                    <option value="" disabled>Tipo de Documento</option>
+                    <option value="CC" <% if(user.document_type==='CC' ) { %> selected <% } %>>C.C</option>
+                    <option value="TI" <% if(user.document_type==='TI' ) { %> selected <% } %>>T.I</option>
+                    <option value="CE" <% if(user.document_type==='CE' ) { %> selected <% } %>>C.E</option>
+                </select>
+                <i class="fa-regular fa-address-card input-icon"
+                    style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); color: #ccc;"></i>
+            </div>
+            <label for="id_number" style="margin-bottom: 10px;">Número de Documento:</label><br>
+            <input type="text" id="id_number" name="id_number" value="<%= user.id_number %>" required
+                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+            <label for="program" style="margin-bottom: 10px;">Programa:</label><br>
+            <div style="position: relative;">
+                <select id="program" name="program" required
+                    style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+                    <option value="" disabled>Carrera</option>
+                    <option value="AdminEmpresDistancia" <% if(user.program==='AdminEmpresDistancia' ) { %> selected <%
+                            } %>>Administración de Empresas</option>
+                    <option value="ComSocialPresencial" <% if(user.program==='ComSocialPresencial' ) { %> selected <% }
+                            %>>Comunicación Social</option>
+                    <option value="ContaduriaPresencial" <% if(user.program==='ContaduriaPresencial' ) { %> selected <%
+                            } %>>Contaduría Pública</option>
+                    <option value="DerechoPresencial" <% if(user.program==='DerechoPresencial' ) { %> selected <% } %>
+                            >Derecho</option>
+                    <option value="DesarrolloFamiliarPresencial" <% if(user.program==='DesarrolloFamiliarPresencial' ) {
+                        %> selected <% } %>>Desarrollo Familiar</option>
+                    <option value="DisenoGraficoPresencial" <% if(user.program==='DisenoGraficoPresencial' ) { %>
+                        selected <% } %>>Diseño Gráfico</option>
+                    <option value="FilosofiaPresencial" <% if(user.program==='FilosofiaPresencial' ) { %> selected <% }
+                            %>>Filosofía</option>
+                    <option value="GastronomiaPresencial" <% if(user.program==='GastronomiaPresencial' ) { %> selected
+                        <% } %>>Gastronomía</option>
+                    <option value="IngSistemasPresencial" <% if(user.program==='IngSistemasPresencial' ) { %> selected
+                        <% } %>>Ingeniería de Sistemas</option>
+                    <option value="LicEducacionInfantilPresencial" <% if(user.program==='LicEducacionInfantilPresencial'
+                        ) { %> selected <% } %>>Licenciatura en Educación Infantil</option>
+                    <option value="LicLenguasExtranjerasPresencial" <%
+                        if(user.program==='LicLenguasExtranjerasPresencial' ) { %> selected <% } %>>Licenciatura en
+                            Lenguas Extranjeras</option>
+                    <option value="NegociosInternacionalesPresencial" <%
+                        if(user.program==='NegociosInternacionalesPresencial' ) { %> selected <% } %>>Negocios
+                            Internacionales</option>
+                    <option value="PsicologiaDistancia" <% if(user.program==='PsicologiaDistancia' ) { %> selected <% }
+                            %>>Psicología (Distancia)</option>
+                    <option value="PsicologiaPresencial" <% if(user.program==='PsicologiaPresencial' ) { %> selected <%
+                            } %>>Psicología (Presencial)</option>
+                    <option value="PublicidadPresencial" <% if(user.program==='PublicidadPresencial' ) { %> selected <%
+                            } %>>Publicidad</option>
+                    <option value="TeologiaPresencial" <% if(user.program==='TeologiaPresencial' ) { %> selected <% } %>
+                            >Teología</option>
+                    <option value="TrabajoSocialDistancia" <% if(user.program==='TrabajoSocialDistancia' ) { %> selected
+                        <% } %>>Trabajo Social (Distancia)</option>
+                </select>
+                <i class="fa-solid fa-user-tie input-icon"
+                    style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); color: #ccc;"></i>
+            </div>
+            <button type="submit"
+                style="width: 100%; padding: 15px; background-color: #4d4d5c; color: white; border: none; border-radius: 5px; cursor: pointer;">Actualizar</button>
+        </form>
+        <button onclick="closeEditForm()"
+            style="margin-top: 20px; padding: 15px; width: 100%; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
+    </div>
 
     <script>
         var categorias = ["Matemáticas", "Física", "Programación", "Idiomas", "Derecho", "Pedagogía", "Comunicación", "Administración ", "Estadistica", "Otros"];
@@ -323,7 +402,7 @@
                     const tema = document.createElement('p');
                     const fecha = document.createElement('p');
                     const editButton = document.createElement('button');
-                    const deleteButton = document.createElement('button'); // Nuevo botón de eliminar
+                    const deleteButton = document.createElement('button');
                     const separator = document.createElement('hr');
 
                     titulo.textContent = publicacion.tipo_servicio === 'solicitar' ? `Solicitud: ${publicacion.materia}` : `Oferta: ${publicacion.materia}`;
@@ -455,12 +534,24 @@
                 year: 'numeric',
                 month: 'short',
                 day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
                 hour12: true // Para usar formato de 12 horas
             };
             return fechaReunion.toLocaleString('en-US', options);
         }
+
+        function editUser() {
+            var editForm = document.getElementById("editarUsuarioForm");
+            if (editForm.style.display === "none") {
+                editForm.style.display = "block";
+            } else {
+                editForm.style.display = "none";
+            }
+        }
+
+        function closeEditForm() {
+            document.getElementById('editarUsuarioForm').style.display = 'none';
+        }
+
     </script>
 </body>
 
