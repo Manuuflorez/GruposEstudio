@@ -42,7 +42,7 @@
 
 
     <div id="general" class="container">
-        <h1>Bienvenido, <%= user.name %> <%= user.lastname %><button onclick="editUser()" class="edit-button" title="Editar Usuario">
+        <h1>Bienvenido, <%= user.name %> <%= user.lastname %> <button onclick="editUser()" class="edit-icon" title="Editar Usuario">
             <i class="fas fa-pencil-alt"></i></button>
         </h1>
         <p>Email: <%= user.email %>
@@ -442,6 +442,7 @@
     }
 
     div.content {
+        margin-top: 100px;
         margin-left: 200px;
         padding: 1px 16px;
         height: 1000px;
@@ -478,6 +479,10 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        position: fixed;
+        width: 96%;
+        top: 0;
+        z-index: 1000;
     }
 
     .logo {
@@ -509,6 +514,19 @@
     .edit-button {
         border-radius: 5px;
         padding: 10px 10px;
+        margin-bottom: 20px;
+        transition: background-color 0.3s;
+        background-color: #4d4d5c;
+        color: white;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+    .edit-icon {
+        border-radius: 5px;
+        padding: 10px 10px;
+        left: 250px;
+        position: relative; 
         margin-bottom: 20px;
         transition: background-color 0.3s;
         background-color: #4d4d5c;
@@ -605,12 +623,14 @@
         padding: 20px;
         background-color: #fff;
         border-radius: 8px;
+        margin-top: 100px;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     }
 
     .container2 {
         max-width: 800px;
         margin: 50px auto;
+        margin-top: 100px;
         padding: 20px;
         background-color: #fff;
         border-radius: 8px;
