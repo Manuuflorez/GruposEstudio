@@ -57,7 +57,7 @@ app.get("/users/registrarservicio", (req, res) => {
   res.render("registrarservicio.ejs", { user: req.user });
 });
 
-app.get("/users/visualizarusuario", (req, res) => {
+app.get("/users/visualizarusuario", checkNotAuthenticated, (req, res) => {
   res.render("visualizarusuario.ejs", { user: req.user });
 });
 
