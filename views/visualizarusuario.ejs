@@ -12,245 +12,9 @@
 
     <title>StudyCoop</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            font-family: Verdana, Geneva, Tahoma, sans-serif;
-        }
-
-        header {
-            height: 100px;
-            background: #4d4d5c;
-            padding: 0 50px;
-            color: aliceblue;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            text-transform: uppercase;
-            font-weight: 200;
-            color: whitesmoke;
-        }
-
-        .menu a {
-            color: #fff;
-            text-decoration: none;
-            text-transform: uppercase;
-            padding: 0 10px;
-            transition: 0.4s;
-        }
-
-        .mostrar-menu,
-        .esconder-menu {
-            font-size: 30px;
-            cursor: pointer;
-            transition: 0.4s;
-            display: none;
-        }
-
-        .mostrar-menu {
-            order: 1;
-        }
-
-        .edit-button {
-            border-radius: 5px;
-            padding: 10px 10px;
-            margin-bottom: 20px;
-            transition: background-color 0.3s;
-            background-color: #4d4d5c;
-            color: white;
-            font-size: 15px;
-            cursor: pointer;
-        }
-
-        .menu a:hover,
-        .mostrar-menu:hover,
-        .esconder-menu:hover {
-            color: #666666;
-        }
-
-        #check {
-            display: none;
-        }
-
-        @media(max-width:768px) {
-
-            .mostrar-menu,
-            .esconder-menu {
-                display: block;
-            }
-
-            .menu {
-                position: fixed;
-                height: 100vh;
-                z-index: 100;
-                width: 100%;
-                background: rgb(86, 87, 87);
-                right: -100%;
-                top: 0;
-                text-align: center;
-                padding: 100px 0px;
-                z-index: 100;
-                transition: o.8s;
-            }
-
-            .menu a {
-                display: block;
-                padding: 20px;
-            }
-
-            .esconder-menu {
-                position: absolute;
-                top: 40px;
-                right: 40px;
-            }
-
-            #check:checked~.menu {
-                right: 0;
-            }
-
-            #personas {
-                flex-direction: column;
-            }
-
-            .contenido-icono {
-                flex-direction: column;
-            }
-
-            .contenido-icono div {
-                border: none !important;
-            }
-
-            .datos-form {
-                flex-direction: column;
-            }
-
-            .boton-empezar {
-                text-decoration: none;
-                transition: all 0.6s;
-                color: #fff;
-                border: 1px solid grey;
-                padding: 20px 40px;
-                align-self: baseline;
-            }
-
-            .boton-empezar:hover {
-                background-color: grey;
-                color: black;
-            }
-
-            .servicio-text {
-                text-align: center;
-            }
-        }
-
-        /* Styles for User Information Container */
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .container2 {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            font-size: 32px;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            margin-bottom: 10px;
-        }
-
-        p {
-            margin-bottom: 10px;
-        }
-
-        a {
-            text-decoration: none;
-            color: #007bff;
-        }
-
-        a:hover {
-            text-decoration: underline;
-            color: #0056b3;
-        }
-
-        .delete-button {
-            font-size: 16px;
-            /* Tamaño de fuente más grande */
-            padding: 9px 19px;
-            /* Padding mayor para hacerlo más grande */
-            margin-left: 50px;
-            /* Margen a la derecha para desplazarlo */
-            display: inline-block;
-            color: red;
-            border: none;
-            /* Elimina el borde */
-            background-color: transparent;
-            /* Hace el fondo transparente */
-        }
-
-        .button-spacing {
-            margin-right: 0px;
-            /* Margen entre los botones */
-        }
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-            left: -160px; /* Ajuste para que el menú se abra hacia la izquierda */
-        }
-
-        .dropdown-content a {
-            color: #4d4d5c;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #f1f1f1;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-    
-    </style>
-
-
 </head>
 
-<body>
+<body onload="mostrarSeccion('general')">
     <header>
         <h2 class="logo">@ StudyCoop</h2>
         <input type="checkbox" id="check">
@@ -262,7 +26,6 @@
                 <a class="dropbtn"><i class="fas fa-cog"></i></a>
                 <div class="dropdown-content">
                     <a href="/logout">Cerrar sesión</a>
-                    <a href="#">Ajustes avanzados</a>
                 </div>
             </div>
             <!-- Fin de lista desplegable -->
@@ -270,10 +33,17 @@
         </nav>
     </header>
 
-    <div class="container">
-        <h1>Bienvenido, <%= user.name %>
-                <%= user.lastname %> <button onclick="editUser()" class="edit-button" title="Editar Usuario"><i
-                            class="fas fa-pencil-alt"></i></button>
+    <div class="sidebar">
+        <a id="generalLink" class="active" onclick="mostrarSeccion('general')"> <i class="fa-solid fa-user-tie input-icon"></i> General</a>
+        <a id="publicacionesLink" onclick="mostrarSeccion('publicaciones')"><i class="fa fa-folder"></i> Publicaciones</a>
+        <a id="cambiarContrasenaLink"><i class="fas fa-lock"></i> Cambiar contraseña</a>
+        <a id="cambiarCorreoLink"><i class="fas fa-envelope"></i> Cambiar correo</a>
+    </div>
+
+
+    <div id="general" class="container">
+        <h1>Bienvenido, <%= user.name %> <%= user.lastname %><button onclick="editUser()" class="edit-button" title="Editar Usuario">
+            <i class="fas fa-pencil-alt"></i></button>
         </h1>
         <p>Email: <%= user.email %>
         </p>
@@ -289,65 +59,8 @@
             <li>Programa: <%= user.program %>
             </li>
         </ul>
-    </div>
 
-    <h1 style="text-align: center;">Listado de tus publicaciones</h1>
-    <div class="container2"></div>
-
-    <!-- Contenedor del formulario de edición y del cuadro de confirmación -->
-    <div id="modalContainer"
-        style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
-        <h2 style="text-align: center; margin-bottom: 20px;">Confirmar eliminación</h2>
-        <p style="margin-bottom: 20px;">¿Estás seguro de que quieres eliminar esta publicación?</p>
-        <div style="display: flex; justify-content: space-around;">
-            <button onclick="cancelDelete()"
-                style="padding: 15px; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cancelar</button>
-            <span>&nbsp;</span>
-            <span>&nbsp;</span>
-            <span>&nbsp;</span>
-            <span>&nbsp;</span><!-- Espacio entre los botones -->
-            <button onclick="confirmDelete()"
-                style="padding: 15px; background-color: #ff4d4d; color: white; border: none; border-radius: 5px; cursor: pointer;">Eliminar</button>
-        </div>
-    </div>
-
-    <!-- Mensaje de eliminación exitosa -->
-    <div id="deleteSuccessMessage"
-        style="display: none; background-color: #4CAF50; color: white; text-align: center; padding: 20px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);">
-        <p>¡Publicación eliminada con éxito!</p>
-    </div>
-
-    <div id="editarForm" class="editar-form"
-        style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
-        <h2 style="text-align: center; margin-bottom: 20px;">Formulario de Edición</h2>
-        <button onclick="openEditForm()"
-            style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #555;cursor: pointer;">&times;</button>
-        <form id="editForm" method="post">
-            <input type="hidden" id="user_data" name="user_data" value="<%= JSON.stringify(user) %>">
-            <label for="tipo">Tipo de Publicación:</label><br>
-            <select id="tipo" name="tipo"
-                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
-                <option value="solicitar">Solicitar Servicio</option>
-                <option value="ofrecer">Ofrecer Servicio</option>
-            </select><br>
-            <label for="materia">Materia:</label><br>
-            <select id="materia" name="materia"
-                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
-                <option value="" disabled selected>Selecciona una materia</option>
-            </select><br>
-            <label for="fecha">Fecha:</label><br>
-            <input type="date" id="fecha" name="fecha"
-                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
-            <label for="tema">Tema:</label><br>
-            <input type="text" id="tema" name="tema"
-                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br><br>
-            <button type="submit"
-                style="width: 100%; padding: 15px; background-color: #4d4d5c; color: white; border: none; border-radius: 5px; cursor: pointer;">Actualizar</button>
-        </form>
-        <button onclick="openEditForm()"
-            style="margin-top: 20px; padding: 15px; width: 100%; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
-    </div>
-    <div id="editarUsuarioForm"
+        <div id="editarUsuarioForm"
         style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5); max-width: 400px;">
         <h2 style="text-align: center; margin-bottom: 20px;">Editar Usuario</h2>
         <button onclick="closeEditForm()"
@@ -379,42 +92,58 @@
                 <select id="program" name="program" required
                     style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
                     <option value="" disabled>Carrera</option>
-                    <option value="AdminEmpresDistancia" <% if(user.program==='AdminEmpresDistancia' ) { %> selected <%
-                            } %>>Administración de Empresas</option>
-                    <option value="ComSocialPresencial" <% if(user.program==='ComSocialPresencial' ) { %> selected <% }
-                            %>>Comunicación Social</option>
-                    <option value="ContaduriaPresencial" <% if(user.program==='ContaduriaPresencial' ) { %> selected <%
-                            } %>>Contaduría Pública</option>
-                    <option value="DerechoPresencial" <% if(user.program==='DerechoPresencial' ) { %> selected <% } %>
+                    <option value="AdminEmpresDistancia" <% if(user.program==='AdminEmpresDistancia' ) { %> selected
+                        <% } %>>Administración de Empresas
+                    </option>
+                    <option value="ComSocialPresencial" <% if(user.program==='ComSocialPresencial' ) { %> selected
+                        <% } %>>Comunicación Social
+                    </option>
+                    <option value="ContaduriaPresencial" <% if(user.program==='ContaduriaPresencial' ) { %> selected
+                        <% } %>>Contaduría Pública
+                    </option>
+                    <option value="DerechoPresencial" <% if(user.program==='DerechoPresencial' ) { %> selected <% }
+                            %>
                             >Derecho</option>
-                    <option value="DesarrolloFamiliarPresencial" <% if(user.program==='DesarrolloFamiliarPresencial' ) {
-                        %> selected <% } %>>Desarrollo Familiar</option>
+                    <option value="DesarrolloFamiliarPresencial" <% if(user.program==='DesarrolloFamiliarPresencial'
+                        ) { %> selected <% } %>>Desarrollo Familiar</option>
                     <option value="DisenoGraficoPresencial" <% if(user.program==='DisenoGraficoPresencial' ) { %>
                         selected <% } %>>Diseño Gráfico</option>
-                    <option value="FilosofiaPresencial" <% if(user.program==='FilosofiaPresencial' ) { %> selected <% }
-                            %>>Filosofía</option>
-                    <option value="GastronomiaPresencial" <% if(user.program==='GastronomiaPresencial' ) { %> selected
-                        <% } %>>Gastronomía</option>
-                    <option value="IngSistemasPresencial" <% if(user.program==='IngSistemasPresencial' ) { %> selected
-                        <% } %>>Ingeniería de Sistemas</option>
-                    <option value="LicEducacionInfantilPresencial" <% if(user.program==='LicEducacionInfantilPresencial'
-                        ) { %> selected <% } %>>Licenciatura en Educación Infantil</option>
+                    <option value="FilosofiaPresencial" <% if(user.program==='FilosofiaPresencial' ) { %> selected
+                        <% } %>>Filosofía
+                    </option>
+                    <option value="GastronomiaPresencial" <% if(user.program==='GastronomiaPresencial' ) { %>
+                        selected
+                        <% } %>>Gastronomía
+                    </option>
+                    <option value="IngSistemasPresencial" <% if(user.program==='IngSistemasPresencial' ) { %>
+                        selected
+                        <% } %>>Ingeniería de Sistemas
+                    </option>
+                    <option value="LicEducacionInfantilPresencial" <%
+                        if(user.program==='LicEducacionInfantilPresencial' ) { %> selected <% } %>>Licenciatura en
+                            Educación Infantil</option>
                     <option value="LicLenguasExtranjerasPresencial" <%
                         if(user.program==='LicLenguasExtranjerasPresencial' ) { %> selected <% } %>>Licenciatura en
                             Lenguas Extranjeras</option>
                     <option value="NegociosInternacionalesPresencial" <%
                         if(user.program==='NegociosInternacionalesPresencial' ) { %> selected <% } %>>Negocios
                             Internacionales</option>
-                    <option value="PsicologiaDistancia" <% if(user.program==='PsicologiaDistancia' ) { %> selected <% }
-                            %>>Psicología (Distancia)</option>
-                    <option value="PsicologiaPresencial" <% if(user.program==='PsicologiaPresencial' ) { %> selected <%
-                            } %>>Psicología (Presencial)</option>
-                    <option value="PublicidadPresencial" <% if(user.program==='PublicidadPresencial' ) { %> selected <%
-                            } %>>Publicidad</option>
-                    <option value="TeologiaPresencial" <% if(user.program==='TeologiaPresencial' ) { %> selected <% } %>
+                    <option value="PsicologiaDistancia" <% if(user.program==='PsicologiaDistancia' ) { %> selected
+                        <% } %>>Psicología (Distancia)
+                    </option>
+                    <option value="PsicologiaPresencial" <% if(user.program==='PsicologiaPresencial' ) { %> selected
+                        <% } %>>Psicología (Presencial)
+                    </option>
+                    <option value="PublicidadPresencial" <% if(user.program==='PublicidadPresencial' ) { %> selected
+                        <% } %>>Publicidad
+                    </option>
+                    <option value="TeologiaPresencial" <% if(user.program==='TeologiaPresencial' ) { %> selected <%
+                            } %>
                             >Teología</option>
-                    <option value="TrabajoSocialDistancia" <% if(user.program==='TrabajoSocialDistancia' ) { %> selected
-                        <% } %>>Trabajo Social (Distancia)</option>
+                    <option value="TrabajoSocialDistancia" <% if(user.program==='TrabajoSocialDistancia' ) { %>
+                        selected
+                        <% } %>>Trabajo Social (Distancia)
+                    </option>
                 </select>
                 <i class="fa-solid fa-user-tie input-icon"
                     style="position: absolute; top: 35%; right: 25px; transform: translateY(-50%); color: #ccc;"></i>
@@ -425,172 +154,546 @@
         <button onclick="closeEditForm()"
             style="margin-top: 20px; padding: 15px; width: 100%; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
     </div>
+    </div>
 
-    <script>
-        var categorias = ["Matemáticas", "Física", "Programación", "Idiomas", "Derecho", "Pedagogía", "Comunicación", "Administración ", "Estadistica", "Otros"];
-        id = '<%= user.id %>';
-        fetch(`/api/publicaciones-usuario/${id}`)
-            .then(response => response.json())
-            .then(data => {
-                const container = document.querySelector('.container2');
-                data.forEach(publicacion => {
-                    const div = document.createElement('div');
-                    const titulo = document.createElement('h3');
-                    const materia = document.createElement('p');
-                    const tema = document.createElement('p');
-                    const fecha = document.createElement('p');
-                    const editButton = document.createElement('button');
-                    const deleteButton = document.createElement('button');
-                    const separator = document.createElement('hr');
+    <div id="publicaciones" class="container2" style="display: none;">
+        <h1 style="text-align: center;">Listado de tus publicaciones</h1>
 
-                    titulo.textContent = publicacion.tipo_servicio === 'solicitar' ? `Solicitud: ${publicacion.materia}` : `Oferta: ${publicacion.materia}`;
-                    materia.textContent = `Materia: ${publicacion.materia}`;
-                    tema.textContent = `Tema: ${publicacion.tema_interes}`;
-                    fecha.textContent = `Fecha de reunión: ${formatDate(publicacion.fecha_reunion)}`;
-                    editButton.textContent = 'Editar';
-                    deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
-                    deleteButton.setAttribute('data-id', publicacion.solicitud_id); // Agregar ID de la publicación
+        <!-- Contenedor del formulario de edición y del cuadro de confirmación -->
+        <div id="modalContainer"
+            style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
+            <h2 style="text-align: center; margin-bottom: 20px;">Confirmar eliminación</h2>
+            <p style="margin-bottom: 20px;">¿Estás seguro de que quieres eliminar esta publicación?</p>
+            <div style="display: flex; justify-content: space-around;">
+                <button onclick="cancelDelete()"
+                    style="padding: 15px; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cancelar</button>
+                <span>&nbsp;</span>
+                <span>&nbsp;</span>
+                <span>&nbsp;</span>
+                <span>&nbsp;</span><!-- Espacio entre los botones -->
+                <button onclick="confirmDelete()"
+                    style="padding: 15px; background-color: #ff4d4d; color: white; border: none; border-radius: 5px; cursor: pointer;">Eliminar</button>
+            </div>
+        </div>
 
-                    deleteButton.classList.add('delete-button');
-                    editButton.classList.add('edit-button');
-                    editButton.setAttribute('data-id', publicacion.solicitud_id);
+        <!-- Mensaje de eliminación exitosa -->
+        <div id="deleteSuccessMessage"
+            style="display: none; background-color: #4CAF50; color: white; text-align: center; padding: 20px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);">
+            <p>¡Publicación eliminada con éxito!</p>
+        </div>
 
-                    editButton.addEventListener('click', () => {
-                        const fechaReunion = new Date(publicacion.fecha_reunion);
-                        const fechaFormateada = fechaReunion.toISOString().split('T')[0];
-                        document.getElementById('tipo').value = publicacion.tipo_servicio;
-                        document.getElementById('materia').value = publicacion.materia;
-                        document.getElementById('fecha').value = fechaFormateada;
-                        document.getElementById('tema').value = publicacion.tema_interes;
+        <div id="editarForm" class="editar-form"
+            style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
+            <h2 style="text-align: center; margin-bottom: 20px;">Formulario de Edición</h2>
+            <button onclick="openEditForm()"
+                style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #555;cursor: pointer;">&times;</button>
+            <form id="editForm" method="post">
+                <input type="hidden" id="user_data" name="user_data" value="<%= JSON.stringify(user) %>">
+                <label for="tipo">Tipo de Publicación:</label><br>
+                <select id="tipo" name="tipo"
+                    style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+                    <option value="solicitar">Solicitar Servicio</option>
+                    <option value="ofrecer">Ofrecer Servicio</option>
+                </select><br>
+                <label for="materia">Materia:</label><br>
+                <select id="materia" name="materia"
+                    style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+                    <option value="" disabled selected>Selecciona una materia</option>
+                </select><br>
+                <label for="fecha">Fecha:</label><br>
+                <input type="date" id="fecha" name="fecha"
+                    style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+                <label for="tema">Tema:</label><br>
+                <input type="text" id="tema" name="tema"
+                    style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br><br>
+                <button type="submit"
+                    style="width: 100%; padding: 15px; background-color: #4d4d5c; color: white; border: none; border-radius: 5px; cursor: pointer;">Actualizar</button>
+            </form>
+            <button onclick="openEditForm()"
+                style="margin-top: 20px; padding: 15px; width: 100%; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
+        </div>
 
-                        document.getElementById('editForm').action = `/api/publicacion/${publicacion.solicitud_id}`;
+        <script>
+            var categorias = ["Matemáticas", "Física", "Programación", "Idiomas", "Derecho", "Pedagogía", "Comunicación", "Administración ", "Estadistica", "Otros"];
+            id = '<%= user.id %>';
+            fetch(`/api/publicaciones-usuario/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.querySelector('.container2');
+                    data.forEach(publicacion => {
+                        const div = document.createElement('div');
+                        const titulo = document.createElement('h3');
+                        const materia = document.createElement('p');
+                        const tema = document.createElement('p');
+                        const fecha = document.createElement('p');
+                        const editButton = document.createElement('button');
+                        const deleteButton = document.createElement('button');
+                        const separator = document.createElement('hr');
 
-                        openEditForm();
+                        titulo.textContent = publicacion.tipo_servicio === 'solicitar' ? `Solicitud: ${publicacion.materia}` : `Oferta: ${publicacion.materia}`;
+                        materia.textContent = `Materia: ${publicacion.materia}`;
+                        tema.textContent = `Tema: ${publicacion.tema_interes}`;
+                        fecha.textContent = `Fecha de reunión: ${formatDate(publicacion.fecha_reunion)}`;
+                        editButton.textContent = 'Editar';
+                        deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
+                        deleteButton.setAttribute('data-id', publicacion.solicitud_id); // Agregar ID de la publicación
 
-                        console.log('Editar solicitud con ID:', publicacion.solicitud_id);
-                    });
+                        deleteButton.classList.add('delete-button');
+                        editButton.classList.add('edit-button');
+                        editButton.setAttribute('data-id', publicacion.solicitud_id);
 
-                    deleteButton.addEventListener('click', () => {
-                        showDeleteConfirmation();
-                        console.log('Eliminar solicitud con ID:', publicacion.solicitud_id);
-                        const modalContainer = document.getElementById("modalContainer");
-                        const confirmDeleteButton = document.querySelector("#modalContainer button:last-child");
-                        confirmDeleteButton.onclick = async () => {
-                            try {
-                                const response = await fetch(`/api/eliminar-publicacion/${publicacion.solicitud_id}`, {
-                                    method: 'DELETE'
-                                });
-                                if (response.ok) {
-                                    console.log("Publicación eliminada con éxito");
-                                    // Después de eliminar la publicación con éxito
-                                    document.getElementById('deleteSuccessMessage').style.display = 'block';
-                                    // Ocultar el mensaje después de unos segundos
-                                    setTimeout(() => {
-                                        document.getElementById('deleteSuccessMessage').style.display = 'none';
-                                    }, 3000); // Ocultar después de 3 segundos (3000 milisegundos)
+                        editButton.addEventListener('click', () => {
+                            const fechaReunion = new Date(publicacion.fecha_reunion);
+                            const fechaFormateada = fechaReunion.toISOString().split('T')[0];
+                            document.getElementById('tipo').value = publicacion.tipo_servicio;
+                            document.getElementById('materia').value = publicacion.materia;
+                            document.getElementById('fecha').value = fechaFormateada;
+                            document.getElementById('tema').value = publicacion.tema_interes;
 
-                                    // Actualizar la lista de publicaciones después de eliminar una
-                                    container.removeChild(div);
-                                } else {
-                                    console.error("Error al intentar eliminar la publicación");
+                            document.getElementById('editForm').action = `/api/publicacion/${publicacion.solicitud_id}`;
+
+                            openEditForm();
+
+                            console.log('Editar solicitud con ID:', publicacion.solicitud_id);
+                        });
+
+                        deleteButton.addEventListener('click', () => {
+                            showDeleteConfirmation();
+                            console.log('Eliminar solicitud con ID:', publicacion.solicitud_id);
+                            const modalContainer = document.getElementById("modalContainer");
+                            const confirmDeleteButton = document.querySelector("#modalContainer button:last-child");
+                            confirmDeleteButton.onclick = async () => {
+                                try {
+                                    const response = await fetch(`/api/eliminar-publicacion/${publicacion.solicitud_id}`, {
+                                        method: 'DELETE'
+                                    });
+                                    if (response.ok) {
+                                        console.log("Publicación eliminada con éxito");
+                                        // Después de eliminar la publicación con éxito
+                                        document.getElementById('deleteSuccessMessage').style.display = 'block';
+                                        // Ocultar el mensaje después de unos segundos
+                                        setTimeout(() => {
+                                            document.getElementById('deleteSuccessMessage').style.display = 'none';
+                                        }, 3000); // Ocultar después de 3 segundos (3000 milisegundos)
+
+                                        // Actualizar la lista de publicaciones después de eliminar una
+                                        container.removeChild(div);
+                                    } else {
+                                        console.error("Error al intentar eliminar la publicación");
+                                    }
+                                } catch (error) {
+                                    console.error("Error en la solicitud de eliminación:", error);
+                                } finally {
+                                    modalContainer.style.display = "none";
                                 }
-                            } catch (error) {
-                                console.error("Error en la solicitud de eliminación:", error);
-                            } finally {
-                                modalContainer.style.display = "none";
-                            }
-                        };
+                            };
+                        });
+
+                        div.appendChild(titulo);
+                        div.appendChild(materia);
+                        div.appendChild(tema);
+                        div.appendChild(fecha);
+                        div.appendChild(editButton);
+                        div.appendChild(deleteButton);
+                        div.appendChild(separator);
+                        container.appendChild(div);
                     });
+                })
+                .catch(error => console.error("Error al obtener las publicaciones del usuario:", error));
 
-                    div.appendChild(titulo);
-                    div.appendChild(materia);
-                    div.appendChild(tema);
-                    div.appendChild(fecha);
-                    div.appendChild(editButton);
-                    div.appendChild(deleteButton);
-                    div.appendChild(separator);
-                    container.appendChild(div);
+
+            function openEditForm() {
+                var editForm = document.getElementById("editarForm");
+                if (editForm.style.display === "none") {
+                    editForm.style.display = "block";
+                } else {
+                    editForm.style.display = "none";
+                }
+            }
+
+            function cancelDelete() {
+                var modalContainer = document.getElementById("modalContainer");
+                modalContainer.style.display = "none";
+            }
+
+            function confirmDelete() {
+                // Aquí puedes colocar la lógica para eliminar la publicación
+                console.log("Publicación eliminada.");
+                var modalContainer = document.getElementById("modalContainer");
+                modalContainer.style.display = "none";
+            }
+
+            function showDeleteConfirmation() {
+                var modalContainer = document.getElementById("modalContainer");
+                modalContainer.style.display = "block";
+            }
+
+            function generarOpcionesMaterias() {
+                var selectMateria = document.getElementById("materia");
+
+                selectMateria.innerHTML = "";
+
+                var defaultOption = document.createElement("option");
+                defaultOption.value = "";
+                defaultOption.textContent = "Selecciona una materia";
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                selectMateria.appendChild(defaultOption);
+
+                categorias.forEach(function (categoria) {
+                    var option = document.createElement("option");
+                    option.value = categoria;
+                    option.textContent = categoria;
+                    selectMateria.appendChild(option);
                 });
-            })
-            .catch(error => console.error("Error al obtener las publicaciones del usuario:", error));
-
-
-        function openEditForm() {
-            var editForm = document.getElementById("editarForm");
-            if (editForm.style.display === "none") {
-                editForm.style.display = "block";
-            } else {
-                editForm.style.display = "none";
             }
-        }
 
-        function cancelDelete() {
-            var modalContainer = document.getElementById("modalContainer");
-            modalContainer.style.display = "none";
-        }
-
-        function confirmDelete() {
-            // Aquí puedes colocar la lógica para eliminar la publicación
-            console.log("Publicación eliminada.");
-            var modalContainer = document.getElementById("modalContainer");
-            modalContainer.style.display = "none";
-        }
-
-        function showDeleteConfirmation() {
-            var modalContainer = document.getElementById("modalContainer");
-            modalContainer.style.display = "block";
-        }
-
-        function generarOpcionesMaterias() {
-            var selectMateria = document.getElementById("materia");
-
-            selectMateria.innerHTML = "";
-
-            var defaultOption = document.createElement("option");
-            defaultOption.value = "";
-            defaultOption.textContent = "Selecciona una materia";
-            defaultOption.disabled = true;
-            defaultOption.selected = true;
-            selectMateria.appendChild(defaultOption);
-
-            categorias.forEach(function (categoria) {
-                var option = document.createElement("option");
-                option.value = categoria;
-                option.textContent = categoria;
-                selectMateria.appendChild(option);
-            });
-        }
-
-        window.onload = function () {
-            generarOpcionesMaterias();
-        }
-
-        // Función para formatear la fecha
-        function formatDate(dateString) {
-            const fechaReunion = new Date(dateString);
-            const options = {
-                year: 'numeric',
-                month: 'short',
-                day: '2-digit',
-                hour12: true // Para usar formato de 12 horas
-            };
-            return fechaReunion.toLocaleString('en-US', options);
-        }
-
-        function editUser() {
-            var editForm = document.getElementById("editarUsuarioForm");
-            if (editForm.style.display === "none") {
-                editForm.style.display = "block";
-            } else {
-                editForm.style.display = "none";
+            window.onload = function () {
+                generarOpcionesMaterias();
             }
-        }
 
-        function closeEditForm() {
-            document.getElementById('editarUsuarioForm').style.display = 'none';
-        }
+            // Función para formatear la fecha
+            function formatDate(dateString) {
+                const fechaReunion = new Date(dateString);
+                const options = {
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit',
+                    hour12: true // Para usar formato de 12 horas
+                };
+                return fechaReunion.toLocaleString('en-US', options);
+            }
 
-    </script>
+            function editUser() {
+                var editForm = document.getElementById("editarUsuarioForm");
+                if (editForm.style.display === "none") {
+                    editForm.style.display = "block";
+                } else {
+                    editForm.style.display = "none";
+                }
+            }
+
+            function closeEditForm() {
+                document.getElementById('editarUsuarioForm').style.display = 'none';
+            }
+
+            function mostrarSeccion(seccion) {
+                // Oculta todas las secciones
+                var secciones = document.querySelectorAll('.container, .container2');
+                secciones.forEach(function (seccion) {
+                    seccion.style.display = 'none';
+                });
+
+                // Muestra la sección seleccionada
+                document.getElementById(seccion).style.display = 'block';
+
+                // Remueve la clase 'active' de todos los enlaces
+                var links = document.querySelectorAll('.sidebar a');
+                links.forEach(function (link) {
+                    link.classList.remove('active');
+                });
+
+                // Agrega la clase 'active' solo al enlace correspondiente a la sección seleccionada
+                document.getElementById(seccion + 'Link').classList.add('active');
+            }
+
+
+
+
+
+        </script>
 </body>
 
 </html>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+
+    .sidebar {
+        margin: 0;
+        padding: 0;
+        width: 250px;
+        background-color: #f1f1f1;
+        position: fixed;
+        height: 100%;
+        overflow: auto;
+    }
+
+    .sidebar a {
+        display: block;
+        color: black;
+        padding: 16px;
+        text-decoration: none;
+    }
+
+    .sidebar a.active {
+        background-color: #4d4d5c;
+        color: white;
+    }
+
+    .sidebar a:hover:not(.active) {
+        background-color: #4d4d5c;
+        color: white;
+    }
+
+    div.content {
+        margin-left: 200px;
+        padding: 1px 16px;
+        height: 1000px;
+    }
+
+    @media screen and (max-width: 700px) {
+        .sidebar {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+
+        .sidebar a {
+            float: left;
+        }
+
+        div.content {
+            margin-left: 0;
+        }
+    }
+
+    @media screen and (max-width: 400px) {
+        .sidebar a {
+            text-align: center;
+            float: none;
+        }
+    }
+
+    header {
+        height: 100px;
+        background: #4d4d5c;
+        padding: 0 50px;
+        color: aliceblue;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        text-transform: uppercase;
+        font-weight: 200;
+        color: whitesmoke;
+    }
+
+    .menu a {
+        color: #fff;
+        text-decoration: none;
+        text-transform: uppercase;
+        padding: 0 10px;
+        transition: 0.4s;
+    }
+
+    .mostrar-menu,
+    .esconder-menu {
+        font-size: 30px;
+        cursor: pointer;
+        transition: 0.4s;
+        display: none;
+    }
+
+    .mostrar-menu {
+        order: 1;
+    }
+
+    .edit-button {
+        border-radius: 5px;
+        padding: 10px 10px;
+        margin-bottom: 20px;
+        transition: background-color 0.3s;
+        background-color: #4d4d5c;
+        color: white;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+    .menu a:hover,
+    .mostrar-menu:hover,
+    .esconder-menu:hover {
+        color: #666666;
+    }
+
+    #check {
+        display: none;
+    }
+
+    @media(max-width:768px) {
+
+        .mostrar-menu,
+        .esconder-menu {
+            display: block;
+        }
+
+        .menu {
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+            width: 100%;
+            background: rgb(86, 87, 87);
+            right: -100%;
+            top: 0;
+            text-align: center;
+            padding: 100px 0px;
+            z-index: 100;
+            transition: o.8s;
+        }
+
+        .menu a {
+            display: block;
+            padding: 20px;
+        }
+
+        .esconder-menu {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+        }
+
+        #check:checked~.menu {
+            right: 0;
+        }
+
+        #personas {
+            flex-direction: column;
+        }
+
+        .contenido-icono {
+            flex-direction: column;
+        }
+
+        .contenido-icono div {
+            border: none !important;
+        }
+
+        .datos-form {
+            flex-direction: column;
+        }
+
+        .boton-empezar {
+            text-decoration: none;
+            transition: all 0.6s;
+            color: #fff;
+            border: 1px solid grey;
+            padding: 20px 40px;
+            align-self: baseline;
+        }
+
+        .boton-empezar:hover {
+            background-color: grey;
+            color: black;
+        }
+
+        .servicio-text {
+            text-align: center;
+        }
+    }
+
+    /* Styles for User Information Container */
+    .container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .container2 {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        font-size: 32px;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    p {
+        margin-bottom: 10px;
+    }
+
+    a {
+        text-decoration: none;
+        color: #007bff;
+    }
+
+    a:hover {
+        text-decoration: underline;
+        color: #0056b3;
+    }
+
+    .delete-button {
+        font-size: 16px;
+        /* Tamaño de fuente más grande */
+        padding: 9px 19px;
+        /* Padding mayor para hacerlo más grande */
+        margin-left: 50px;
+        /* Margen a la derecha para desplazarlo */
+        display: inline-block;
+        color: red;
+        border: none;
+        /* Elimina el borde */
+        background-color: transparent;
+        /* Hace el fondo transparente */
+    }
+
+    .button-spacing {
+        margin-right: 0px;
+        /* Margen entre los botones */
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        left: -160px;
+        /* Ajuste para que el menú se abra hacia la izquierda */
+    }
+
+    .dropdown-content a {
+        color: #4d4d5c;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #f1f1f1;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+</style>
