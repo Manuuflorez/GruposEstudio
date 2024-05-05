@@ -57,8 +57,8 @@ app.get("/users/registrarservicio", (req, res) => {
   res.render("registrarservicio.ejs", { user: req.user });
 });
 
-app.get("/users/visualizarusuario", checkNotAuthenticated, (req, res) => {
-  res.render("visualizarusuario.ejs", { user: req.user });
+app.get("/users/profile", checkNotAuthenticated, (req, res) => {
+  res.render("profile.ejs", { user: req.user });
 });
 
 app.get("/users/solicitarservicio", (req, res) => {
@@ -193,7 +193,7 @@ app.post("/users/update/:id", async (req, res) => {
       "UPDATE users SET name = $1, lastname = $2, document_type = $3, id_number = $4, email = $5, program = $6, password = $7 WHERE id = $8",
       [name, lastname, document_type, id_number, email, program, password, userId]
     );
-    res.redirect("/users/visualizarusuario");
+    res.redirect("/users/profile");
   } catch (error) {
     console.error("Error al actualizar el usuario:", error);
     res.status(500).json({ error: "Error al actualizar el usuario" });
@@ -293,7 +293,7 @@ app.post('/api/publicacion/:id', async (req, res) => {
       [tipo, materia, tema, fecha, userData, publicacionId]
     );
 
-    res.redirect("/users/visualizarusuario");
+    res.redirect("/users/profile");
   } catch (error) {
     console.error("Error al actualizar la publicación:", error);
     res.status(500).json({ error: "Error al actualizar la publicación" });
