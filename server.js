@@ -45,42 +45,24 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-app.get("/users/register", checkAuthenticated, (req, res) => {
+app.get("/users/register", (req, res) => {
   res.render("register.ejs");
-});
-
-app.get("/users/homepage", checkAuthenticated, (req, res) => {
-  res.render("homepage.ejs");
-});
-
-app.get("/users/registrarservicio", (req, res) => {
-  res.render("registrarservicio.ejs", { user: req.user });
 });
 
 app.get("/users/profile", checkNotAuthenticated, (req, res) => {
   res.render("profile.ejs", { user: req.user });
 });
 
-app.get("/users/solicitarservicio", (req, res) => {
-  res.render("solicitarservicio.ejs");
-});
-
-/*app.get("/solicitud/visualizar", (req, res) => {
-  res.render("visualizarservicio.ejs");
-});*/
-
-app.get("/users/login", checkAuthenticated, (req, res) => {
-  // flash establece una variable de mensajes. Passport establece el mensaje de error
+app.get("/users/login", (req, res) => {
   const errors = req.flash('error');
   res.render("login.ejs", { errors: errors || [] });
 });
+
 app.get("/users/dashboard", checkNotAuthenticated, (req, res) => {
-  console.log(req.isAuthenticated());
   res.render("dashboard", { user: req.user });
 });
 
 app.get("/users/logout", checkNotAuthenticated, (req, res) => {
-  console.log(req.isAuthenticated());
   res.render("dashboard", { user: req.user });
 });
 
@@ -91,7 +73,6 @@ app.get('/logout', (req, res) => {
       console.error("Error al cerrar sesión:", err);
       return res.status(500).send("Error al cerrar sesión");
     }
-    // Redireccionar al usuario a la página de inicio de sesión después de cerrar sesión
     res.redirect('/users/login');
   });
 });
@@ -100,18 +81,6 @@ app.post("/users/register", async (req, res) => {
   let { name, lastname, document_type, id_number, email, program, password, password2 } = req.body;
 
   let errors = [];
-
-  console.log({
-    name,
-    lastname,
-    document_type,
-    id_number,
-    email,
-    program,
-    password,
-    password2
-  });
-  //
 
   if (!name || !lastname || !document_type || !id_number || !email || !program || !password || !password2) {
     errors.push({ message: "Por favor completa todos los campos" });
@@ -135,7 +104,6 @@ app.post("/users/register", async (req, res) => {
     res.render("register", { errors, name, lastname, document_type, id_number, email, program, password, password2 });
   } else {
     hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword);
     // Validación superada
     pool.query(
       `SELECT * FROM users
@@ -145,7 +113,6 @@ app.post("/users/register", async (req, res) => {
         if (err) {
           console.log(err);
         }
-        console.log(results.rows);
 
         if (results.rows.length > 0) {
           return res.render("register", {
@@ -153,15 +120,14 @@ app.post("/users/register", async (req, res) => {
           });
         } else {
           pool.query(
-            `INSERT INTO users (name, lastname, document_type, id_number, email, program, password)
-                VALUES ($1, $2, $3, $4, $5, $6, $7)
+            `INSERT INTO users (name, lastname, document_type, id_number, email, program, password, active)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
                 RETURNING id, password`,
-            [name, lastname, document_type, id_number, email, program, hashedPassword],
+            [name, lastname, document_type, id_number, email, program, hashedPassword, true], // Asegúrate de establecer active en true
             (err, results) => {
               if (err) {
                 throw err;
               }
-              console.log(results.rows);
               req.flash("success_msg", "Te has registrado correctamente, inicia sesión");
               res.redirect("/users/login");
             }
@@ -175,8 +141,48 @@ app.post("/users/register", async (req, res) => {
 // Actualizar user
 app.post("/users/update/:id", async (req, res) => {
   const userId = req.params.id;
-  const { name, lastname, document_type, id_number, program } = req.body;
-  const { password, email } = req.user
+  let name, lastname, document_type, id_number, program, email, password, active;
+
+  // Verifica los campos enviados en la solicitud y actualiza las variables correspondientes
+  if (req.body.newPassword) {
+    const { name: userName, lastname: userLastname, document_type: userDocumentType, id_number: userIdNumber, program: userProgram, email: userEmail, active } = req.user;
+    const { newPassword, oldPassword, confirmPassword } = req.body;
+
+    // Verifica si la nueva contraseña y la confirmación de la contraseña son iguales
+    if (newPassword !== confirmPassword) {
+      console.log("La nueva contraseña y la confirmación de la contraseña no coinciden");
+    }
+
+    name = userName;
+    lastname = userLastname;
+    document_type = userDocumentType;
+    id_number = userIdNumber;
+    program = userProgram;
+    email = userEmail;
+    password = newPassword;
+    
+  } else if (req.body.email) {
+    const { name: userName, lastname: userLastname, document_type: userDocumentType, id_number: userIdNumber, program: userProgram, password: userPassword, active } = req.user;
+    const { email: userEmail } = req.body;
+    name = userName;
+    lastname = userLastname;
+    document_type = userDocumentType;
+    id_number = userIdNumber;
+    program = userProgram;
+    email = userEmail;
+    password = userPassword;
+  } else {
+    const { name: userName, lastname: userLastname, document_type: userDocumentType, id_number: userIdNumber, program: userProgram } = req.body;
+    const { password: userPassword, email: userEmail, active } = req.user;
+    name = userName;
+    lastname = userLastname;
+    document_type = userDocumentType;
+    id_number = userIdNumber;
+    program = userProgram;
+    email = userEmail;
+    password = userPassword;
+  }
+
   try {
     // Verifica si el usuario existe
     const userExists = await pool.query(
@@ -186,6 +192,46 @@ app.post("/users/update/:id", async (req, res) => {
 
     if (userExists.rows.length === 0) {
       return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    const userData = userExists.rows[0];
+
+    // Verifica si se proporciona una nueva contraseña
+    if (req.body.newPassword) {
+      const { oldPassword, newPassword } = req.body;
+
+      // Verifica si la contraseña anterior coincide con la almacenada en la base de datos
+      const passwordMatch = await bcrypt.compare(oldPassword, userData.password);
+
+      if (!passwordMatch) {
+        // Si la contraseña anterior no coincide, devuelve un mensaje de error
+        return res.json({ success: false, message: "La contraseña no coincide" });
+      }
+
+      // Si la contraseña anterior coincide, actualiza la contraseña
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      password = hashedPassword; // Actualiza la contraseña con la nueva contraseña hasheada
+    }
+
+      // Verifica si la cuenta está activa o desactivada
+      if (active !== undefined) {
+        // Actualiza el campo 'active'
+        await pool.query(
+          "UPDATE users SET active = $1 WHERE id = $2",
+          [active, userId]
+        );
+      }
+
+    if (req.body.email) {
+      const { oldPassword } = req.body;
+
+      // Verifica si la contraseña anterior coincide con la almacenada en la base de datos
+      const passwordMatch = await bcrypt.compare(oldPassword, userData.password);
+
+      if (!passwordMatch) {
+        // Si la contraseña anterior no coincide, devuelve un mensaje de error
+        return res.json({ success: false, message: "La contraseña no coincide" });
+      }
     }
 
     // Actualiza los datos del usuario
@@ -199,6 +245,25 @@ app.post("/users/update/:id", async (req, res) => {
     res.status(500).json({ error: "Error al actualizar el usuario" });
   }
 });
+
+app.post("/users/deactivate/:id", async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    // Actualiza el valor 'active' a false en la base de datos
+    await pool.query(
+      "UPDATE users SET active = false WHERE id = $1",
+      [userId]
+    );
+
+    req.flash("success_msg", "Tu cuenta ha sido desactivada exitosamente");
+    res.redirect("/users/login"); // Redirecciona a la página de inicio de sesión u otra página
+  } catch (error) {
+    console.error("Error al desactivar la cuenta:", error);
+    res.status(500).json({ error: "Error al desactivar la cuenta" });
+  }
+});
+
 
 app.get("/dashboard/publicar", async (req, res) => {
   res.render("dashboard.ejs"); // Renderiza el formulario de publicación en el dashboard
@@ -402,25 +467,48 @@ app.get("/api/search", async (req, res) => {
 });
 
 
-app.post(
-  "/users/login",
-  passport.authenticate("local", {
-    successRedirect: "/users/dashboard",
-    failureRedirect: "/users/login",
-    failureFlash: true
-  })
-);
+app.post("/users/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.render("login", { errors: [{ message: info.message }] });
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user.active) {
+        return res.render("login", { errors: [{ message: "Tu cuenta está desactivada. Por favor, contacta al administrador." }] });
+      }
+      return res.redirect("/users/dashboard");
+    });
+  })(req, res, next);
+});
 
 function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
-    return res.redirect("/users/dashboard");
+    // Verificar si la cuenta está activa
+    if (req.user.active) {
+      return res.redirect("/users/dashboard");
+    } else {
+      req.flash("error_msg", "Tu cuenta está desactivada. Por favor, contáctanos para obtener ayuda.");
+      return res.redirect("/users/login");
+    }
   }
   next();
 }
 
 function checkNotAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
-    return next();
+    // Verificar si la cuenta está activa
+    if (req.user.active) {
+      return next();
+    } else {
+      req.flash("error_msg", "Tu cuenta está desactivada. Por favor, contáctanos para obtener ayuda.");
+      return res.redirect("/users/login");
+    }
   }
   res.redirect("/users/login");
 }

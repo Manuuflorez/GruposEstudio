@@ -34,18 +34,55 @@
     </header>
 
     <div class="sidebar">
-        <a id="generalLink" class="active" onclick="mostrarSeccion('general')"> <i class="fa-solid fa-user-tie input-icon"></i> General</a>
-        <a id="publicacionesLink" onclick="mostrarSeccion('publicaciones')"><i class="fa fa-folder"></i> Publicaciones</a>
-        <a id="cambiarContrasenaLink"><i class="fas fa-lock"></i> Cambiar contraseña</a>
-        <a id="cambiarCorreoLink"><i class="fas fa-envelope"></i> Cambiar correo</a>
-        <a id="desactivarCuentaLink"><i class="fas fa-user-times"></i> Desactivar cuenta</a>
+        <a id="generalLink" class="active" onclick="mostrarSeccion('general')"> <i
+                class="fa-solid fa-user-tie input-icon"></i> General</a>
+        <a id="publicacionesLink" onclick="mostrarSeccion('publicaciones')"><i class="fa fa-folder"></i>
+            Publicaciones</a>
+        <a id="cambiarContrasenaLink" onclick="mostrarSeccion('cambiarContrasena')"> <i class="fas fa-lock"></i> Cambiar
+            contraseña</a>
+        <a id="cambiarCorreoLink" onclick="mostrarSeccion('cambiarCorreo')"><i class="fas fa-envelope"></i> Cambiar
+            correo</a>
+        <a id="desactivarCuentaLink" onclick="desactivarCuenta()"> <i class="fas fa-user-times"></i> Desactivar
+            cuenta</a>
+    </div>
+
+
+    <div id="cambiarContrasena" class="container" style="display: none;">
+        <h1>Cambiar contraseña</h1>
+        <form id="changePasswordForm" method="POST" action="/users/update/<%= user.id %>">
+            <label for="oldPassword">Contraseña anterior:</label><br>
+            <input type="password" id="oldPassword" name="oldPassword" required
+                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+            <label for="newPassword">Nueva contraseña:</label><br>
+            <input type="password" id="newPassword" name="newPassword"
+                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+            <label for="confirmPassword">Confirmar nueva contraseña:</label><br>
+            <input type="password" id="confirmPassword" name="confirmPassword" required
+                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+            <button type="submit" style="width: 100%; padding: 15px; background-color: #4d4d5c; color: white; border: none; border-radius: 5px; 
+                cursor: pointer;">Cambiar contraseña</button>
+        </form>
+    </div>
+
+    <div id="cambiarCorreo" class="container" style="display: none;">
+        <h1>Cambiar correo electrónico</h1>
+        <form id="oldPassword" method="POST" action="/users/update/<%= user.id %>">
+            <label for="oldPassword">Contraseña anterior:</label><br>
+            <input type="password" id="oldPassword" name="oldPassword" required
+                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+            <label for="email">Nuevo correo electrónico:</label><br>
+            <input type="email" id="email" name="email" required
+                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+            <button type="submit" style="width: 100%; padding: 15px; background-color: #4d4d5c; color: white; border: none; border-radius: 5px; 
+                cursor: pointer;">Cambiar correo electrónico</button>
+        </form>
     </div>
 
 
     <div id="general" class="container">
-        <h1>Bienvenido, <%= user.name %> <%= user.lastname %> <button onclick="editUser()" class="edit-icon" title="Editar Usuario">
-            <i class="fas fa-pencil-alt"></i></button>
-        </h1>
+        <h1>Bienvenido, <%= user.name %>
+                <%= user.lastname %> <button onclick="editUser()" class="edit-icon" title="Editar Usuario">
+                        <i class="fas fa-pencil-alt"></i></button></h1>
         <p>Email: <%= user.email %>
         </p>
         <ul>
@@ -62,99 +99,99 @@
         </ul>
 
         <div id="editarUsuarioForm"
-        style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5); max-width: 400px;">
-        <h2 style="text-align: center; margin-bottom: 20px;">Editar Usuario</h2>
-        <button onclick="closeEditForm()"
-            style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #555;cursor: pointer;">&times;</button>
-        <form id="editUserForm" method="POST" action="/users/update/<%= user.id %>">
-            <label for="name" style="margin-bottom: 10px;">Nombre:</label><br>
-            <input type="text" id="name" name="name" value="<%= user.name %>" required
-                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
-            <label for="lastname" style="margin-bottom: 10px;">Apellido:</label><br>
-            <input type="text" id="lastname" name="lastname" value="<%= user.lastname %>" required
-                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
-            <label for="document_type" style="margin-bottom: 10px;">Tipo de Documento:</label><br>
-            <div style="position: relative;">
-                <select id="document_type" name="document_type" required
-                    style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
-                    <option value="" disabled>Tipo de Documento</option>
-                    <option value="CC" <% if(user.document_type==='CC' ) { %> selected <% } %>>C.C</option>
-                    <option value="TI" <% if(user.document_type==='TI' ) { %> selected <% } %>>T.I</option>
-                    <option value="CE" <% if(user.document_type==='CE' ) { %> selected <% } %>>C.E</option>
-                </select>
-                <i class="fa-regular fa-address-card input-icon"
-                    style="position: absolute; top: 35%; right: 25px; transform: translateY(-50%); color: #ccc;"></i>
-            </div>
-            <label for="id_number" style="margin-bottom: 10px;">Número de Documento:</label><br>
-            <input type="text" id="id_number" name="id_number" value="<%= user.id_number %>" required
-                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
-            <label for="program" style="margin-bottom: 10px;">Programa:</label><br>
-            <div style="position: relative;">
-                <select id="program" name="program" required
-                    style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
-                    <option value="" disabled>Carrera</option>
-                    <option value="AdminEmpresDistancia" <% if(user.program==='AdminEmpresDistancia' ) { %> selected
-                        <% } %>>Administración de Empresas
-                    </option>
-                    <option value="ComSocialPresencial" <% if(user.program==='ComSocialPresencial' ) { %> selected
-                        <% } %>>Comunicación Social
-                    </option>
-                    <option value="ContaduriaPresencial" <% if(user.program==='ContaduriaPresencial' ) { %> selected
-                        <% } %>>Contaduría Pública
-                    </option>
-                    <option value="DerechoPresencial" <% if(user.program==='DerechoPresencial' ) { %> selected <% }
-                            %>
-                            >Derecho</option>
-                    <option value="DesarrolloFamiliarPresencial" <% if(user.program==='DesarrolloFamiliarPresencial'
-                        ) { %> selected <% } %>>Desarrollo Familiar</option>
-                    <option value="DisenoGraficoPresencial" <% if(user.program==='DisenoGraficoPresencial' ) { %>
-                        selected <% } %>>Diseño Gráfico</option>
-                    <option value="FilosofiaPresencial" <% if(user.program==='FilosofiaPresencial' ) { %> selected
-                        <% } %>>Filosofía
-                    </option>
-                    <option value="GastronomiaPresencial" <% if(user.program==='GastronomiaPresencial' ) { %>
-                        selected
-                        <% } %>>Gastronomía
-                    </option>
-                    <option value="IngSistemasPresencial" <% if(user.program==='IngSistemasPresencial' ) { %>
-                        selected
-                        <% } %>>Ingeniería de Sistemas
-                    </option>
-                    <option value="LicEducacionInfantilPresencial" <%
-                        if(user.program==='LicEducacionInfantilPresencial' ) { %> selected <% } %>>Licenciatura en
-                            Educación Infantil</option>
-                    <option value="LicLenguasExtranjerasPresencial" <%
-                        if(user.program==='LicLenguasExtranjerasPresencial' ) { %> selected <% } %>>Licenciatura en
-                            Lenguas Extranjeras</option>
-                    <option value="NegociosInternacionalesPresencial" <%
-                        if(user.program==='NegociosInternacionalesPresencial' ) { %> selected <% } %>>Negocios
-                            Internacionales</option>
-                    <option value="PsicologiaDistancia" <% if(user.program==='PsicologiaDistancia' ) { %> selected
-                        <% } %>>Psicología (Distancia)
-                    </option>
-                    <option value="PsicologiaPresencial" <% if(user.program==='PsicologiaPresencial' ) { %> selected
-                        <% } %>>Psicología (Presencial)
-                    </option>
-                    <option value="PublicidadPresencial" <% if(user.program==='PublicidadPresencial' ) { %> selected
-                        <% } %>>Publicidad
-                    </option>
-                    <option value="TeologiaPresencial" <% if(user.program==='TeologiaPresencial' ) { %> selected <%
-                            } %>
-                            >Teología</option>
-                    <option value="TrabajoSocialDistancia" <% if(user.program==='TrabajoSocialDistancia' ) { %>
-                        selected
-                        <% } %>>Trabajo Social (Distancia)
-                    </option>
-                </select>
-                <i class="fa-solid fa-user-tie input-icon"
-                    style="position: absolute; top: 35%; right: 25px; transform: translateY(-50%); color: #ccc;"></i>
-            </div>
-            <button type="submit"
-                style="width: 100%; padding: 15px; background-color: #4d4d5c; color: white; border: none; border-radius: 5px; cursor: pointer;">Actualizar</button>
-        </form>
-        <button onclick="closeEditForm()"
-            style="margin-top: 20px; padding: 15px; width: 100%; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
-    </div>
+            style="z-index: 1000; display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5); max-width: 400px;">
+            <h2 style="text-align: center; margin-bottom: 20px;">Editar Usuario</h2>
+            <button onclick="closeEditForm()"
+                style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #555;cursor: pointer;">&times;</button>
+            <form id="editUserForm" method="POST" action="/users/update/<%= user.id %>">
+                <label for="name" style="margin-bottom: 10px;">Nombre:</label><br>
+                <input type="text" id="name" name="name" value="<%= user.name %>" required
+                    style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+                <label for="lastname" style="margin-bottom: 10px;">Apellido:</label><br>
+                <input type="text" id="lastname" name="lastname" value="<%= user.lastname %>" required
+                    style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+                <label for="document_type" style="margin-bottom: 10px;">Tipo de Documento:</label><br>
+                <div style="position: relative;">
+                    <select id="document_type" name="document_type" required
+                        style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+                        <option value="" disabled>Tipo de Documento</option>
+                        <option value="CC" <% if(user.document_type==='CC' ) { %> selected <% } %>>C.C</option>
+                        <option value="TI" <% if(user.document_type==='TI' ) { %> selected <% } %>>T.I</option>
+                        <option value="CE" <% if(user.document_type==='CE' ) { %> selected <% } %>>C.E</option>
+                    </select>
+                    <i class="fa-regular fa-address-card input-icon"
+                        style="position: absolute; top: 35%; right: 25px; transform: translateY(-50%); color: #ccc;"></i>
+                </div>
+                <label for="id_number" style="margin-bottom: 10px;">Número de Documento:</label><br>
+                <input type="text" id="id_number" name="id_number" value="<%= user.id_number %>" required
+                    style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+                <label for="program" style="margin-bottom: 10px;">Programa:</label><br>
+                <div style="position: relative;">
+                    <select id="program" name="program" required
+                        style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+                        <option value="" disabled>Carrera</option>
+                        <option value="AdminEmpresDistancia" <% if(user.program==='AdminEmpresDistancia' ) { %> selected
+                            <% } %>>Administración de Empresas
+                        </option>
+                        <option value="ComSocialPresencial" <% if(user.program==='ComSocialPresencial' ) { %> selected
+                            <% } %>>Comunicación Social
+                        </option>
+                        <option value="ContaduriaPresencial" <% if(user.program==='ContaduriaPresencial' ) { %> selected
+                            <% } %>>Contaduría Pública
+                        </option>
+                        <option value="DerechoPresencial" <% if(user.program==='DerechoPresencial' ) { %> selected <% }
+                                %>
+                                >Derecho</option>
+                        <option value="DesarrolloFamiliarPresencial" <% if(user.program==='DesarrolloFamiliarPresencial'
+                            ) { %> selected <% } %>>Desarrollo Familiar</option>
+                        <option value="DisenoGraficoPresencial" <% if(user.program==='DisenoGraficoPresencial' ) { %>
+                            selected <% } %>>Diseño Gráfico</option>
+                        <option value="FilosofiaPresencial" <% if(user.program==='FilosofiaPresencial' ) { %> selected
+                            <% } %>>Filosofía
+                        </option>
+                        <option value="GastronomiaPresencial" <% if(user.program==='GastronomiaPresencial' ) { %>
+                            selected
+                            <% } %>>Gastronomía
+                        </option>
+                        <option value="IngSistemasPresencial" <% if(user.program==='IngSistemasPresencial' ) { %>
+                            selected
+                            <% } %>>Ingeniería de Sistemas
+                        </option>
+                        <option value="LicEducacionInfantilPresencial" <%
+                            if(user.program==='LicEducacionInfantilPresencial' ) { %> selected <% } %>>Licenciatura en
+                                Educación Infantil</option>
+                        <option value="LicLenguasExtranjerasPresencial" <%
+                            if(user.program==='LicLenguasExtranjerasPresencial' ) { %> selected <% } %>>Licenciatura en
+                                Lenguas Extranjeras</option>
+                        <option value="NegociosInternacionalesPresencial" <%
+                            if(user.program==='NegociosInternacionalesPresencial' ) { %> selected <% } %>>Negocios
+                                Internacionales</option>
+                        <option value="PsicologiaDistancia" <% if(user.program==='PsicologiaDistancia' ) { %> selected
+                            <% } %>>Psicología (Distancia)
+                        </option>
+                        <option value="PsicologiaPresencial" <% if(user.program==='PsicologiaPresencial' ) { %> selected
+                            <% } %>>Psicología (Presencial)
+                        </option>
+                        <option value="PublicidadPresencial" <% if(user.program==='PublicidadPresencial' ) { %> selected
+                            <% } %>>Publicidad
+                        </option>
+                        <option value="TeologiaPresencial" <% if(user.program==='TeologiaPresencial' ) { %> selected <%
+                                } %>
+                                >Teología</option>
+                        <option value="TrabajoSocialDistancia" <% if(user.program==='TrabajoSocialDistancia' ) { %>
+                            selected
+                            <% } %>>Trabajo Social (Distancia)
+                        </option>
+                    </select>
+                    <i class="fa-solid fa-user-tie input-icon"
+                        style="position: absolute; top: 35%; right: 25px; transform: translateY(-50%); color: #ccc;"></i>
+                </div>
+                <button type="submit"
+                    style="width: 100%; padding: 15px; background-color: #4d4d5c; color: white; border: none; border-radius: 5px; cursor: pointer;">Actualizar</button>
+            </form>
+            <button onclick="closeEditForm()"
+                style="margin-top: 20px; padding: 15px; width: 100%; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
+        </div>
     </div>
 
     <div id="publicaciones" class="container2" style="display: none;">
@@ -162,7 +199,7 @@
 
         <!-- Contenedor del formulario de edición y del cuadro de confirmación -->
         <div id="modalContainer"
-            style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
+            style="z-index: 1000; display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
             <h2 style="text-align: center; margin-bottom: 20px;">Confirmar eliminación</h2>
             <p style="margin-bottom: 20px;">¿Estás seguro de que quieres eliminar esta publicación?</p>
             <div style="display: flex; justify-content: space-around;">
@@ -184,7 +221,7 @@
         </div>
 
         <div id="editarForm" class="editar-form"
-            style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
+            style="z-index: 1000; display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
             <h2 style="text-align: center; margin-bottom: 20px;">Formulario de Edición</h2>
             <button onclick="openEditForm()"
                 style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #555;cursor: pointer;">&times;</button>
@@ -217,6 +254,7 @@
         <script>
             var categorias = ["Matemáticas", "Física", "Programación", "Idiomas", "Derecho", "Pedagogía", "Comunicación", "Administración ", "Estadistica", "Otros"];
             id = '<%= user.id %>';
+            password = '<%= user.password %>'
             fetch(`/api/publicaciones-usuario/${id}`)
                 .then(response => response.json())
                 .then(data => {
@@ -250,17 +288,12 @@
                             document.getElementById('materia').value = publicacion.materia;
                             document.getElementById('fecha').value = fechaFormateada;
                             document.getElementById('tema').value = publicacion.tema_interes;
-
                             document.getElementById('editForm').action = `/api/publicacion/${publicacion.solicitud_id}`;
-
                             openEditForm();
-
-                            console.log('Editar solicitud con ID:', publicacion.solicitud_id);
                         });
 
                         deleteButton.addEventListener('click', () => {
                             showDeleteConfirmation();
-                            console.log('Eliminar solicitud con ID:', publicacion.solicitud_id);
                             const modalContainer = document.getElementById("modalContainer");
                             const confirmDeleteButton = document.querySelector("#modalContainer button:last-child");
                             confirmDeleteButton.onclick = async () => {
@@ -269,7 +302,6 @@
                                         method: 'DELETE'
                                     });
                                     if (response.ok) {
-                                        console.log("Publicación eliminada con éxito");
                                         // Después de eliminar la publicación con éxito
                                         document.getElementById('deleteSuccessMessage').style.display = 'block';
                                         // Ocultar el mensaje después de unos segundos
@@ -302,7 +334,6 @@
                 })
                 .catch(error => console.error("Error al obtener las publicaciones del usuario:", error));
 
-
             function openEditForm() {
                 var editForm = document.getElementById("editarForm");
                 if (editForm.style.display === "none") {
@@ -318,8 +349,6 @@
             }
 
             function confirmDelete() {
-                // Aquí puedes colocar la lógica para eliminar la publicación
-                console.log("Publicación eliminada.");
                 var modalContainer = document.getElementById("modalContainer");
                 modalContainer.style.display = "none";
             }
@@ -398,8 +427,76 @@
                 document.getElementById(seccion + 'Link').classList.add('active');
             }
 
+            document.getElementById("changePasswordForm").addEventListener("submit", function (event) {
+                event.preventDefault(); // Evita que el formulario se envíe de forma predeterminada
 
+                // Obtiene los valores de las contraseñas
+                var oldPassword = document.getElementById("oldPassword").value;
+                var newPassword = document.getElementById("newPassword").value;
+                var confirmPassword = document.getElementById("confirmPassword").value;
 
+                // if (oldPassword !== password) {
+                //     // Muestra el mensaje de error
+                //     alert("La contraseña actual no es valida");
+                //     return; // Sale de la función si las contraseñas no coinciden
+                // }
+
+                // Verifica si la nueva contraseña es igual a la confirmación de contraseña
+                if (newPassword !== confirmPassword) {
+                    // Muestra el mensaje de error
+                    alert("La nueva contraseña y la confirmación de la contraseña no coinciden");
+                    return; // Sale de la función si las contraseñas no coinciden
+                }
+
+                // Aquí se enviaría el formulario al servidor si todas las validaciones pasan
+                this.submit();
+            });
+
+            document.getElementById("changeEmailForm").addEventListener("submit", function (event) {
+                event.preventDefault(); // Evita que el formulario se envíe de forma predeterminada
+
+                // Obtiene los valores de la contraseña anterior y el nuevo correo electrónico
+                var oldPasswordEmail = document.getElementById("oldPasswordEmail").value;
+                var email = document.getElementById("email").value;
+
+                // Realiza la validación de la contraseña anterior aquí si es necesario
+                // if (oldPasswordEmail !== password) {
+                //     // Muestra el mensaje de error
+                //     alert("La contraseña actual no es válida");  
+                //     return; // Sale de la función si las contraseñas no coinciden
+                // }
+
+                // Aquí se enviaría el formulario al servidor si todas las validaciones pasan
+                this.submit();
+            });
+
+            function desactivarCuenta() {
+                if (confirm("¿Estás seguro de que quieres desactivar tu cuenta?")) {
+                    // Realizar una solicitud HTTP al servidor para desactivar la cuenta
+                    fetch(`/users/deactivate/${id}`, { // Utiliza la ruta correcta con el ID del usuario
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                // La cuenta se desactivó correctamente
+                                alert("Tu cuenta ha sido desactivada exitosamente.");
+                                // Redirigir a la página de inicio de sesión u otra página deseada
+                                window.location.href = '/users/login';
+                            } else {
+                                // Error al desactivar la cuenta
+                                alert("Hubo un error al intentar desactivar tu cuenta. Por favor, intenta nuevamente más tarde.");
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            // Manejar el error, si es necesario
+                            alert("Hubo un error al intentar desactivar tu cuenta. Por favor, intenta nuevamente más tarde.");
+                        });
+                }
+            }
 
 
         </script>
@@ -526,8 +623,8 @@
     .edit-icon {
         border-radius: 5px;
         padding: 10px 10px;
-        left: 250px;
-        position: relative; 
+        left: 200px;
+        position: relative;
         margin-bottom: 20px;
         transition: background-color 0.3s;
         background-color: #4d4d5c;
@@ -699,7 +796,7 @@
         min-width: 160px;
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
         z-index: 1;
-        left: -160px;
+        left: -140px;
         /* Ajuste para que el menú se abra hacia la izquierda */
     }
 

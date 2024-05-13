@@ -178,7 +178,7 @@
   </head>
   <body>
     
-
+<div style="position: absolute; height: 500px;">
     <ul>
       <% if (typeof errors != 'undefined') { %> <% errors.forEach(error => { %>
       <li><%= error.message %></li>
@@ -196,7 +196,7 @@
       <li><%= messages.error %></li>
       <% } %>
     </ul>
-
+  </div>
     <form action="/users/login" method="POST">
       <h1>Iniciar sesión</h1>
       <div style="position: relative;" class="email">
