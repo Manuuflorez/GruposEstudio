@@ -87,6 +87,14 @@
         </form>
     </div>
 
+    <div id="modalErrorContrasena" class="modal">
+        <div class="modal-content">
+            <h2>Error</h2><br>
+            <p>La nueva contraseña y la confirmación de la<br> contraseña no coinciden.</p>
+            <button class="ok-button" onclick="cerrarModalErrorContrasena()">OK</button>
+        </div>
+    </div>
+
     <div id="cambiarCorreo" class="container" style="display: none;">
         <h1 style="margin-top: 25px;">Cambiar correo electrónico</h1>
         <form id="oldPassword" method="POST" action="/users/update/<%= user.id %>">
@@ -281,15 +289,18 @@
                     const container = document.querySelector('.container2');
                     data.forEach(publicacion => {
                         const div = document.createElement('div');
+                        div.classList.add('recuadro-publicacion'); 
                         const titulo = document.createElement('h3');
+                        const br = document.createElement('br');
+                        const br2 = document.createElement('br');
                         const materia = document.createElement('p');
                         const tema = document.createElement('p');
                         const fecha = document.createElement('p');
                         const editButton = document.createElement('button');
                         const deleteButton = document.createElement('button');
-                        const separator = document.createElement('hr');
 
                         titulo.textContent = publicacion.tipo_servicio === 'solicitar' ? `Solicitud: ${publicacion.materia}` : `Oferta: ${publicacion.materia}`;
+
                         materia.textContent = `Materia: ${publicacion.materia}`;
                         tema.textContent = `Tema: ${publicacion.tema_interes}`;
                         fecha.textContent = `Fecha de reunión: ${formatDate(publicacion.fecha_reunion)}`;
@@ -341,12 +352,13 @@
                         });
 
                         div.appendChild(titulo);
+                        div.appendChild(br);
                         div.appendChild(materia);
                         div.appendChild(tema);
                         div.appendChild(fecha);
+                        div.appendChild(br2);
                         div.appendChild(editButton);
                         div.appendChild(deleteButton);
-                        div.appendChild(separator);
                         container.appendChild(div);
                     });
                 })
@@ -445,17 +457,26 @@
             document.getElementById("changePasswordForm").addEventListener("submit", function (event) {
                 event.preventDefault();
 
-                var oldPassword = document.getElementById("oldPassword").value;
                 var newPassword = document.getElementById("newPassword").value;
                 var confirmPassword = document.getElementById("confirmPassword").value;
 
                 if (newPassword !== confirmPassword) {
-                    alert("La nueva contraseña y la confirmación de la contraseña no coinciden");
-                    return;
+                    mostrarModalErrorContrasena();
+                } else {
+                    this.submit();
                 }
-
-                this.submit();
             });
+
+            function mostrarModalErrorContrasena() {
+                var modal = document.getElementById("modalErrorContrasena");
+                modal.style.display = "block";
+            }
+
+            function cerrarModalErrorContrasena() {
+                var modal = document.getElementById("modalErrorContrasena");
+                modal.style.display = "none";
+            }
+
 
             document.getElementById("changeEmailForm").addEventListener("submit", function (event) {
                 event.preventDefault();
@@ -855,5 +876,14 @@
     .modal-content .ok-button {
         background-color: #ccc;
         color: #333;
+    }
+
+    .recuadro-publicacion {
+        border: 1px solid #ccc;
+        padding: 16px;
+        margin-bottom: 16px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 </style>
