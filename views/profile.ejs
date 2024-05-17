@@ -47,27 +47,28 @@
             cuenta</a>
     </div>
 
-    <!-- Modal de Confirmación de Desactivación de Cuenta -->
-<!-- Modal de Confirmación de Desactivación de Cuenta -->
-<div id="modalDesactivarCuenta" class="modal">
-    <div class="modal-content">
-        <h2>Confirmar Desactivación</h2><br>
-        <p>¿Estás seguro de que quieres desactivar tu cuenta?</p><br>
-        <div>
-            <button class="confirm-button" onclick="confirmarDesactivacion()">Desactivar</button>
-            <button class="cancel-button" onclick="cancelarDesactivacion()">Cancelar</button>
+    <div id="modalDesactivarCuenta" class="modal">
+        <div class="modal-content">
+            <h2>Confirmar Desactivación</h2><br>
+            <p>¿Estás seguro de que quieres desactivar tu cuenta?</p><br>
+            <div>
+                <button class="confirm-button" onclick="confirmarDesactivacion()">Desactivar</button>
+                <span>&nbsp;</span>
+                <span>&nbsp;</span>
+                <span>&nbsp;</span>
+                <span>&nbsp;</span>
+                <button class="cancel-button" onclick="cancelarDesactivacion()">Cancelar</button>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Modal de Confirmación de Desactivación Exitosa -->
-<div id="modalConfirmacionDesactivacion" class="modal">
-    <div class="modal-content">
-        <h2>Cuenta Desactivada</h2><br>
-        <p>Tu cuenta ha sido desactivada exitosamente.</p><br>
-        <button class="ok-button" onclick="redireccionarLogin()">OK</button>
+    <div id="modalConfirmacionDesactivacion" class="modal">
+        <div class="modal-content">
+            <h2>Cuenta Desactivada</h2><br>
+            <p>Tu cuenta ha sido desactivada exitosamente.</p><br>
+            <button class="ok-button" onclick="redireccionarLogin()">OK</button>
+        </div>
     </div>
-</div>
 
     <div id="cambiarContrasena" class="container" style="display: none;">
         <h1 style="margin-top: 25px;">Cambiar contraseña</h1>
@@ -99,7 +100,6 @@
                 cursor: pointer;">Cambiar correo electrónico</button>
         </form>
     </div>
-
 
     <div id="general" class="container" style="margin-top: 150;">
         <h1 style="margin-top: 25px;">Bienvenido, <%= user.name %>
@@ -219,7 +219,6 @@
     <div id="publicaciones" class="container2" style="display: none;">
         <h1 style="text-align: center;margin-top: 25px;">Listado de tus publicaciones</h1>
 
-        <!-- Contenedor del formulario de edición y del cuadro de confirmación -->
         <div id="modalContainer"
             style="z-index: 1000; display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
             <h2 style="text-align: center; margin-bottom: 20px;">Confirmar eliminación</h2>
@@ -230,13 +229,12 @@
                 <span>&nbsp;</span>
                 <span>&nbsp;</span>
                 <span>&nbsp;</span>
-                <span>&nbsp;</span><!-- Espacio entre los botones -->
+                <span>&nbsp;</span>
                 <button onclick="confirmDelete()"
                     style="padding: 15px; background-color: #ff4d4d; color: white; border: none; border-radius: 5px; cursor: pointer;">Eliminar</button>
             </div>
         </div>
 
-        <!-- Mensaje de eliminación exitosa -->
         <div id="deleteSuccessMessage"
             style="display: none; background-color: #4CAF50; color: white; text-align: center; padding: 20px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);">
             <p>¡Publicación eliminada con éxito!</p>
@@ -324,12 +322,10 @@
                                         method: 'DELETE'
                                     });
                                     if (response.ok) {
-                                        // Después de eliminar la publicación con éxito
                                         document.getElementById('deleteSuccessMessage').style.display = 'block';
-                                        // Ocultar el mensaje después de unos segundos
                                         setTimeout(() => {
                                             document.getElementById('deleteSuccessMessage').style.display = 'none';
-                                        }, 3000); // Ocultar después de 3 segundos (3000 milisegundos)
+                                        }, 3000);
 
                                         // Actualizar la lista de publicaciones después de eliminar una
                                         container.removeChild(div);
@@ -404,14 +400,13 @@
                 generarOpcionesMaterias();
             }
 
-            // Función para formatear la fecha
             function formatDate(dateString) {
                 const fechaReunion = new Date(dateString);
                 const options = {
                     year: 'numeric',
                     month: 'short',
                     day: '2-digit',
-                    hour12: true // Para usar formato de 12 horas
+                    hour12: true
                 };
                 return fechaReunion.toLocaleString('en-US', options);
             }
@@ -430,13 +425,11 @@
             }
 
             function mostrarSeccion(seccion) {
-                // Oculta todas las secciones
                 var secciones = document.querySelectorAll('.container, .container2');
                 secciones.forEach(function (seccion) {
                     seccion.style.display = 'none';
                 });
 
-                // Muestra la sección seleccionada
                 document.getElementById(seccion).style.display = 'block';
 
                 // Remueve la clase 'active' de todos los enlaces
@@ -450,88 +443,61 @@
             }
 
             document.getElementById("changePasswordForm").addEventListener("submit", function (event) {
-                event.preventDefault(); // Evita que el formulario se envíe de forma predeterminada
+                event.preventDefault();
 
-                // Obtiene los valores de las contraseñas
                 var oldPassword = document.getElementById("oldPassword").value;
                 var newPassword = document.getElementById("newPassword").value;
                 var confirmPassword = document.getElementById("confirmPassword").value;
 
-                // if (oldPassword !== password) {
-                //     // Muestra el mensaje de error
-                //     alert("La contraseña actual no es valida");
-                //     return; // Sale de la función si las contraseñas no coinciden
-                // }
-
-                // Verifica si la nueva contraseña es igual a la confirmación de contraseña
                 if (newPassword !== confirmPassword) {
-                    // Muestra el mensaje de error
                     alert("La nueva contraseña y la confirmación de la contraseña no coinciden");
-                    return; // Sale de la función si las contraseñas no coinciden
+                    return;
                 }
 
-                // Aquí se enviaría el formulario al servidor si todas las validaciones pasan
                 this.submit();
             });
 
             document.getElementById("changeEmailForm").addEventListener("submit", function (event) {
-                event.preventDefault(); // Evita que el formulario se envíe de forma predeterminada
+                event.preventDefault();
 
-                // Obtiene los valores de la contraseña anterior y el nuevo correo electrónico
                 var oldPasswordEmail = document.getElementById("oldPasswordEmail").value;
                 var email = document.getElementById("email").value;
 
-                // Realiza la validación de la contraseña anterior aquí si es necesario
-                // if (oldPasswordEmail !== password) {
-                //     // Muestra el mensaje de error
-                //     alert("La contraseña actual no es válida");  
-                //     return; // Sale de la función si las contraseñas no coinciden
-                // }
-
-                // Aquí se enviaría el formulario al servidor si todas las validaciones pasan
                 this.submit();
             });
 
             function desactivarCuenta() {
-    document.getElementById('modalDesactivarCuenta').style.display = 'flex';
-}
+                document.getElementById('modalDesactivarCuenta').style.display = 'flex';
+            }
 
-function cancelarDesactivacion() {
-    document.getElementById('modalDesactivarCuenta').style.display = 'none';
-}
+            function cancelarDesactivacion() {
+                document.getElementById('modalDesactivarCuenta').style.display = 'none';
+            }
 
-function confirmarDesactivacion() {
-    // Lógica para desactivar la cuenta
-    fetch(`/users/deactivate/${id}`, { // Utiliza la ruta correcta con el ID del usuario
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        if (response.ok) {
-            // La cuenta se desactivó correctamente
-            document.getElementById('modalDesactivarCuenta').style.display = 'none';
-            document.getElementById('modalConfirmacionDesactivacion').style.display = 'flex';
-        } else {
-            // Error al desactivar la cuenta
-            alert("Hubo un error al intentar desactivar tu cuenta. Por favor, intenta nuevamente más tarde.");
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        // Manejar el error, si es necesario
-        alert("Hubo un error al intentar desactivar tu cuenta. Por favor, intenta nuevamente más tarde.");
-    });
-}
+            function confirmarDesactivacion() {
+                fetch(`/users/deactivate/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            document.getElementById('modalDesactivarCuenta').style.display = 'none';
+                            document.getElementById('modalConfirmacionDesactivacion').style.display = 'flex';
+                        } else {
+                            alert("Hubo un error al intentar desactivar tu cuenta. Por favor, intenta nuevamente más tarde.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert("Hubo un error al intentar desactivar tu cuenta. Por favor, intenta nuevamente más tarde.");
+                    });
+            }
 
-function redireccionarLogin() {
-    window.location.href = '/users/login';
-}
-
-
-
-
+            function redireccionarLogin() {
+                window.location.href = '/users/login';
+            }
 
         </script>
 </body>
@@ -544,7 +510,6 @@ function redireccionarLogin() {
         padding: 0;
         font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
-
 
     .sidebar {
         margin: 0;
@@ -748,7 +713,6 @@ function redireccionarLogin() {
         }
     }
 
-    /* Styles for User Information Container */
     .container {
         max-width: 800px;
         margin: 50px auto;
@@ -802,22 +766,16 @@ function redireccionarLogin() {
 
     .delete-button {
         font-size: 16px;
-        /* Tamaño de fuente más grande */
         padding: 9px 19px;
-        /* Padding mayor para hacerlo más grande */
         margin-left: 50px;
-        /* Margen a la derecha para desplazarlo */
         display: inline-block;
         color: red;
         border: none;
-        /* Elimina el borde */
         background-color: transparent;
-        /* Hace el fondo transparente */
     }
 
     .button-spacing {
         margin-right: 0px;
-        /* Margen entre los botones */
     }
 
     .dropdown {
@@ -833,7 +791,6 @@ function redireccionarLogin() {
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
         z-index: 1;
         left: -140px;
-        /* Ajuste para que el menú se abra hacia la izquierda */
     }
 
     .dropdown-content a {
@@ -850,52 +807,53 @@ function redireccionarLogin() {
     .dropdown:hover .dropdown-content {
         display: block;
     }
+
     .modal {
-    z-index: 1000;
-    display: none;
-    background-color: rgba(255, 255, 255, 0.95);
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 50px;
-    border-radius: 20px;
-    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
-}
+        z-index: 1000;
+        display: none;
+        background-color: rgba(255, 255, 255, 0.95);
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 50px;
+        border-radius: 20px;
+        box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
+    }
 
-.modal-content {
-    text-align: center;
-}
+    .modal-content {
+        text-align: center;
+    }
 
-.modal-actions {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-}
+    .modal-actions {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+    }
 
-.modal-actions button {
-    padding: 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
+    .modal-actions button {
+        padding: 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
 
-.modal-content button {
-    padding: 10px 20px;
-    margin: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
+    .modal-content button {
+        padding: 10px 20px;
+        margin: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
 
-.modal-content .confirm-button {
-    background-color: #ff4d4d;
-    color: white;
-}
+    .modal-content .confirm-button {
+        background-color: #ff4d4d;
+        color: white;
+    }
 
-.modal-content .cancel-button, .modal-content .ok-button {
-    background-color: #ccc;
-    color: #333;
-}
-
+    .modal-content .cancel-button,
+    .modal-content .ok-button {
+        background-color: #ccc;
+        color: #333;
+    }
 </style>
