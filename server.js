@@ -5,6 +5,9 @@ const passport = require("passport");
 const flash = require("express-flash");
 const session = require("express-session");
 const path = require('path');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser');
 require("dotenv").config();
 const app = express();
 
@@ -18,6 +21,10 @@ initializePassport(passport);
 app.use(express.static(path.join(__dirname, 'public')));
 // Parsea los detalles de un formulario
 app.use(express.urlencoded({ extended: false }));
+
+app.use(bodyParser.json());
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set("view engine", "ejs");
 
@@ -43,6 +50,15 @@ app.use(flash());
 
 app.get("/", (req, res) => {
   res.render("index");
+});
+
+app.get("/users/reset-password", (req, res) => {
+  res.render("restablecerpass.ejs");
+});
+
+app.get('/users/reset-password/:token', (req, res) => {
+  const { token } = req.params;
+  res.render('restablecerpass-token', { token });
 });
 
 app.get("/users/register", (req, res) => {
@@ -75,6 +91,85 @@ app.get('/logout', (req, res) => {
     }
     res.redirect('/users/login');
   });
+});
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'manuuflorez1@gmail.com',
+    pass: 'qslb timx xdni mogo'
+  }
+});
+
+// Ruta para solicitar el restablecimiento de contraseña
+app.post("/users/reset-password", async (req, res) => {
+  const { email } = req.body;
+  const token = crypto.randomBytes(20).toString('hex');
+
+  try {
+    await pool.query(
+      "INSERT INTO password_resets (email, token) VALUES ($1, $2)",
+      [email, token]
+    );
+
+    // Envía el correo electrónico con el token de restablecimiento
+    const resetLink = `http://localhost:3000/users/reset-password/${token}`;
+    const mailOptions = {
+      from: 'manuuflorez1@gmail.com',
+      to: email,
+      subject: 'Solicitud de restablecimiento de contraseña para StudyCoop',
+      text: `Has solicitado un restablecimiento de contraseña. Utiliza el siguiente enlace para restablecer tu contraseña: ${resetLink}`,
+      html: `<p>Has solicitado un restablecimiento de contraseña. Utiliza el siguiente enlace para restablecer tu contraseña:</p><a href="${resetLink}">Restablecer Contraseña</a>`
+    };
+
+    await transporter.sendMail(mailOptions);
+    res.json({ message: "¡Correo electrónico enviado para el restablecimiento de contraseña!" });
+  } catch (error) {
+    console.error("Error al solicitar el restablecimiento de contraseña:", error);
+    res.status(500).json({ error: "Error al solicitar el restablecimiento de contraseña" });
+  }
+});
+
+
+
+// Ruta para restablecer la contraseña
+app.post("/users/reset-password/:token", async (req, res) => {
+  const { token } = req.params;
+  const { password, confirm_password } = req.body;
+
+  if (password !== confirm_password) {
+    return res.status(400).json({ error: "Las contraseñas no coinciden" });
+  }
+
+  try {
+    const result = await pool.query(
+      "SELECT * FROM password_resets WHERE token = $1",
+      [token]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(400).json({ error: "Este enlace ya ha vencido, token no valido." });
+    }
+
+    const email = result.rows[0].email;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await pool.query(
+      "UPDATE users SET password = $1 WHERE email = $2",
+      [hashedPassword, email]
+    );
+
+    // Elimina el token después de usarlo
+    await pool.query(
+      "DELETE FROM password_resets WHERE token = $1",
+      [token]
+    );
+
+    res.json({ message:"¡Contraseña actualizada correctamente!"});
+  } catch (error) {
+    console.error("Error al actualizar la contraseña:", error);
+    res.status(500).json({ error: "Error al actualizar la contraseña" });
+  }
 });
 
 app.post("/users/register", async (req, res) => {
@@ -160,7 +255,7 @@ app.post("/users/update/:id", async (req, res) => {
     program = userProgram;
     email = userEmail;
     password = newPassword;
-    
+
   } else if (req.body.email) {
     const { name: userName, lastname: userLastname, document_type: userDocumentType, id_number: userIdNumber, program: userProgram, password: userPassword, active } = req.user;
     const { email: userEmail } = req.body;
@@ -213,14 +308,14 @@ app.post("/users/update/:id", async (req, res) => {
       password = hashedPassword; // Actualiza la contraseña con la nueva contraseña hasheada
     }
 
-      // Verifica si la cuenta está activa o desactivada
-      if (active !== undefined) {
-        // Actualiza el campo 'active'
-        await pool.query(
-          "UPDATE users SET active = $1 WHERE id = $2",
-          [active, userId]
-        );
-      }
+    // Verifica si la cuenta está activa o desactivada
+    if (active !== undefined) {
+      // Actualiza el campo 'active'
+      await pool.query(
+        "UPDATE users SET active = $1 WHERE id = $2",
+        [active, userId]
+      );
+    }
 
     if (req.body.email) {
       const { oldPassword } = req.body;

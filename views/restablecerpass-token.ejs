@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restablecer Contraseña</title>
+</head>
+
+<body>
+    <header>
+        <h2 class="logo">@ StudyCoop</h2>
+        <nav class="menu">
+            <a href="/users/login">Volver</a>
+            <label for="check" class="esconder-menu">&#215</label>
+        </nav>
+    </header>
+    <div class="content">
+        <div class="container">
+            <h1>Restablecer Contraseña</h1>
+            <form action="/users/reset-password/<%= token %>" method="POST">
+                <label for="password">Nueva Contraseña:</label>
+                <input type="password" id="password" name="password">
+                <div id="passwordRequirements" style="margin-bottom: 20px ; color: red; font-size: 0.8em;">La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial</div>
+                <label for="confirm-password">Confirmación Nueva Contraseña:</label>
+                <input type="password" id="confirm-password" name="confirm_password" required>
+                <button type="submit" class="edit-button">Restablecer Contraseña</button>
+            </form>
+        </div>
+    </div>
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <h2>Contraseña actualizada</h2>
+            <p>¡Contraseña actualizada correctamente!</p>
+            <button onclick="redirectToLogin()">Ir a inicio</button>
+        </div>
+    </div>
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <h2>Error al restablecer contraseña</h2>
+            <p id="errorMessage">Hubo un error al restablecer la contraseña. Por favor, inténtalo de nuevo más tarde.
+            </p>
+            <button onclick="closeModal('errorModal')">Cerrar</button>
+        </div>
+    </div>
+</body>
+<script>
+
+    const passwordInput = document.getElementById("password");
+    const passwordRequirements = document.getElementById("passwordRequirements");
+
+    passwordInput.addEventListener("input", function () {
+        const password = passwordInput.value;
+        let requirements = [];
+
+        // Verificar longitud mínima
+        if (password.length < 8) {
+            requirements.push("Al menos 8 caracteres");
+        }
+
+        // Verificar letras mayúsculas
+        if (!/[A-Z]/.test(password)) {
+            requirements.push("Al menos una letra mayúscula");
+        }
+
+        // Verificar letras minúsculas
+        if (!/[a-z]/.test(password)) {
+            requirements.push("Al menos una letra minúscula");
+        }
+
+        // Verificar números
+        if (!/\d/.test(password)) {
+            requirements.push("Al menos un número");
+        }
+
+        // Verificar caracteres especiales
+        if (!/[@$!%*?&]/.test(password)) {
+            requirements.push("Al menos un carácter especial");
+        }
+
+        // Actualizar el texto de los requisitos
+        if (requirements.length > 0) {
+            passwordRequirements.textContent = "Faltan los siguientes requisitos: " + requirements.join(", ");
+        } else {
+            passwordRequirements.textContent = "";
+        }
+    });
+
+
+    function redirectToLogin() {
+        closeModal('successModal');
+        window.location.href = "/users/login"; // Redirecciona al usuario al inicio
+    }
+
+    function showModal(modalId) {
+        document.getElementById(modalId).style.display = "block";
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+    }
+
+    document.querySelector('form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        const password = formData.get('password');
+        const confirm_password = formData.get('confirm_password');
+
+        // Aquí puedes agregar validaciones adicionales si lo deseas
+
+        try {
+            const response = await fetch('/users/reset-password/<%= token %>', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ password, confirm_password })
+            });
+            if (response.ok) {
+                // Si la respuesta es exitosa, mostramos el cuadro de diálogo con el mensaje de éxito
+                showModal('successModal'); // Corrección aquí
+            } else {
+                // Si la respuesta no es exitosa, intentamos obtener el mensaje de error del servidor
+                const responseData = await response.json();
+                const errorMessage = responseData.error || 'Hubo un error al restablecer la contraseña. Por favor, inténtalo de nuevo más tarde.';
+                // Mostramos el cuadro de diálogo con el mensaje de error
+                showErrorModal(errorMessage);
+            }
+        } catch (error) {
+            console.error('Error al restablecer la contraseña:', error);
+            alert('Hubo un error al restablecer la contraseña. Por favor, inténtalo de nuevo más tarde.');
+        }
+    });
+
+    // Función para mostrar el cuadro de diálogo de error
+    function showErrorModal(errorMessage) {
+        const errorModal = document.getElementById("errorModal");
+        const errorMessageElement = document.getElementById("errorMessage");
+        errorMessageElement.textContent = errorMessage;
+        errorModal.style.display = "block";
+    }
+
+    // Función para cerrar el cuadro de diálogo de error
+    function closeErrorModal() {
+        const errorModal = document.getElementById("errorModal");
+        errorModal.style.display = "none";
+    }
+
+    // Función para cerrar el cuadro de diálogo y redirigir a inicio
+    function closeAndRedirect() {
+        closeErrorModal();
+        window.location.href = "/users/login"; // Redireccionar a la página de inicio de sesión
+    }
+
+</script>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    header {
+        height: 100px;
+        background: #4d4d5c;
+        padding: 0 50px;
+        color: aliceblue;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        width: 96%;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .logo {
+        text-transform: uppercase;
+        font-weight: 200;
+        color: whitesmoke;
+    }
+
+    .menu a {
+        color: #fff;
+        text-decoration: none;
+        text-transform: uppercase;
+        padding: 0 10px;
+        transition: 0.4s;
+    }
+
+    .mostrar-menu,
+    .esconder-menu {
+        font-size: 30px;
+        cursor: pointer;
+        transition: 0.4s;
+        display: none;
+    }
+
+    .mostrar-menu {
+        order: 1;
+    }
+
+    .content {
+        margin-top: 150px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .container {
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        width: 300px;
+        /* Ajusta el ancho del contenedor según sea necesario */
+    }
+
+    h1 {
+        font-size: 32px;
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    input {
+        width: calc(100% - 20px);
+        /* Reduce el ancho del input para centrarlo */
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .edit-button {
+        border-radius: 5px;
+        padding: 10px 0;
+        margin-top: 20px;
+        width: 100%;
+        background-color: #4d4d5c;
+        color: white;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+    #modalContainer {
+        z-index: 1000;
+        display: none;
+        background-color: rgba(255, 255, 255, 0.95);
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 50px;
+        border-radius: 20px;
+        box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
+    }
+
+    #modalContainer h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #modalContainer p {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    #modalContainer button {
+        padding: 15px;
+        background-color: #4d4d5c;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .modal {
+        z-index: 1000;
+        display: none;
+        background-color: rgba(255, 255, 255, 0.95);
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 50px;
+        border-radius: 20px;
+        box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content h2 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .modal-content p {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .modal-content button {
+        padding: 10px 20px;
+        background-color: #4d4d5c;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: block;
+        margin: 0 auto;
+    }
+</style>

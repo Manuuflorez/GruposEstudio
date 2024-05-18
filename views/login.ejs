@@ -1,240 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css"
-    />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
-    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" 
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar sesión</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Iniciar sesión</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
 
-    <style>
-        body {
-          font-family: Arial, sans-serif;
-          margin: 0;
-          padding: 0;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 100vh;
-          background-color: #f0f0f0;
-        }
-      
-        form {
-          width: 300px;
-          padding: 20px;
-          background-color: #fff;
-          border-radius: 8px;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+    #new-account-button {
+      display: block;
+      margin: 0 auto;
+    }
 
-        form.title {
-          color: #252525;
-          font-size: 35px;
-          font-weight: 800;
-          margin-bottom: 30px;
-        }
+    div a {
+      display: block;
+      text-align: center;
+    }
 
-        h1 {
-          text-align: center;
-          margin-bottom: 20px;
-        }
+    header {
+      height: 100px;
+      background: #4d4d5c;
+      padding: 0 50px;
+      color: aliceblue;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      width: 96%;
+      top: 0;
+      z-index: 1000;
+    }
 
-        
+    .logo {
+      text-transform: uppercase;
+      font-weight: 200;
+      color: whitesmoke;
+    }
 
-        .input-icon {
-          position: absolute;
-          left: 5px; /* Ajusta el espacio entre el icono y el borde izquierdo del campo */
-          top: 36%; /* Centra verticalmente el icono */
-          transform: translateY(-50%); /* Ajusta la posición vertical del icono */
-          z-index: 1; /* Asegura que el icono esté en la capa superior */
-        }
-        
-        /* Agrega un poco de espacio a la derecha del campo de entrada */
-        input[type="email"],
-        input[type="password"] {
-          padding-left: 25px;
-          width: calc(100% - 20px); /* Resta el doble del padding del formulario al 100% del ancho */
-          box-sizing: border-box;
-        }
+    .menu a {
+      color: #fff;
+      text-decoration: none;
+      text-transform: uppercase;
+      padding: 0 10px;
+      transition: 0.4s;
+    }
 
-        
+    .mostrar-menu,
+    .esconder-menu {
+      font-size: 30px;
+      cursor: pointer;
+      transition: 0.4s;
+      display: none;
+    }
 
-        input[type="submit"] {
-          width: 100%;
-          background-color: #333;
-          color: #fff;
-          padding: 10px;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-          line-height: normal; /* Ajusta la altura de línea al valor deseado */
-        }
-        
-        /* Ajusta el espacio entre el texto y el borde inferior del botón */
-        input[type="submit"]:hover {
-          background-color: grey;
-          line-height: normal; /* Ajusta la altura de línea al valor deseado */
-        }
-        #new-account-button {
-          width: 100%;
-          background-color: #333;
-          color: #fff;
-          padding: 10px;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-          line-height: normal; /* Ajusta la altura de línea al valor deseado */
-          transition: background-color 0.3s ease; /* Transición de color al hacer clic */
-        }
-    
-        #new-account-button:hover {
-          background-color: grey; /* Cambia el color al hacer clic */
-        }
+    .mostrar-menu {
+      order: 1;
+    }
 
-        #remember-container {
-          display: flex;
-          align-items: center;
-          cursor: pointer;
-        }
-    
-        #remember-switch {
-          width: 40px;
-          height: 20px;
-          position: relative;
-          cursor: pointer;
-          background-color: #ccc;
-          border-radius: 10px;
-          transition: background-color 0.3s ease; /* Transición de color al pasar el ratón sobre el switch */
-        }
-    
-        #switch-slider {
-          width: 20px;
-          height: 20px;
-          background-color: #fff;
-          border-radius: 50%;
-          transform: translateX(0);
-          transition: transform 0.3s ease; /* Transición de posición al hacer clic */
-        }
-    
-        #remember-checkbox {
-          display: none; /* Oculta el checkbox por defecto */
-        }
-    
-        #remember-container:hover #remember-switch {
-          background-color: #ddd; /* Cambia el color al pasar el ratón sobre el switch */
-        }
-    
-        #remember-checkbox:checked + #remember-switch #switch-slider {
-          transform: translateX(100%); /* Mueve el slider a la posición de "encendido" cuando el checkbox está marcado */
-        }
-    
-        #remember-checkbox:checked + #remember-switch {
-          background-color: grey; /* Cambia el color del switch a rojo cuando el checkbox está marcado */
-        }
-    
-        #remember-container #remember-text {
-          font-size: 16px;
-          margin-left: 10px;
-        }
+    .content {
+      margin-top: 150px;
+      display: flex;
+      justify-content: center;
+    }
 
-        .divisor {
-          border-top: 1px solid #ccc; /* Línea horizontal de 1 píxel de grosor y color gris */
-          margin: 10px 0; /* Ajusta el espacio antes y después de la línea */
-        }
+    .container {
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      width: 400px;
+      position: relative;
+    }
 
-        a {
-          display: block;
-          
-          margin-top: 10px;
-          color: black;
-          text-decoration: none;
-        }
-      
-        a:hover {
-          
-          color: red;
-          
-        }
+    h1 {
+      font-size: 32px;
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
 
-        
-      
-        ul {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-          color: #ff0000;
-        }
-      
-        li {
-          margin-bottom: 5px;
-        }
-    </style>
-  </head>
-  <body>
-    
-<div style="position: absolute; height: 500px;">
-    <ul>
-      <% if (typeof errors != 'undefined') { %> <% errors.forEach(error => { %>
-      <li><%= error.message %></li>
-      <% }) %> <% } %>
-    </ul>
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
 
-    <ul>
-      <% if(messages.success_msg) { %>
-      <li><%= messages.success_msg %></li>
-      <% } %>
-    </ul>
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
 
-    <ul>
-      <% if (messages.error) { %>
-      <li><%= messages.error %></li>
-      <% } %>
-    </ul>
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      padding-left: 40px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .edit-button {
+      border-radius: 5px;
+      padding: 10px 0;
+      margin-top: 20px;
+      width: 100%;
+      background-color: #4d4d5c;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .message-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .message-container ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .message-container li {
+      color: rgb(255, 0, 0);
+      margin-bottom: 10px;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h2 class="logo">@ StudyCoop</h2>
+    <nav class="menu">
+      <a href="/">Volver</a>
+      <label for="check" class="esconder-menu">&#215</label>
+    </nav>
+  </header>
+
+  <div class="content">
+    <div class="container">
+      <div class="message-container">
+        <ul>
+          <% if (typeof errors != 'undefined') { %> <% errors.forEach(error => { %>
+          <li class="error"><%= error.message %></li>
+          <% }) %> <% } %>
+        </ul>
+
+        <ul>
+          <% if(messages.success_msg) { %>
+          <li><%= messages.success_msg %></li>
+          <% } %>
+        </ul>
+
+        <ul>
+          <% if (messages.error) { %>
+          <li class="error"><%= messages.error %></li>
+          <% } %>
+        </ul>
+      </div>
+      <form action="/users/login" method="POST">
+        <h1>Iniciar sesión</h1>
+        <div class="input-group email">
+          <input style="width: 87%;"  type="email" id="email" name="email" placeholder="Email" required />
+          <i class="fa-solid fa-envelope input-icon"></i>
+        </div>
+        <div class="input-group" style="position: relative;">
+          <input style="width: 87%;"  type="password" id="password" name="password" placeholder="Password" required />
+          <i class="fa-solid fa-lock input-icon"></i>
+        </div>
+        <div>
+          <input class="edit-button" type="submit" value="Iniciar sesión" />
+        </div>
+        <br>
+
+        <div>
+          <a href="/users/reset-password/">¿Has olvidado tu contraseña?</a>
+        </div>
+
+        <br>
+        <hr>
+        <br>
+      </form>
+      <div>
+        <button style="width: 80%;" id="new-account-button" class="edit-button"
+          onclick="navigateTo('register')">Nueva cuenta</button>
+      </div>
+    </div>
   </div>
-    <form action="/users/login" method="POST">
-      <h1>Iniciar sesión</h1>
-      <div style="position: relative;" class="email">
-        <input type="email" id="email" name="email" placeholder="Email" required/>
-        <i class="fa-solid fa-envelope input-icon"></i>
-      </div>
-      <div style="position: relative;">
-        <input type="password" id="password" name="password" placeholder="Password" required/>
-        <i class="fa-solid fa-lock input-icon"></i>
-      </div>
-      <div>
-        <a href="#">¿Has olvidado tu contraseña?</a>
-      </div>
-      
-      <div>
-        <input type="submit" value="Login" />
-      </div>
 
-      <div id="remember-container">
-        <input type="checkbox" id="remember-checkbox">
-        <label id="remember-switch" for="remember-checkbox">
-          <div id="switch-slider"></div>
-        </label>
-        <span id="remember-text">Recuérdame</span>
-      </div>
-      <div class="divisor"></div>
-      <div>
-        <button id="new-account-button" onclick="navigateTo('register')">Nueva cuenta</button>
-      </div>
+  <script>
+    function navigateTo(url) {
+      window.location.href = url;
+    }
+  </script>
+</body>
 
-
-      
-    </form>
-    <script>
-      
-      function navigateTo(url) {
-        window.location.href = url;
-      }
-    </script>
-  </body>
 </html>

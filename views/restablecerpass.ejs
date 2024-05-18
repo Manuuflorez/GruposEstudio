@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restablecer Contraseña</title>
+</head>
+
+<body>
+    <header>
+        <h2 class="logo">@ StudyCoop</h2>
+        <nav class="menu">
+            <a href="/users/login">Volver</a>
+            <label for="check" class="esconder-menu">&#215</label>
+        </nav>
+    </header>
+
+    <div class="content">
+        <div class="container">
+            <h1>Restablecer Contraseña</h1>
+            <form action="/users/reset-password" method="POST">
+                <label for="email">Correo Electrónico:</label>
+                <input style="max-width: 380px" type="email" id="email" name="email" required>
+                <button type="submit" class="edit-button">Restablecer Contraseña</button>
+            </form>
+        </div>
+    </div>
+    <div id="modalContainer">
+        <h2>Correo enviado</h2>
+        <p>¡El correo electrónico para restablecer <br>la contraseña ha sido enviado con éxito!</p>
+        <button onclick="closeModal()">Cerrar</button>
+    </div>
+
+    <script>
+        function showModal() {
+            document.getElementById("modalContainer").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("modalContainer").style.display = "none";
+        }
+
+        document.querySelector('form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const email = formData.get('email');
+
+            try {
+                const response = await fetch('/users/reset-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email })
+                });
+
+                showModal();
+            } catch (error) {
+                console.error('Error al restablecer la contraseña:', error);
+                alert('Hubo un error al restablecer la contraseña. Por favor, inténtalo de nuevo más tarde.');
+            }
+        });
+    </script>
+</body>
+
+</html>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    header {
+        height: 100px;
+        background: #4d4d5c;
+        padding: 0 50px;
+        color: aliceblue;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        width: 96%;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .logo {
+        text-transform: uppercase;
+        font-weight: 200;
+        color: whitesmoke;
+    }
+
+    .menu a {
+        color: #fff;
+        text-decoration: none;
+        text-transform: uppercase;
+        padding: 0 10px;
+        transition: 0.4s;
+    }
+
+    .mostrar-menu,
+    .esconder-menu {
+        font-size: 30px;
+        cursor: pointer;
+        transition: 0.4s;
+        display: none;
+    }
+
+    .mostrar-menu {
+        order: 1;
+    }
+
+    .content {
+        margin-top: 150px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .container {
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        width: 400px;
+    }
+
+    h1 {
+        font-size: 32px;
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .edit-button {
+        border-radius: 5px;
+        padding: 10px 0;
+        margin-top: 20px;
+        width: 100%;
+        background-color: #4d4d5c;
+        color: white;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+    #modalContainer {
+        z-index: 1000;
+        display: none;
+        background-color: rgba(255, 255, 255, 0.95);
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 50px;
+        border-radius: 20px;
+        box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
+    }
+
+    #modalContainer h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #modalContainer p {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    #modalContainer button {
+        padding: 15px;
+        background-color: #4d4d5c;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: block;
+        margin: 0 auto;
+    }
+</style>
