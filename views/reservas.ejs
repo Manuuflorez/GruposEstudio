@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://kit.fontawesome.com/8133639c1c.js" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="text/javascript">
+    emailjs.init('Zh5Xh3x-J1rmUjEuJ')
+  </script>
+  <link rel="stylesheet" href="/Styles.css">
+
+  <title>StudyCoop</title>
+</head>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  }
+
+  header {
+    height: 100px;
+    /*background: rgb(108, 118, 118);*/
+    background: #4d4d5c;
+    padding: 0 50px;
+    color: aliceblue;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    text-transform: uppercase;
+    font-weight: 200;
+    color: whitesmoke;
+  }
+
+  .menu a {
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    padding: 0 10px;
+    transition: 0.4s;
+
+  }
+
+  .mostrar-menu,
+  .esconder-menu {
+    font-size: 30px;
+    cursor: pointer;
+    transition: 0.4s;
+    display: none;
+  }
+
+  .mostrar-menu {
+    order: 1;
+  }
+
+  .menu a:hover,
+  .mostrar-menu:hover,
+  .esconder-menu:hover {
+    color: #666666;
+  }
+
+  #check {
+    display: none;
+  }
+
+  @media(max-width:768px) {
+
+    .mostrar-menu,
+    .esconder-menu {
+      display: block;
+    }
+
+    .menu {
+      position: fixed;
+      height: 100vh;
+      z-index: 100;
+      width: 100%;
+      background: rgb(86, 87, 87);
+      /*left: 0;*/
+      right: -100%;
+      top: 0;
+      text-align: center;
+      padding: 100px 0px;
+      z-index: 100;
+      transition: o.8s;
+    }
+
+    .menu a {
+      display: block;
+      padding: 20px;
+    }
+
+    .esconder-menu {
+      position: absolute;
+      top: 40px;
+      right: 40px;
+    }
+
+    #check:checked~.menu {
+      right: 0;
+    }
+
+    #personas {
+      flex-direction: column;
+    }
+
+    .contenido-icono {
+      flex-direction: column;
+    }
+
+    .contenido-icono div {
+      border: none !important;
+    }
+
+    .datos-form {
+      flex-direction: column;
+    }
+  }
+
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    left: -160px;
+    /* Ajuste para que el menú se abra hacia la izquierda */
+  }
+
+  .dropdown-content a {
+    color: #4d4d5c !important;
+    padding: 12px 16px !important;
+    text-decoration: none !important;
+    display: block !important;
+  }
+
+  .dropdown-content a:hover {
+    background-color: #f1f1f1e1;
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  body {
+    background-color: #f2f2f2
+  }
+
+  #principal {
+    flex-direction: row;
+
+    justify-content: space-between;
+  }
+
+  .background-container {
+    margin-top: 20px;
+    margin-left: 40px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    float: left;
+    flex: 5;
+    width: 35%;
+  }
+
+  .user-details,
+  .shopping-details {
+    background-color: white;
+    padding: 20px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    flex: 1;
+    float: left;
+
+  }
+
+  .summary {
+    margin-top: 180px;
+    background-color: white;
+    padding: 20px;
+    margin-right: 100px;
+    width: 35%;
+    float: right;
+
+  }
+
+  #boton-empezar:hover {
+    background-color: grey;
+    color: black;
+  }
+
+  .user-details h3,
+  .shopping-details h3,
+  .summary h3 {
+    margin-top: 0;
+  }
+
+  .user-info,
+  .advisor-info,
+  .reservation-info {
+    margin-top: 20px;
+  }
+
+  .user-info p,
+  .advisor-info p,
+  .reservation-info p {
+    margin-bottom: 10px;
+  }
+
+  .change-btn {
+    background-color: #020a16b0;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    float: right;
+  }
+
+  .change-btn:hover {
+    background-color: gray;
+  }
+
+  .quantity {
+    display: flex;
+    align-items: center;
+  }
+
+  .quantity button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  .increment-btn,
+  .decrement-btn {
+    margin: 0 5px;
+  }
+
+
+  .user-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .user-info {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .user-info p {
+    margin-right: 10px;
+  }
+
+  .user-info p:nth-child(3) {
+    order: 3;
+    width: 100%;
+  }
+
+  .advisor-info {
+    text-align: left;
+  }
+
+  .advisor-info p {
+    margin-bottom: 10px;
+  }
+
+  .advisor-info p strong {
+    display: inline-block;
+    width: 100px;
+    text-align: left;
+  }
+
+  .payment-info {
+    text-align: right;
+  }
+</style>
+
+<body>
+  <header>
+    <h2 class="logo">@ StudyCoop</h2>
+
+    <input type="checkbox" id="check">
+    <label for="check" class="mostrar-menu">&#8801</label>
+    <nav class="menu">
+      <a href="/users/dashboard">Volver</a>
+      <a href="profile">Mi cuenta</a>
+      <!-- Lista desplegable de ajustes -->
+      <div class="dropdown">
+        <a class="dropbtn"><i class="fas fa-cog"></i></a>
+        <div class="dropdown-content">
+          <a href="/logout">Cerrar sesión</a>
+        </div>
+      </div>
+      <!-- Fin de lista desplegable -->
+      <label for="check" class="esconder-menu">&#215</label>
+    </nav>  
+  </header>
+
+  <div id="principal">
+    <div class="background-container">
+      <!-- Primer contenedor: Detalles del usuario -->
+      <div class="user-details">
+        <h3><i class="fas fa-user"></i> <%= user.name %> <%= user.lastname %></h3>
+        <div class="user-info">
+          <p>Programa: <%= user.program %></p>
+          <p>Email: <%= user.email %></p>
+          <p>Teléfono: +57 30080090</p>
+        </div>
+      </div>
+
+      <!-- Segundo contenedor: Shopping details -->
+      <div class="shopping-details">
+        <h3>Shopping Details</h3>
+        <div class="advisor-info">
+          <p><strong>Asesoría:</strong> Inglés</p>
+          <p><strong>Día:</strong> Martes</p>
+          <p><strong>Horario:</strong> 10-12</p>
+          <p class="payment-info"><strong>Forma de pago:</strong> <input type="text" id="payment-input">
+          </p>
+          <button id="change-btn" class="change-btn">Aceptar</button>
+        </div>
+      </div>
+
+    </div>
+    <!-- Tercer contenedor: Resumen -->
+    <div class="summary">
+      <h3>Resumen</h3>
+      <div class="reservation-info">
+        <p><strong>Día:</strong> 27 de febrero</p>
+        <p><strong>Horario:</strong> 10-12 am</p>
+        <p><strong>Categoría:</strong> Inglés</p>
+        <p><strong>Tutor:</strong> Juan Ruiz</p>
+      </div>
+      <hr>
+      <p><strong>Pago:</strong> <span id="payment-display"></span></p>
+    </div>
+  </div>
+
+
+  <script>
+    document.getElementById('change-btn').addEventListener('click', function () {
+      let paymentInput = document.getElementById('payment-input').value;
+      document.getElementById('payment-display').textContent = paymentInput;
+    });
+
+    
+
+    
+    
+  </script>
+
+
+
+</body>
