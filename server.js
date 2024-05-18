@@ -69,6 +69,10 @@ app.get("/users/profile", checkNotAuthenticated, (req, res) => {
   res.render("profile.ejs", { user: req.user });
 });
 
+app.get("/users/reservas/:id", (req, res) => {
+  res.render("reservas.ejs", { user: req.user, id: req.params.id });
+});
+
 app.get("/users/login", (req, res) => {
   const errors = req.flash('error');
   res.render("login.ejs", { errors: errors || [] });
@@ -632,5 +636,26 @@ app.get("/api/infouser/:id", async (req, res) => {
     res.status(500).json({ error: "Error al obtener información del usuario" });
   }
 });
+
+app.get("/api/solicitudById/:id", async (req, res) => {
+  const solicitudId = req.params.id;
+
+  try {
+    const solicitudData = await pool.query(
+        "SELECT s.solicitud_id, s.materia, s.tema_interes, s.fecha_reunion, s.user_data  -> 'id' as idPersona\n" +
+        "FROM solicitudes s\n" +
+        "JOIN users u ON (s.user_data ->> 'id')::bigint = u.id where s.solicitud_id\t = $1;",
+        [solicitudId]
+    );
+    if (solicitudData.rows.length === 0) {
+      return res.status(404).json({message: "Solicitud no encontrada"});
+    }
+    res.json(solicitudData.rows[0]);
+  } catch (error) {
+    console.error("Error al obtener la solicitud:", error);
+    res.status(500).json({error: "Error al obtener la solicitud"});
+  }
+});
+
 
 

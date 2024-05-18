@@ -179,12 +179,9 @@
             style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #555;cursor: pointer;">&times;</button>
         <!-- Fin del botón de cerrar -->
         <div id="detallesContenido" style="margin-bottom: 20px;"></div>
-        <button type="submit" onclick="agendarServicio()"
-            style="width: 100%; padding: 15px; background-color: #4d4d5c; color: white; border: none; border-radius: 5px; cursor: pointer;">Agendar</button>
 
         <!-- Botón de cerrar dentro del formulario -->
-        <button onclick="cerrarDetalles()"
-            style="margin-top: 20px; padding: 15px; width: 100%; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
+
         <!-- Fin del botón de cerrar dentro del formulario -->
     </div>
 
@@ -210,8 +207,6 @@
 
 
         <script>
-            var scrollInterval;
-
             document.addEventListener("DOMContentLoaded", () => {
                 fetch("/api/ultimas-publicaciones") // Cambia la ruta de la solicitud
                     .then(response => response.json())
@@ -250,9 +245,8 @@
                             botonDetalle.textContent = "Ver Detalles";
                             botonDetalle.className = "boton-detalles";
                             botonDetalle.onclick = function () {
-                                verDetallesPublicacion(publicacion);
-                                // Puedes agregar aquí la lógica para redirigir al usuario a la página de detalles de la publicación
-                            };
+                                verDetallesPublicacion(publicacion)
+                            }
 
                             const tema = document.createElement("p")
                             tema.textContent = `Tema: ${publicacion.tema_interes}`;
@@ -262,6 +256,8 @@
                             div.appendChild(tema);
                             div.appendChild(botonDetalle);
                             listaPublicaciones.appendChild(div);
+
+
                         });
                     })
                     .catch(error => console.error("Error al obtener las publicaciones:", error));
@@ -299,9 +295,9 @@
                 const contenido = document.createElement("p");
                 contenido.textContent = `Tema: ${publicacion.tema_interes}`;
 
+
                 const usuario = document.createElement("p");
                 usuario.textContent = `Publicado por: ${publicacion.user_data.name} ${publicacion.user_data.lastname}`;
-
 
                 detallesContenido.appendChild(titulo);
                 detallesContenido.appendChild(usuario);
@@ -309,8 +305,43 @@
                 detallesContenido.appendChild(contenido);
                 detallesContenido.appendChild(info);
 
+                const botonAgendar = document.createElement("button");
+                botonAgendar.textContent = "Agendar Servicio";
+                botonAgendar.style.width = "100%";
+                botonAgendar.style.padding = "15px";
+                botonAgendar.style.backgroundColor = "#4d4d5c";
+                botonAgendar.style.color = "white";
+                botonAgendar.style.border = "none";
+                botonAgendar.style.borderRadius = "5px";
+                botonAgendar.style.cursor = "pointer";
+                botonAgendar.style.marginTop = "20px";
+                detallesContenido.appendChild(botonAgendar);
+
+                // Asignar el evento de clic al botón
+                botonAgendar.onclick = function () {
+                    agendarServicio(publicacion.solicitud_id);
+                };
+
+                const botonCerrar = document.createElement("button");
+                botonCerrar.textContent = "Cerrar";
+                botonCerrar.style.width = "100%";
+                botonCerrar.style.padding = "15px";
+                botonCerrar.style.backgroundColor = "#ccc";
+                botonCerrar.style.color = "#333";
+                botonCerrar.style.border = "none";
+                botonCerrar.style.borderRadius = "5px";
+                botonCerrar.style.cursor = "pointer";
+                botonCerrar.style.marginTop = "20px";
+                detallesContenido.appendChild(botonCerrar);
+
+                // Asignar el evento de clic al botón
+                botonCerrar.onclick = function () {
+                    cerrarDetalles();
+                };
+
                 const verDetalles = document.getElementById("verDetalles");
                 verDetalles.style.display = "block"; // Mostramos los detalles
+
             }
 
             // Función para cerrar los detalles de la publicación
@@ -375,9 +406,14 @@
                 });
             }
 
-            function agendarServicio() {
-                console.log("En desarrollo")
-            }
+
+                function agendarServicio(solicitudId) {
+                        window.location.href = `/users/reservas/${solicitudId}`;
+                }
+
+
+
+
             // Función para generar las opciones del select de materias dinámicamente
             function generarOpcionesMaterias() {
                 var selectMateria = document.getElementById("materia");
