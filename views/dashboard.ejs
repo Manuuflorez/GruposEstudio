@@ -48,16 +48,23 @@
 
     <!-- Contenido de las pestañas -->
     <div id="Servicios" class="tabcontent">
+        <!-- Bloque de Resultado según materia -->
+        <div id="resultado-materia" style="display: none;">
+            <!-- Aquí se mostrarán los resultados según la materia seleccionada -->
+        </div>
+    
         <ul id="ultimas-ofrecer">
             <!-- Aquí se mostrarán las últimas solicitudes -->
         </ul>
-
+    
         <!-- Script para obtener las últimas solicitudes -->
         <script>
             document.addEventListener("DOMContentLoaded", () => {
                 fetch("/api/ultimas-ofrecer")
                     .then(response => response.json())
                     .then(data => {
+                        // Aquí puedes manipular los datos como desees
+                        console.log("Últimas 5 solicitudes:", data);
                         // Por ejemplo, podrías mostrar las solicitudes en una lista
                         const list = document.getElementById("ultimas-ofrecer");
                         data.forEach(solicitud => {
@@ -77,53 +84,331 @@
                     .catch(error => console.error("Error al obtener las solicitudes:", error));
             });
         </script>
-
     </div>
-
+    
     <div id="Solicitudes" class="tabcontent">
-
+        <!-- Bloque de Resultado según materia -->
+        <div id="resultado-materia" style="display: none;">
+            <!-- Aquí se mostrarán los resultados según la materia seleccionada -->
+        </div>
+    
         <ul id="ultimas-solicitudes">
             <!-- Aquí se mostrarán las últimas solicitudes -->
         </ul>
-
+    
         <!-- Script para obtener las últimas solicitudes -->
         <script>
+            var scrollInterval;
+        
             document.addEventListener("DOMContentLoaded", () => {
-                fetch("/api/ultimas-solicitudes")
+                fetch("/api/ultimas-publicaciones") // Cambia la ruta de la solicitud
                     .then(response => response.json())
                     .then(data => {
-                        // Por ejemplo, podrías mostrar las solicitudes en una lista
-                        const list = document.getElementById("ultimas-solicitudes");
-                        data.forEach(solicitud => {
-                            const listItem = document.createElement("li");
-                            listItem.innerHTML = `
+                        const listaPublicaciones = document.getElementById("publicaciones-lista");
+                        listaPublicaciones.innerHTML = ""; // Limpiamos la lista antes de agregar las publicaciones
+        
+                        data.forEach(publicacion => {
+                            const div = document.createElement("div");
+                            div.className = "publicacion-container";
+                            div.setAttribute("data-category", publicacion.materia); // Añadimos el atributo data-category
+        
+                            const titulo = document.createElement("h3");
+                            if (publicacion.tipo_servicio == "solicitar") {
+                                titulo.textContent = "Solicitud " + publicacion.materia;
+                            } else {
+                                titulo.textContent = "Asesoría " + publicacion.materia; // Corregimos el texto "Asesoria" a "Asesoría"
+                            }
+        
+                            const info = document.createElement("p");
+                            // Convertir la fecha en un objeto de fecha
+                            const fecha = new Date(publicacion.fecha_reunion);
+                            // Obtener el día de la semana
+                            const diaSemana = obtenerNombreDiaSemana(fecha.getDay());
+                            // Obtener el día del mes
+                            const diaMes = fecha.getDate();
+                            // Obtener el nombre del mes
+                            const nombreMes = obtenerNombreMes(fecha.getMonth());
+                            // Crear una cadena de fecha formateada
+                            const fechaFormateada = `${diaSemana} ${diaMes} de ${nombreMes}`;
+                            // Utilizar la fecha formateada en el contenido del párrafo
+                            info.textContent = `Día: ${fechaFormateada}`;
+        
+                            const botonDetalle = document.createElement("button");
+                            botonDetalle.textContent = "Ver Detalles";
+                            botonDetalle.className = "boton-detalles";
+                            botonDetalle.onclick = function () {
+                                verDetallesPublicacion(publicacion);
+                                // Puedes agregar aquí la lógica para redirigir al usuario a la página de detalles de la publicación
+                            };
+        
+                            const tema = document.createElement("p");
+                            tema.textContent = `Tema: ${publicacion.tema_interes}`;
+        
+                            div.appendChild(titulo);
+                            div.appendChild(info);
+                            div.appendChild(tema);
+                            div.appendChild(botonDetalle);
+                            listaPublicaciones.appendChild(div);
+                        });
+                    })
+                    .catch(error => console.error("Error al obtener las publicaciones:", error));
+            });
+        
+            function verDetallesPublicacion(publicacion) {
+                const detallesContenido = document.getElementById("detallesContenido");
+                detallesContenido.innerHTML = ""; // Limpiamos el contenido antes de agregar los detalles
+        
+                const titulo = document.createElement("h3");
+                if (publicacion.tipo_servicio == "solicitar") {
+                    titulo.textContent = "Solicitud " + publicacion.materia;
+                } else {
+                    titulo.textContent = "Asesoría " + publicacion.materia;
+                }
+        
+                const materia = document.createElement("p");
+                materia.textContent = `Materia: ${publicacion.materia}`;
+        
+                const fecha = new Date(publicacion.fecha_reunion);
+                // Obtener el día de la semana
+                const diaSemana = obtenerNombreDiaSemana(fecha.getDay());
+                // Obtener el día del mes
+                const diaMes = fecha.getDate();
+                // Obtener el nombre del mes
+                const nombreMes = obtenerNombreMes(fecha.getMonth());
+                // Obtener el año
+                const año = fecha.getFullYear();
+                // Crear una cadena de fecha formateada
+                const fechaFormateada = `${diaSemana} ${diaMes} de ${nombreMes}`;
+                const info = document.createElement("p");
+                info.textContent = `Fecha: ${fechaFormateada}`;
+        
+                const contenido = document.createElement("p");
+                contenido.textContent = `Tema: ${publicacion.tema_interes}`;
+        
+                const usuario = document.createElement("p");
+                usuario.textContent = `Publicado por: ${publicacion.user_data.name} ${publicacion.user_data.lastname}`;
+        
+                detallesContenido.appendChild(titulo);
+                detallesContenido.appendChild(usuario);
+                detallesContenido.appendChild(materia);
+                detallesContenido.appendChild(contenido);
+                detallesContenido.appendChild(info);
+
+                const botonAgendar = document.createElement("button");
+                botonAgendar.textContent = "Agendar Servicio";
+                botonAgendar.style.width = "100%";
+                botonAgendar.style.padding = "15px";
+                botonAgendar.style.backgroundColor = "#4d4d5c";
+                botonAgendar.style.color = "white";
+                botonAgendar.style.border = "none";
+                botonAgendar.style.borderRadius = "5px";
+                botonAgendar.style.cursor = "pointer";
+                botonAgendar.style.marginTop = "20px";
+                detallesContenido.appendChild(botonAgendar);
+
+                // Asignar el evento de clic al botón
+                botonAgendar.onclick = function () {
+                    agendarServicio(publicacion.solicitud_id);
+                };
+
+                const botonCerrar = document.createElement("button");
+                botonCerrar.textContent = "Cerrar";
+                botonCerrar.style.width = "100%";
+                botonCerrar.style.padding = "15px";
+                botonCerrar.style.backgroundColor = "#ccc";
+                botonCerrar.style.color = "#333";
+                botonCerrar.style.border = "none";
+                botonCerrar.style.borderRadius = "5px";
+                botonCerrar.style.cursor = "pointer";
+                botonCerrar.style.marginTop = "20px";
+                detallesContenido.appendChild(botonCerrar);
+
+                // Asignar el evento de clic al botón
+                botonCerrar.onclick = function () {
+                    cerrarDetalles();
+                };
+        
+                const verDetalles = document.getElementById("verDetalles");
+                verDetalles.style.display = "block"; // Mostramos los detalles
+            }
+        
+            // Función para cerrar los detalles de la publicación
+            function cerrarDetalles() {
+                const verDetalles = document.getElementById("verDetalles");
+                verDetalles.style.display = "none"; // Ocultamos los detalles
+            }
+        
+            // Función para iniciar el desplazamiento continuo
+            function startScrolling(amount) {
+                scrollInterval = setInterval(function () {
+                    scrollCategorias(amount);
+                }, 100); // Intervalo de tiempo en milisegundos
+            }
+        
+            // Función para detener el desplazamiento continuo
+            function stopScrolling() {
+                clearInterval(scrollInterval);
+            }
+        
+            function openTab(evt, tabName) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(tabName).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
+        
+            function toggleForm() {
+                var form = document.getElementById("publicarForm");
+                if (form.style.display === "none") {
+                    form.style.display = "block";
+                } else {
+                    form.style.display = "none";
+                }
+            }
+        
+            function scrollCategorias(amount) {
+                const container = document.querySelector('.categorias-container2');
+                container.scrollBy({ left: amount, behavior: 'smooth' });
+            }
+        
+            var categorias = ["Matemáticas", "Física", "Programación", "Idiomas", "Derecho", "Pedagogía",
+                "Comunicación", "Administración", "Estadística", "Otros"]; // Corregimos "Administración " a "Administración" y "Estadistica" a "Estadística"
+        
+            // Función para generar las categorías dinámicamente
+            function generarCategorias() {
+                var listaCategorias = document.getElementById("categorias-lista");
+                listaCategorias.innerHTML = ""; // Limpiamos la lista antes de agregar las categorías
+        
+                categorias.forEach(function (categoria) {
+                    var li = document.createElement("li");
+                    li.textContent = categoria;
+                    li.className = "categoria";
+                    li.addEventListener("click", function() {
+                        filtrarPorCategoria(categoria);
+                    });
+                    listaCategorias.appendChild(li);
+                });
+            }
+        
+            function filtrarPorCategoria(categoria) {
+    // Mostrar solo las publicaciones de la categoría seleccionada
+    const publicaciones = document.querySelectorAll(".publicacion-container");
+    const listaPublicaciones = document.getElementById("publicaciones-lista");
+    listaPublicaciones.innerHTML = ""; // Limpiamos la lista antes de agregar las publicaciones filtradas
+
+    publicaciones.forEach(publicacion => {
+        if (publicacion.getAttribute("data-category") === categoria) {
+            listaPublicaciones.appendChild(publicacion); // Agregamos las publicaciones filtradas al principio de la lista
+        }
+    });
+
+    // Mostrar el resultado según la materia
+    const resultadoMateria = document.getElementById("resultadoMateria");
+    resultadoMateria.style.display = "block";
+}
+        
+                   function agendarServicio(solicitudId) {
+                        window.location.href = `/users/reservas/${solicitudId}`;
+                }
+        
+            // Función para generar las opciones del select de materias dinámicamente
+            function generarOpcionesMaterias() {
+                var selectMateria = document.getElementById("materia");
+        
+                // Limpiamos las opciones existentes antes de agregar las nuevas
+                selectMateria.innerHTML = "";
+        
+                // Agregamos la opción predeterminada deshabilitada y seleccionada
+                var defaultOption = document.createElement("option");
+                defaultOption.value = "";
+                defaultOption.textContent = "Selecciona una materia";
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                selectMateria.appendChild(defaultOption);
+        
+                // Iteramos sobre las categorías y agregamos cada una como una opción
+                categorias.forEach(function (categoria) {
+                    var option = document.createElement("option");
+                    option.value = categoria;
+                    option.textContent = categoria;
+                    selectMateria.appendChild(option);
+                });
+            }
+        
+            // Llamamos a la función para generar las opciones de materias al cargar la página
+            window.onload = function () {
+                generarCategorias();
+                generarOpcionesMaterias();
+            };
+        
+            // Función para obtener el nombre del día de la semana
+            function obtenerNombreDiaSemana(diaSemana) {
+                const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+                return diasSemana[diaSemana];
+            }
+        
+            // Función para obtener el nombre del mes
+            function obtenerNombreMes(numeroMes) {
+                const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+                return nombresMeses[numeroMes];
+            }
+        
+            document.addEventListener("DOMContentLoaded", () => {
+                // Evento para manejar la búsqueda
+                document.getElementById("searchForm").addEventListener("submit", function(event) {
+                    event.preventDefault(); // Prevenir el envío del formulario
+                    const query = document.getElementById("search").value;
+                    fetchSearchResults(query);
+                });
+            
+                // Función para obtener resultados de búsqueda
+                function fetchSearchResults(query) {
+                    fetch(`/api/search?query=${encodeURIComponent(query)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            updateSearchResults(data);
+                        })
+                        .catch(error => console.error("Error al buscar:", error));
+                }
+            
+                // Función para actualizar los resultados de búsqueda en la interfaz de usuario
+                function updateSearchResults(data) {
+                    // Actualizar la lista de servicios y solicitudes con los resultados de búsqueda
+                    const serviciosList = document.getElementById("ultimas-ofrecer");
+                    const solicitudesList = document.getElementById("ultimas-solicitudes");
+            
+                    serviciosList.innerHTML = '';
+                    solicitudesList.innerHTML = '';
+            
+                    data.forEach(solicitud => {
+                        const listItem = document.createElement("li");
+                        listItem.innerHTML = `
                             <div class="solicitud-item">
                                 <p><strong>Tipo de Servicio:</strong> ${solicitud.tipo_servicio}</p>
                                 <p><strong>Materia:</strong> ${solicitud.materia}</p>
                                 <p><strong>Tema de Interés:</strong> ${solicitud.tema_interes}</p>
-                                <p><strong>Fecha de Solicitud:</strong> ${formatDate(solicitud.fecha_reunion)}</p>
+                                <p><strong>Fecha de Reunión:</strong> ${solicitud.fecha_reunion}</p>
                             </div>
                             <hr>
                         `;
-                            list.appendChild(listItem);
-                        });
-                    })
-                    .catch(error => console.error("Error al obtener las solicitudes:", error));
+                        if (solicitud.tipo_servicio === 'ofrecer') {
+                            serviciosList.appendChild(listItem);
+                        } else if (solicitud.tipo_servicio === 'solicitar') {
+                            solicitudesList.appendChild(listItem);
+                        }
+                    });
+                }
             });
-
-            function formatDate(dateString) {
-                const options = {
-                    year: 'numeric',
-                    month: 'short',
-                    day: '2-digit'
-                };
-                const fechaReunion = new Date(dateString);
-                return fechaReunion.toLocaleString('en-US', options);
-            }
         </script>
-
     </div>
-
+    
     <h1 style="text-align: center; margin-top: 50px; margin-bottom: 70px; color: #3c3c45;">Ofrece tus servicios o
         Solicita uno</h1>
 
@@ -179,10 +464,7 @@
             style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #555;cursor: pointer;">&times;</button>
         <!-- Fin del botón de cerrar -->
         <div id="detallesContenido" style="margin-bottom: 20px;"></div>
-
-        <!-- Botón de cerrar dentro del formulario -->
-
-        <!-- Fin del botón de cerrar dentro del formulario -->
+    
     </div>
 
     <!-- Espacio para categorías -->
@@ -193,321 +475,179 @@
         </ul>
         <div class="flecha-derecha" onmousedown="startScrolling(100)" onmouseup="stopScrolling()">&#10095;</div>
     </div>
+    <h2 style="padding: 25px;">Resultados segun materia</h2>
+    <div id="publicaciones-lista" class="publicaciones-filtradas"></div>
 
     <hr style="margin-top: 15px; border: none; border-top: 1px solid #ccc;">
 
-    <div>
-        <h2 style="padding: 25px;">Ultimas publicaciones recientes!</h2>
+    
+
+    <div id="publicaciones-lista" class="publicaciones-filtradas">
+        <!-- Contenido de las publicaciones filtradas -->
     </div>
 
+    <hr style="margin-top: 15px; border: none; border-top: 1px solid #ccc;">
+
+    <!-- Título de las últimas publicaciones recientes -->
+    <h2 style="padding: 25px;">Últimas publicaciones recientes</h2>
+
+    <!-- Espacio para las publicaciones recientes -->
     <div class="publicaciones-container" style="padding: 25px; margin-bottom: 30px; text-align: center;">
-        <div id="publicaciones-lista" style="display: inline-block;">
-            <!-- Las publicaciones se agregarán aquí dinámicamente -->
+        <div id="publicaciones-recientes" class="publicaciones-lista">
+            <!-- Las publicaciones recientes se agregarán aquí dinámicamente -->
         </div>
+    </div>
+</div>
 
+<!-- Contenido posterior -->
 
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                fetch("/api/ultimas-publicaciones") // Cambia la ruta de la solicitud
-                    .then(response => response.json())
-                    .then(data => {
-                        const listaPublicaciones = document.getElementById("publicaciones-lista");
-                        listaPublicaciones.innerHTML = ""; // Limpiamos la lista antes de agregar las publicaciones
+<script>
+    // Función para iniciar el desplazamiento continuo
+    var scrollInterval;
 
-                        data.forEach(publicacion => {
-                            const div = document.createElement("div");
-                            div.className = "publicacion-container";
+    function startScrolling(amount) {
+        scrollInterval = setInterval(function () {
+            scrollCategorias(amount);
+        }, 100); // Intervalo de tiempo en milisegundos
+    }
 
-                            const titulo = document.createElement("h3");
-                            if (publicacion.tipo_servicio == "solicitar") {
-                                titulo.textContent = "Solicitud " + publicacion.materia
-                            } else {
-                                titulo.textContent = "Asesoria " + publicacion.materia
-                            }
+    // Función para detener el desplazamiento continuo
+    function stopScrolling() {
+        clearInterval(scrollInterval);
+    }
 
-                            const info = document.createElement("p");
-                            // Convertir la fecha en un objeto de fecha
-                            const fecha = new Date(publicacion.fecha_reunion);
-                            // Obtener el día de la semana
-                            const diaSemana = obtenerNombreDiaSemana(fecha.getDay());
-                            // Obtener el día del mes
-                            const diaMes = fecha.getDate();
-                            // Obtener el nombre del mes
-                            const nombreMes = obtenerNombreMes(fecha.getMonth());
-                            // Obtener el año
-                            const año = fecha.getFullYear();
-                            // Crear una cadena de fecha formateada
-                            const fechaFormateada = `${diaSemana} ${diaMes} de ${nombreMes}`;
-                            // Utilizar la fecha formateada en el contenido del párrafo
-                            info.textContent = `Día: ${fechaFormateada}`;
+    var categorias = ["Matemáticas", "Física", "Programación", "Idiomas", "Derecho", "Pedagogía",
+        "Comunicación", "Administración", "Estadística", "Otros"];
 
-                            const botonDetalle = document.createElement("button");
-                            botonDetalle.textContent = "Ver Detalles";
-                            botonDetalle.className = "boton-detalles";
-                            botonDetalle.onclick = function () {
-                                verDetallesPublicacion(publicacion)
-                            }
+    // Función para generar las categorías dinámicamente
+    function generarCategorias() {
+        var listaCategorias = document.getElementById("categorias-lista");
+        listaCategorias.innerHTML = ""; // Limpiamos la lista antes de agregar las categorías
 
-                            const tema = document.createElement("p")
-                            tema.textContent = `Tema: ${publicacion.tema_interes}`;
-
-                            div.appendChild(titulo);
-                            div.appendChild(info);
-                            div.appendChild(tema);
-                            div.appendChild(botonDetalle);
-                            listaPublicaciones.appendChild(div);
-
-
-                        });
-                    })
-                    .catch(error => console.error("Error al obtener las publicaciones:", error));
+        categorias.forEach(function (categoria) {
+            var li = document.createElement("li");
+            li.textContent = categoria;
+            li.className = "categoria";
+            li.addEventListener("click", function () {
+                filtrarPorCategoria(categoria);
             });
+            listaCategorias.appendChild(li);
+        });
+    }
 
-            function verDetallesPublicacion(publicacion) {
-                const detallesContenido = document.getElementById("detallesContenido");
-                detallesContenido.innerHTML = ""; // Limpiamos el contenido antes de agregar los detalles
+    // Función para generar las opciones del select de materias dinámicamente
+    function generarOpcionesMaterias() {
+        var selectMateria = document.getElementById("materia");
 
-                const titulo = document.createElement("h3");
-                if (publicacion.tipo_servicio == "solicitar") {
-                    titulo.textContent = "Solicitud " + publicacion.materia
+        // Limpiamos las opciones existentes antes de agregar las nuevas
+        selectMateria.innerHTML = "";
+
+        // Agregamos la opción predeterminada deshabilitada y seleccionada
+        var defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.textContent = "Selecciona una materia";
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        selectMateria.appendChild(defaultOption);
+
+        // Iteramos sobre las categorías y agregamos cada una como una opción
+        categorias.forEach(function (categoria) {
+            var option = document.createElement("option");
+            option.value = categoria;
+            option.textContent = categoria;
+            selectMateria.appendChild(option);
+        });
+    }
+
+    // Llamamos a las funciones para generar las categorías y opciones de materias al cargar la página
+    window.onload = function () {
+        generarCategorias();
+        generarOpcionesMaterias();
+        obtenerPublicacionesRecientes();
+    };
+
+    // Función para obtener y mostrar las publicaciones más recientes
+    function obtenerPublicacionesRecientes() {
+        fetch("/api/ultimas-publicaciones")
+            .then(response => response.json())
+            .then(data => {
+                const listaPublicaciones = document.getElementById("publicaciones-recientes");
+                listaPublicaciones.innerHTML = ""; // Limpiamos la lista antes de agregar las publicaciones
+
+                data.forEach(publicacion => {
+                    const div = document.createElement("div");
+                    div.className = "publicacion-container";
+                    div.setAttribute("data-category", publicacion.materia);
+
+                    const titulo = document.createElement("h3");
+                    if (publicacion.tipo_servicio == "solicitar") {
+                        titulo.textContent = "Solicitud " + publicacion.materia;
+                    } else {
+                        titulo.textContent = "Asesoría " + publicacion.materia;
+                    }
+
+                    const info = document.createElement("p");
+                    const fecha = new Date(publicacion.fecha_reunion);
+                    const diaSemana = obtenerNombreDiaSemana(fecha.getDay());
+                    const diaMes = fecha.getDate();
+                    const nombreMes = obtenerNombreMes(fecha.getMonth());
+                    const fechaFormateada = `${diaSemana} ${diaMes} de ${nombreMes}`;
+                    info.textContent = `Día: ${fechaFormateada}`;
+
+                    const botonDetalle = document.createElement("button");
+                    botonDetalle.textContent = "Ver Detalles";
+                    botonDetalle.className = "boton-detalles";
+                    botonDetalle.onclick = function () {
+                        verDetallesPublicacion(publicacion);
+                    };
+
+                    const tema = document.createElement("p");
+                    tema.textContent = `Tema: ${publicacion.tema_interes}`;
+
+                    div.appendChild(titulo);
+                    div.appendChild(info);
+                    div.appendChild(tema);
+                    div.appendChild(botonDetalle);
+                    listaPublicaciones.appendChild(div);
+                });
+            })
+            .catch(error => console.error("Error al obtener las publicaciones:", error));
+    }
+
+    // Función para filtrar las publicaciones por categoría
+    function filtrarPorCategoria(categoria) {
+        const publicaciones = document.querySelectorAll(".publicacion-container");
+        publicaciones.forEach(publicacion => {
+            // Verificamos si la publicación está dentro del contenedor de las últimas publicaciones recientes
+            if (!publicacion.closest("#publicaciones-recientes")) {
+                // Si no está dentro del contenedor de las últimas publicaciones recientes, aplicamos el filtro
+                if (publicacion.getAttribute("data-category") === categoria) {
+                    publicacion.style.display = "block";
                 } else {
-                    titulo.textContent = "Asesoria " + publicacion.materia
-                }
-
-                const materia = document.createElement("p");
-                materia.textContent = `Materia: ${publicacion.materia}`;
-
-
-                const fecha = new Date(publicacion.fecha_reunion);
-                // Obtener el día de la semana
-                const diaSemana = obtenerNombreDiaSemana(fecha.getDay());
-                // Obtener el día del mes
-                const diaMes = fecha.getDate();
-                // Obtener el nombre del mes
-                const nombreMes = obtenerNombreMes(fecha.getMonth());
-                // Obtener el año
-                const año = fecha.getFullYear();
-                // Crear una cadena de fecha formateada
-                const fechaFormateada = `${diaSemana} ${diaMes} de ${nombreMes}`;
-                const info = document.createElement("p");
-                info.textContent = `Fecha: ${fechaFormateada}`;
-
-                const contenido = document.createElement("p");
-                contenido.textContent = `Tema: ${publicacion.tema_interes}`;
-
-
-                const usuario = document.createElement("p");
-                usuario.textContent = `Publicado por: ${publicacion.user_data.name} ${publicacion.user_data.lastname}`;
-
-                detallesContenido.appendChild(titulo);
-                detallesContenido.appendChild(usuario);
-                detallesContenido.appendChild(materia);
-                detallesContenido.appendChild(contenido);
-                detallesContenido.appendChild(info);
-
-                const botonAgendar = document.createElement("button");
-                botonAgendar.textContent = "Agendar Servicio";
-                botonAgendar.style.width = "100%";
-                botonAgendar.style.padding = "15px";
-                botonAgendar.style.backgroundColor = "#4d4d5c";
-                botonAgendar.style.color = "white";
-                botonAgendar.style.border = "none";
-                botonAgendar.style.borderRadius = "5px";
-                botonAgendar.style.cursor = "pointer";
-                botonAgendar.style.marginTop = "20px";
-                detallesContenido.appendChild(botonAgendar);
-
-                // Asignar el evento de clic al botón
-                botonAgendar.onclick = function () {
-                    agendarServicio(publicacion.solicitud_id);
-                };
-
-                const botonCerrar = document.createElement("button");
-                botonCerrar.textContent = "Cerrar";
-                botonCerrar.style.width = "100%";
-                botonCerrar.style.padding = "15px";
-                botonCerrar.style.backgroundColor = "#ccc";
-                botonCerrar.style.color = "#333";
-                botonCerrar.style.border = "none";
-                botonCerrar.style.borderRadius = "5px";
-                botonCerrar.style.cursor = "pointer";
-                botonCerrar.style.marginTop = "20px";
-                detallesContenido.appendChild(botonCerrar);
-
-                // Asignar el evento de clic al botón
-                botonCerrar.onclick = function () {
-                    cerrarDetalles();
-                };
-
-                const verDetalles = document.getElementById("verDetalles");
-                verDetalles.style.display = "block"; // Mostramos los detalles
-
-            }
-
-            // Función para cerrar los detalles de la publicación
-            function cerrarDetalles() {
-                const verDetalles = document.getElementById("verDetalles");
-                verDetalles.style.display = "none"; // Ocultamos los detalles
-            }
-
-            // Función para iniciar el desplazamiento continuo
-            function startScrolling(amount) {
-                scrollInterval = setInterval(function () {
-                    scrollCategorias(amount);
-                }, 100); // Intervalo de tiempo en milisegundos
-            }
-
-            // Función para detener el desplazamiento continuo
-            function stopScrolling() {
-                clearInterval(scrollInterval);
-            }
-
-            function openTab(evt, tabName) {
-                var i, tabcontent, tablinks;
-                tabcontent = document.getElementsByClassName("tabcontent");
-                for (i = 0; i < tabcontent.length; i++) {
-                    tabcontent[i].style.display = "none";
-                }
-                tablinks = document.getElementsByClassName("tablinks");
-                for (i = 0; i < tablinks.length; i++) {
-                    tablinks[i].className = tablinks[i].className.replace(" active", "");
-                }
-                document.getElementById(tabName).style.display = "block";
-                evt.currentTarget.className += " active";
-            }
-
-            function toggleForm() {
-                var form = document.getElementById("publicarForm");
-                if (form.style.display === "none") {
-                    form.style.display = "block";
-                } else {
-                    form.style.display = "none";
+                    publicacion.style.display = "none";
                 }
             }
+        });
+    }
 
-            function scrollCategorias(amount) {
-                const container = document.querySelector('.categorias-container2');
-                container.scrollBy({ left: amount, behavior: 'smooth' });
-            }
+    // Función para obtener el nombre del día de la semana
+    function obtenerNombreDiaSemana(diaSemana) {
+        const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+        return diasSemana[diaSemana];
+    }
 
-            var categorias = ["Matemáticas", "Física", "Programación", "Idiomas", "Derecho", "Pedagogía",
-                "Comunicación", "Administración ", "Estadistica", "Otros"];
-
-            // Función para generar las categorías dinámicamente
-            function generarCategorias() {
-                var listaCategorias = document.getElementById("categorias-lista");
-                listaCategorias.innerHTML = ""; // Limpiamos la lista antes de agregar las categorías
-
-                categorias.forEach(function (categoria) {
-                    var li = document.createElement("li");
-                    li.textContent = categoria;
-                    li.className = "categoria";
-                    listaCategorias.appendChild(li);
-                });
-            }
-
-
-                function agendarServicio(solicitudId) {
-                        window.location.href = `/users/reservas/${solicitudId}`;
-                }
-
-
-
-
-            // Función para generar las opciones del select de materias dinámicamente
-            function generarOpcionesMaterias() {
-                var selectMateria = document.getElementById("materia");
-
-                // Limpiamos las opciones existentes antes de agregar las nuevas
-                selectMateria.innerHTML = "";
-
-                // Agregamos la opción predeterminada deshabilitada y seleccionada
-                var defaultOption = document.createElement("option");
-                defaultOption.value = "";
-                defaultOption.textContent = "Selecciona una materia";
-                defaultOption.disabled = true;
-                defaultOption.selected = true;
-                selectMateria.appendChild(defaultOption);
-
-                // Iteramos sobre las categorías y agregamos cada una como una opción
-                categorias.forEach(function (categoria) {
-                    var option = document.createElement("option");
-                    option.value = categoria;
-                    option.textContent = categoria;
-                    selectMateria.appendChild(option);
-                });
-            }
-
-            // Llamamos a la función para generar las opciones de materias al cargar la página
-            window.onload = function () {
-                generarCategorias();
-                generarOpcionesMaterias();
-                generarPublicaciones();
-            };
-
-            // Función para obtener el nombre del día de la semana
-            function obtenerNombreDiaSemana(diaSemana) {
-                const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-                return diasSemana[diaSemana];
-            }
-
-            // Función para obtener el nombre del mes
-            function obtenerNombreMes(numeroMes) {
-                const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-                return nombresMeses[numeroMes];
-            }
-
-            document.addEventListener("DOMContentLoaded", () => {
-                // Evento para manejar la búsqueda
-                document.getElementById("searchForm").addEventListener("submit", function(event) {
-                    event.preventDefault(); // Prevenir el envío del formulario
-                    const query = document.getElementById("search").value;
-                    fetchSearchResults(query);
-                });
-            
-                // Función para obtener resultados de búsqueda
-                function fetchSearchResults(query) {
-                    fetch(`/api/search?query=${encodeURIComponent(query)}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            updateSearchResults(data);
-                        })
-                        .catch(error => console.error("Error al buscar:", error));
-                }
-            
-                // Función para actualizar los resultados de búsqueda en la interfaz de usuario
-                function updateSearchResults(data) {
-                    // Actualizar la lista de servicios y solicitudes con los resultados de búsqueda
-                    const serviciosList = document.getElementById("ultimas-ofrecer");
-                    const solicitudesList = document.getElementById("ultimas-solicitudes");
-            
-                    serviciosList.innerHTML = '';
-                    solicitudesList.innerHTML = '';
-            
-                    data.forEach(solicitud => {
-                        const listItem = document.createElement("li");
-                        listItem.innerHTML = `
-                            <div class="solicitud-item">
-                                <p><strong>Tipo de Servicio:</strong> ${solicitud.tipo_servicio}</p>
-                                <p><strong>Materia:</strong> ${solicitud.materia}</p>
-                                <p><strong>Tema de Interés:</strong> ${solicitud.tema_interes}</p>
-                                <p><strong>Fecha de Reunión:</strong> ${solicitud.fecha_reunion}</p>
-                            </div>
-                            <hr>
-                        `;
-                        if (solicitud.tipo_servicio === 'ofrecer') {
-                            serviciosList.appendChild(listItem);
-                        } else if (solicitud.tipo_servicio === 'solicitar') {
-                            solicitudesList.appendChild(listItem);
-                        }
-                    });
-                }
-            });
+    // Función para obtener el nombre del mes
+    function obtenerNombreMes(numeroMes) {
+        const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        return nombresMeses[numeroMes];
+    }
+</script>
         
 
-        </script>
-
 </body>
+
+
+
 
 </html>
 
@@ -530,7 +670,7 @@
             min-width: 160px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
-            left: -140px; /* Ajuste para que el menú se abra hacia la izquierda */
+            left: -160px; /* Ajuste para que el menú se abra hacia la izquierda */
         }
 
         .dropdown-content a {
@@ -553,6 +693,15 @@
         white-space: nowrap;
         padding: 10px 0;
     }
+   
+    /* Estilo CSS para el contenedor de publicaciones filtradas */
+    .publicaciones-filtradas {
+        display: flex;
+        flex-wrap: nowrap; /* Para que las publicaciones no se envuelvan */
+        overflow-x: auto; /* Para habilitar el desplazamiento horizontal */
+    }
+
+
 
     .publicaciones-lista {
         white-space: nowrap;
