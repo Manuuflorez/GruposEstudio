@@ -69,6 +69,24 @@ app.get("/users/profile", checkNotAuthenticated, (req, res) => {
   res.render("profile.ejs", { user: req.user });
 });
 
+// Endpoint para obtener las agendas de una publicación específica
+app.get("/api/agendas-publicacion/:solicitud_id", async (req, res) => {
+  const { solicitud_id } = req.params;
+  try {
+    const result = await pool.query(
+      `SELECT user_name FROM agendas WHERE tema = (
+         SELECT tema_interes FROM solicitudes WHERE solicitud_id = $1
+       )`,
+      [solicitud_id]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Error al obtener las agendas de la publicación:", err);
+    res.status(500).send("Error al obtener las agendas de la publicación");
+  }
+});
+
+
 app.get("/users/reservas/:id", async (req, res) => {
   try {
     const solicitudId = req.params.id;

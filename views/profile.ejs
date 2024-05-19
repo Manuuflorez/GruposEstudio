@@ -284,12 +284,13 @@
         <script>
             var categorias = ["Matemáticas", "Física", "Programación", "Idiomas", "Derecho", "Pedagogía", "Comunicación", "Administración ", "Estadistica", "Otros"];
             id = '<%= user.id %>';
-            password = '<%= user.password %>'
+            password = '<%= user.password %>';
+
             fetch(`/api/publicaciones-usuario/${id}`)
                 .then(response => response.json())
-                .then(data => {
+                .then(async data => {
                     const container = document.querySelector('.container2');
-                    data.forEach(publicacion => {
+                    for (const publicacion of data) {
                         const div = document.createElement('div');
                         div.classList.add('recuadro-publicacion'); 
                         const titulo = document.createElement('h3');
@@ -298,6 +299,7 @@
                         const materia = document.createElement('p');
                         const tema = document.createElement('p');
                         const fecha = document.createElement('p');
+                        const agendaUsuarios = document.createElement('p');
                         const editButton = document.createElement('button');
                         const deleteButton = document.createElement('button');
 
@@ -306,6 +308,17 @@
                         materia.textContent = `Materia: ${publicacion.materia}`;
                         tema.textContent = `Tema: ${publicacion.tema_interes}`;
                         fecha.textContent = `Fecha de reunión: ${formatDate(publicacion.fecha_reunion)}`;
+
+                        // Fetching user names who scheduled the publication
+                        try {
+                            const agendasResponse = await fetch(`/api/agendas-publicacion/${publicacion.solicitud_id}`);
+                            const agendasData = await agendasResponse.json();
+                            agendaUsuarios.textContent = `Usuarios que han agendado: ${agendasData.map(agenda => agenda.user_name).join(', ')}`;
+                        } catch (error) {
+                            console.error("Error al obtener las agendas de la publicación:", error);
+                            agendaUsuarios.textContent = `Error al obtener los usuarios que han agendado.`;
+                        }
+
                         editButton.textContent = 'Editar';
                         deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
                         deleteButton.setAttribute('data-id', publicacion.solicitud_id); // Agregar ID de la publicación
@@ -358,11 +371,12 @@
                         div.appendChild(materia);
                         div.appendChild(tema);
                         div.appendChild(fecha);
+                        div.appendChild(agendaUsuarios); // Adding the paragraph to the div
                         div.appendChild(br2);
                         div.appendChild(editButton);
                         div.appendChild(deleteButton);
                         container.appendChild(div);
-                    });
+                    }
                 })
                 .catch(error => console.error("Error al obtener las publicaciones del usuario:", error));
 
