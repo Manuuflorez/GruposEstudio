@@ -419,40 +419,44 @@
 
     <!-- Formulario de Publicación -->
     <div id="publicarForm" class="publicar-form"
-        style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
-        <h2 style="text-align: center; margin-bottom: 20px;">Formulario de Publicación</h2>
-        <!-- Botón de cerrar -->
-        <button onclick="toggleForm()"
-            style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #555;cursor: pointer;">&times;</button>
-        <!-- Fin del botón de cerrar -->
-        <form action="/dashboard/publicar" method="post">
-            <input type="hidden" id="user_data" name="user_data" value="<%= user %>">
-            <label for="tipo">Tipo de Publicación:</label><br>
-            <select id="tipo" name="tipo"
-                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
-                <option value="solicitar">Solicitar Servicio</option>
-                <option value="ofrecer">Ofrecer Servicio</option>
-            </select><br>
-            <label for="materia">Materia:</label><br>
-            <select id="materia" name="materia"
-                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
-                <option value="" disabled selected>Selecciona una materia</option>
-                <!-- Aquí se agregarán las opciones de las categorías dinámicamente -->
-            </select><br>
-            <label for="fecha">Fecha:</label><br>
-            <input type="date" id="fecha" name="fecha"
-                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
-            <label for="tema">Tema:</label><br>
-            <input type="text" id="tema" name="tema"
-                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br><br>
-            <button type="submit" onclick="toggleForm()"
-                style="width: 100%; padding: 15px; background-color: #4d4d5c; color: white; border: none; border-radius: 5px; cursor: pointer;">Enviar</button>
-        </form>
-        <!-- Botón de cerrar dentro del formulario -->
-        <button onclick="toggleForm()"
-            style="margin-top: 20px; padding: 15px; width: 100%; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
-        <!-- Fin del botón de cerrar dentro del formulario -->
-    </div>
+    style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
+    <h2 style="text-align: center; margin-bottom: 20px;">Formulario de Publicación</h2>
+    <button onclick="toggleForm()"
+        style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #555;cursor: pointer;">&times;</button>
+    <form action="/dashboard/publicar" method="post">
+        <input type="hidden" id="user_data" name="user_data" value="<%= user %>">
+        <label for="tipo">Tipo de Publicación:</label><br>
+        <select id="tipo" name="tipo"
+            style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+            <option value="solicitar">Solicitar Servicio</option>
+            <option value="ofrecer">Ofrecer Servicio</option>
+        </select><br>
+        <label for="materia">Materia:</label><br>
+        <select id="materia" name="materia"
+            style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+            <option value="" disabled selected>Selecciona una materia</option>
+        </select><br>
+        <label for="fecha">Fecha:</label><br>
+        <input type="date" id="fecha" name="fecha"
+            style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+        <label for="hora">Hora:</label><br>
+        <select id="hora" name="hora"
+            style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+            <option value="8-10">8-10</option>
+            <option value="10-12">10-12</option>
+            <option value="12-14">12-14</option>
+            <option value="14-16">14-16</option>
+            <option value="16-18">16-18</option>
+        </select><br><br>
+        <label for="tema">Tema:</label><br>
+        <input type="text" id="tema" name="tema"
+            style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br><br>
+        <button type="submit" onclick="toggleForm()"
+            style="width: 100%; padding: 15px; background-color: #4d4d5c; color: white; border: none; border-radius: 5px; cursor: pointer;">Enviar</button>
+    </form>
+    <button onclick="toggleForm()"
+        style="margin-top: 20px; padding: 15px; width: 100%; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
+</div>
     <hr style="margin-top: 20px; border: none;margin-bottom: 30px; border-top: 1px solid #ccc;">
 
     <!-- Detalles de la publicación -->

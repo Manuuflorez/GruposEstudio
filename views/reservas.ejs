@@ -207,6 +207,28 @@
     margin-top: 20px;
   }
 
+
+.confirmation-modal {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 30px;
+  text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
+}
+.confirmation-modal button {
+  padding: 10px 20px;
+  background-color: #ccc;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
   #boton-empezar:hover {
     background-color: grey;
     color: black;
@@ -330,7 +352,6 @@
         <div class="user-info">
           <p>Programa: <%= user.program %></p>
           <p>Email: <%= user.email %></p>
-          <p>Teléfono: +57 30080090</p>
         </div>
       </div>
 
@@ -340,7 +361,7 @@
         <div class="advisor-info">
           <p><strong>Asesoría:</strong> <%= solicitud.materia %></p>
           <p><strong>Día:</strong> <%= new Date(solicitud.fecha_reunion).toLocaleDateString('es-ES', { weekday: 'long' }) %></p>
-          <p><strong>Horario:</strong> 10-12</p>
+          <p><strong>Horario:</strong> <%= solicitud.hora %></p>
           <p class="payment-info"><strong>Forma de pago:</strong> <input type="text" id="payment-input"></p>
           <button id="change-btn" class="change-btn">Aceptar</button>
         </div>
@@ -352,7 +373,7 @@
       <h3>Resumen</h3>
       <div class="reservation-info">
         <p><strong>Día:</strong> <%= new Date(solicitud.fecha_reunion).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) %></p>
-        <p><strong>Horario:</strong> 10-12 am</p>
+        <p><strong>Horario:</strong> <%= solicitud.hora %></p>
         <p><strong>Categoría:</strong> <%= solicitud.materia %></p>
         <p><strong>Tutor:</strong> <%= solicitud.user_data.name %> <%= solicitud.user_data.lastname %></p>
       </div>
@@ -380,17 +401,34 @@
           userEmail: '<%= user.email %>',
           tema: '<%= solicitud.tema_interes %>',
           fecha: '<%= new Date(solicitud.fecha_reunion).toISOString() %>',
+          hora: '<%= solicitud.hora %>',
           tutor: '<%= solicitud.user_data.name %> <%= solicitud.user_data.lastname %>',
           pago: payment
         })
       }).then(response => {
         if (response.ok) {
-          alert('Confirmación de agenda');
+          showConfirmationModal('Confirmación de agenda');
         } else {
-          alert('Error al agendar');
+          showConfirmationModal('Error al agendar');
         }
       });
     });
+
+    function showConfirmationModal(message) {
+      const modal = document.createElement('div');
+      modal.innerHTML = `<div class="confirmation-modal">
+                          <h2>${message}</h2>
+                          <button onclick="closeConfirmationModal()">Aceptar</button>
+                        </div>`;
+      document.body.appendChild(modal);
+    }
+
+    function closeConfirmationModal() {
+      const modal = document.querySelector('.confirmation-modal');
+      if (modal) {
+        modal.remove();
+      }
+    }
   </script>
 
 

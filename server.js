@@ -379,12 +379,12 @@ app.post("/users/deactivate/:id", async (req, res) => {
 
 
 app.get("/dashboard/publicar", async (req, res) => {
-  res.render("dashboard.ejs"); // Renderiza el formulario de publicación en el dashboard
+  res.render("dashboard.ejs", { user: req.user }); // Renderiza el formulario de publicación en el dashboard
 });
 
 // Dentro del endpoint de publicación de solicitudes
 app.post("/dashboard/publicar", (req, res) => {
-  const { tipo, materia, tema, fecha } = req.body;
+  const { tipo, materia, tema, fecha, hora } = req.body; // Añadir hora aquí
   const usuario_id = req.user.id;
 
   // Construir el objeto JSON con los datos del usuario
@@ -401,10 +401,10 @@ app.post("/dashboard/publicar", (req, res) => {
 
   // Insertar la nueva solicitud en la base de datos
   pool.query(
-    `INSERT INTO solicitudes (user_data, tipo_servicio, materia, tema_interes, fecha_reunion)
-     VALUES ($1, $2, $3, $4, $5)
+    `INSERT INTO solicitudes (user_data, tipo_servicio, materia, tema_interes, fecha_reunion, hora)
+     VALUES ($1, $2, $3, $4, $5, $6)
      RETURNING solicitud_id`,
-    [userData, tipo, materia, tema, fecha],
+    [userData, tipo, materia, tema, fecha, hora], // Añadir hora aquí
     (err, results) => {
       if (err) {
         console.error("Error al insertar solicitud:", err);
@@ -417,6 +417,7 @@ app.post("/dashboard/publicar", (req, res) => {
     }
   );
 });
+
 
 // Eliminar una publicación por su ID
 app.delete('/api/eliminar-publicacion/:id', async (req, res) => {
@@ -672,21 +673,17 @@ app.get("/api/solicitudById/:id", async (req, res) => {
 });
 
 app.post('/agendar', async (req, res) => {
-  const { userName, userEmail, tema, fecha, tutor, pago } = req.body;
+  const { userName, userEmail, tema, fecha, hora, tutor, pago } = req.body; // Añadir hora aquí
 
   try {
     const query = `
-      INSERT INTO agendas (user_name, user_email, tema, fecha, tutor, pago)
-      VALUES ($1, $2, $3, $4, $5, $6)
+      INSERT INTO agendas (user_name, user_email, tema, fecha, hora, tutor, pago)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
     `;
-    await pool.query(query, [userName, userEmail, tema, fecha, tutor, pago]);
+    await pool.query(query, [userName, userEmail, tema, fecha, hora, tutor, pago]); // Añadir hora aquí
     res.status(200).send('Agendado con éxito');
   } catch (error) {
     console.error('Error agendando:', error);
     res.status(500).send('Error al agendar');
   }
 });
-
-
-
-
