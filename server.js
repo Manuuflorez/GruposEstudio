@@ -69,9 +69,23 @@ app.get("/users/profile", checkNotAuthenticated, (req, res) => {
   res.render("profile.ejs", { user: req.user });
 });
 
-app.get("/users/reservas/:id", (req, res) => {
-  res.render("reservas.ejs", { user: req.user, id: req.params.id });
+app.get("/users/reservas/:id", async (req, res) => {
+  try {
+    const solicitudId = req.params.id;
+    const result = await pool.query('SELECT * FROM solicitudes WHERE solicitud_id = $1', [solicitudId]);
+    const solicitud = result.rows[0];
+
+    if (!solicitud) {
+      return res.status(404).send('Solicitud no encontrada');
+    }
+
+    res.render("reservas.ejs", { user: req.user, solicitud: solicitud });
+  } catch (error) {
+    console.error('Error fetching solicitud:', error);
+    res.status(500).send('Error del servidor');
+  }
 });
+
 
 app.get("/users/login", (req, res) => {
   const errors = req.flash('error');
@@ -656,6 +670,23 @@ app.get("/api/solicitudById/:id", async (req, res) => {
     res.status(500).json({error: "Error al obtener la solicitud"});
   }
 });
+
+app.post('/agendar', async (req, res) => {
+  const { userName, userEmail, tema, fecha, tutor, pago } = req.body;
+
+  try {
+    const query = `
+      INSERT INTO agendas (user_name, user_email, tema, fecha, tutor, pago)
+      VALUES ($1, $2, $3, $4, $5, $6)
+    `;
+    await pool.query(query, [userName, userEmail, tema, fecha, tutor, pago]);
+    res.status(200).send('Agendado con éxito');
+  } catch (error) {
+    console.error('Error agendando:', error);
+    res.status(500).send('Error al agendar');
+  }
+});
+
 
 
 

@@ -196,6 +196,17 @@
 
   }
 
+  .schedule-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #4d4d5c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+
   #boton-empezar:hover {
     background-color: grey;
     color: black;
@@ -327,11 +338,10 @@
       <div class="shopping-details">
         <h3>Shopping Details</h3>
         <div class="advisor-info">
-          <p><strong>Asesoría:</strong> Inglés</p>
-          <p><strong>Día:</strong> Martes</p>
+          <p><strong>Asesoría:</strong> <%= solicitud.materia %></p>
+          <p><strong>Día:</strong> <%= new Date(solicitud.fecha_reunion).toLocaleDateString('es-ES', { weekday: 'long' }) %></p>
           <p><strong>Horario:</strong> 10-12</p>
-          <p class="payment-info"><strong>Forma de pago:</strong> <input type="text" id="payment-input">
-          </p>
+          <p class="payment-info"><strong>Forma de pago:</strong> <input type="text" id="payment-input"></p>
           <button id="change-btn" class="change-btn">Aceptar</button>
         </div>
       </div>
@@ -341,16 +351,16 @@
     <div class="summary">
       <h3>Resumen</h3>
       <div class="reservation-info">
-        <p><strong>Día:</strong> 27 de febrero</p>
+        <p><strong>Día:</strong> <%= new Date(solicitud.fecha_reunion).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) %></p>
         <p><strong>Horario:</strong> 10-12 am</p>
-        <p><strong>Categoría:</strong> Inglés</p>
-        <p><strong>Tutor:</strong> Juan Ruiz</p>
+        <p><strong>Categoría:</strong> <%= solicitud.materia %></p>
+        <p><strong>Tutor:</strong> <%= solicitud.user_data.name %> <%= solicitud.user_data.lastname %></p>
       </div>
       <hr>
       <p><strong>Pago:</strong> <span id="payment-display"></span></p>
+      <button id="schedule-btn" class="schedule-btn">Agendar espacio</button>
     </div>
   </div>
-
 
   <script>
     document.getElementById('change-btn').addEventListener('click', function () {
@@ -358,10 +368,29 @@
       document.getElementById('payment-display').textContent = paymentInput;
     });
 
-    
-
-    
-    
+    document.getElementById('schedule-btn').addEventListener('click', function () {
+      let payment = document.getElementById('payment-display').textContent;
+      fetch('/agendar', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userName: '<%= user.name %>',
+          userEmail: '<%= user.email %>',
+          tema: '<%= solicitud.tema_interes %>',
+          fecha: '<%= new Date(solicitud.fecha_reunion).toISOString() %>',
+          tutor: '<%= solicitud.user_data.name %> <%= solicitud.user_data.lastname %>',
+          pago: payment
+        })
+      }).then(response => {
+        if (response.ok) {
+          alert('Confirmación de agenda');
+        } else {
+          alert('Error al agendar');
+        }
+      });
+    });
   </script>
 
 
