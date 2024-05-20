@@ -322,32 +322,42 @@
   .payment-info {
     text-align: right;
   }
+  .confirmation-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
 </style>
 
 <body>
   <header>
     <h2 class="logo">@ StudyCoop</h2>
-
     <input type="checkbox" id="check">
     <label for="check" class="mostrar-menu">&#8801</label>
     <nav class="menu">
       <a href="/users/dashboard">Volver</a>
       <a href="/users/profile">Mi cuenta</a>
-      <!-- Lista desplegable de ajustes -->
       <div class="dropdown">
         <a class="dropbtn"><i class="fas fa-cog"></i></a>
         <div class="dropdown-content">
           <a href="/logout">Cerrar sesión</a>
         </div>
       </div>
-      <!-- Fin de lista desplegable -->
       <label for="check" class="esconder-menu">&#215</label>
     </nav>  
   </header>
 
   <div id="principal">
     <div class="background-container">
-      <!-- Primer contenedor: Detalles del usuario -->
       <div class="user-details">
         <h3><i class="fas fa-user"></i> <%= user.name %> <%= user.lastname %></h3>
         <div class="user-info">
@@ -356,9 +366,8 @@
         </div>
       </div>
 
-      <!-- Segundo contenedor: Shopping details -->
       <div class="shopping-details">
-        <h3>Shopping Details</h3>
+        <h3>Detalles de la Asesoría</h3>
         <div class="advisor-info">
           <p><strong>Asesoría:</strong> <%= solicitud.materia %></p>
           <p><strong>Día:</strong> <%= new Date(solicitud.fecha_reunion).toLocaleDateString('es-ES', { weekday: 'long' }) %></p>
@@ -367,9 +376,8 @@
           <button id="change-btn" class="change-btn">Aceptar</button>
         </div>
       </div>
-
     </div>
-    <!-- Tercer contenedor: Resumen -->
+
     <div class="summary">
       <h3>Resumen</h3>
       <div class="reservation-info">
@@ -392,27 +400,40 @@
 
     document.getElementById('schedule-btn').addEventListener('click', function () {
       let payment = document.getElementById('payment-display').textContent;
+      if (!payment) {
+        alert('Por favor, llene el campo de forma de pago.');
+        return;
+      }
+
       fetch('/agendar', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          userName: '<%= user.name %>',
-          userEmail: '<%= user.email %>',
+          user_data: {
+            name: '<%= user.name %>',
+            lastname: '<%= user.lastname %>',
+            email: '<%= user.email %>',
+            program: '<%= user.program %>'
+          },
           tema: '<%= solicitud.tema_interes %>',
           fecha: '<%= new Date(solicitud.fecha_reunion).toISOString() %>',
           hora: '<%= solicitud.hora %>',
           tutor: '<%= solicitud.user_data.name %> <%= solicitud.user_data.lastname %>',
-          pago: payment
+          pago: payment,
+          solicitud_id: '<%= solicitud.solicitud_id %>'
         })
-      }).then(response => {
-        if (response.ok) {
-          showConfirmationModal('Confirmación de agenda');
-        } else {
-          showConfirmationModal('Error al agendar');
-        }
-      });
+      }).then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            showConfirmationModal('Confirmación de agenda');
+          } else if (data.error === 'already_scheduled') {
+            showConfirmationModal('Ya has agendado este espacio');
+          } else {
+            showConfirmationModal('Error al agendar');
+          }
+        }).catch(error => console.error('Error al agendar:', error));
     });
 
     function showConfirmationModal(message) {
@@ -431,7 +452,4 @@
       }
     }
   </script>
-
-
-
 </body>

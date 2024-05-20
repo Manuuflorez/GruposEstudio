@@ -285,7 +285,7 @@
             var categorias = ["Matemáticas", "Física", "Programación", "Idiomas", "Derecho", "Pedagogía", "Comunicación", "Administración ", "Estadistica", "Otros"];
             id = '<%= user.id %>';
             password = '<%= user.password %>';
-
+        
             fetch(`/api/publicaciones-usuario/${id}`)
                 .then(response => response.json())
                 .then(async data => {
@@ -302,31 +302,35 @@
                         const agendaUsuarios = document.createElement('p');
                         const editButton = document.createElement('button');
                         const deleteButton = document.createElement('button');
-
+            
                         titulo.textContent = publicacion.tipo_servicio === 'solicitar' ? `Solicitud: ${publicacion.materia}` : `Oferta: ${publicacion.materia}`;
-
+            
                         materia.textContent = `Materia: ${publicacion.materia}`;
                         tema.textContent = `Tema: ${publicacion.tema_interes}`;
                         fecha.textContent = `Fecha de reunión: ${formatDate(publicacion.fecha_reunion)}`;
-
+            
                         // Fetching user names who scheduled the publication
                         try {
                             const agendasResponse = await fetch(`/api/agendas-publicacion/${publicacion.solicitud_id}`);
                             const agendasData = await agendasResponse.json();
-                            agendaUsuarios.textContent = `Usuarios que han agendado: ${agendasData.map(agenda => agenda.user_name).join(', ')}`;
+                            const usuariosAgendados = agendasData.map(agenda => {
+                                const userData = agenda.user_data;
+                                return `${userData.name} ${userData.lastname}`;
+                            }).join(', ');
+                            agendaUsuarios.textContent = `Usuarios que han agendado: ${usuariosAgendados}`;
                         } catch (error) {
                             console.error("Error al obtener las agendas de la publicación:", error);
                             agendaUsuarios.textContent = `Error al obtener los usuarios que han agendado.`;
                         }
-
+            
                         editButton.textContent = 'Editar';
                         deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
-                        deleteButton.setAttribute('data-id', publicacion.solicitud_id); // Agregar ID de la publicación
-
+                        deleteButton.setAttribute('data-id', publicacion.solicitud_id);
+            
                         deleteButton.classList.add('delete-button');
                         editButton.classList.add('edit-button');
                         editButton.setAttribute('data-id', publicacion.solicitud_id);
-
+            
                         editButton.addEventListener('click', () => {
                             const fechaReunion = new Date(publicacion.fecha_reunion);
                             const fechaFormateada = fechaReunion.toISOString().split('T')[0];
@@ -337,7 +341,7 @@
                             document.getElementById('editForm').action = `/api/publicacion/${publicacion.solicitud_id}`;
                             openEditForm();
                         });
-
+            
                         deleteButton.addEventListener('click', () => {
                             showDeleteConfirmation();
                             const modalContainer = document.getElementById("modalContainer");
@@ -352,7 +356,7 @@
                                         setTimeout(() => {
                                             document.getElementById('deleteSuccessMessage').style.display = 'none';
                                         }, 3000);
-
+            
                                         // Actualizar la lista de publicaciones después de eliminar una
                                         container.removeChild(div);
                                     } else {
@@ -365,13 +369,13 @@
                                 }
                             };
                         });
-
+            
                         div.appendChild(titulo);
                         div.appendChild(br);
                         div.appendChild(materia);
                         div.appendChild(tema);
                         div.appendChild(fecha);
-                        div.appendChild(agendaUsuarios); // Adding the paragraph to the div
+                        div.appendChild(agendaUsuarios);
                         div.appendChild(br2);
                         div.appendChild(editButton);
                         div.appendChild(deleteButton);
@@ -379,55 +383,7 @@
                     }
                 })
                 .catch(error => console.error("Error al obtener las publicaciones del usuario:", error));
-
-            function openEditForm() {
-                var editForm = document.getElementById("editarForm");
-                if (editForm.style.display === "none") {
-                    editForm.style.display = "block";
-                } else {
-                    editForm.style.display = "none";
-                }
-            }
-
-            function cancelDelete() {
-                var modalContainer = document.getElementById("modalContainer");
-                modalContainer.style.display = "none";
-            }
-
-            function confirmDelete() {
-                var modalContainer = document.getElementById("modalContainer");
-                modalContainer.style.display = "none";
-            }
-
-            function showDeleteConfirmation() {
-                var modalContainer = document.getElementById("modalContainer");
-                modalContainer.style.display = "block";
-            }
-
-            function generarOpcionesMaterias() {
-                var selectMateria = document.getElementById("materia");
-
-                selectMateria.innerHTML = "";
-
-                var defaultOption = document.createElement("option");
-                defaultOption.value = "";
-                defaultOption.textContent = "Selecciona una materia";
-                defaultOption.disabled = true;
-                defaultOption.selected = true;
-                selectMateria.appendChild(defaultOption);
-
-                categorias.forEach(function (categoria) {
-                    var option = document.createElement("option");
-                    option.value = categoria;
-                    option.textContent = categoria;
-                    selectMateria.appendChild(option);
-                });
-            }
-
-            window.onload = function () {
-                generarOpcionesMaterias();
-            }
-
+            
             function formatDate(dateString) {
                 const fechaReunion = new Date(dateString);
                 const options = {
@@ -438,7 +394,68 @@
                 };
                 return fechaReunion.toLocaleString('en-US', options);
             }
+        
 
+        
+            function openEditForm() {
+                var editForm = document.getElementById("editarForm");
+                if (editForm.style.display === "none") {
+                    editForm.style.display = "block";
+                } else {
+                    editForm.style.display = "none";
+                }
+            }
+        
+            function cancelDelete() {
+                var modalContainer = document.getElementById("modalContainer");
+                modalContainer.style.display = "none";
+            }
+        
+            function confirmDelete() {
+                var modalContainer = document.getElementById("modalContainer");
+                modalContainer.style.display = "none";
+            }
+        
+            function showDeleteConfirmation() {
+                var modalContainer = document.getElementById("modalContainer");
+                modalContainer.style.display = "block";
+            }
+        
+            function generarOpcionesMaterias() {
+                var selectMateria = document.getElementById("materia");
+        
+                selectMateria.innerHTML = "";
+        
+                var defaultOption = document.createElement("option");
+                defaultOption.value = "";
+                defaultOption.textContent = "Selecciona una materia";
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                selectMateria.appendChild(defaultOption);
+        
+                categorias.forEach(function (categoria) {
+                    var option = document.createElement("option");
+                    option.value = categoria;
+                    option.textContent = categoria;
+                    selectMateria.appendChild(option);
+                });
+            }
+        
+            window.onload = function () {
+                generarOpcionesMaterias();
+            }
+        
+            function formatDate(dateString) {
+                const fechaReunion = new Date(dateString);
+                const options = {
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit',
+                    hour12: true
+                };
+                return fechaReunion.toLocaleString('en-US', options);
+            }
+        
             function editUser() {
                 var editForm = document.getElementById("editarUsuarioForm");
                 if (editForm.style.display === "none") {
@@ -447,70 +464,69 @@
                     editForm.style.display = "none";
                 }
             }
-
+        
             function closeEditForm() {
                 document.getElementById('editarUsuarioForm').style.display = 'none';
             }
-
+        
             function mostrarSeccion(seccion) {
                 var secciones = document.querySelectorAll('.container, .container2');
                 secciones.forEach(function (seccion) {
                     seccion.style.display = 'none';
                 });
-
+        
                 document.getElementById(seccion).style.display = 'block';
-
+        
                 // Remueve la clase 'active' de todos los enlaces
                 var links = document.querySelectorAll('.sidebar a');
                 links.forEach(function (link) {
                     link.classList.remove('active');
                 });
-
+        
                 // Agrega la clase 'active' solo al enlace correspondiente a la sección seleccionada
                 document.getElementById(seccion + 'Link').classList.add('active');
             }
-
+        
             document.getElementById("changePasswordForm").addEventListener("submit", function (event) {
                 event.preventDefault();
-
+        
                 var newPassword = document.getElementById("newPassword").value;
                 var confirmPassword = document.getElementById("confirmPassword").value;
-
+        
                 if (newPassword !== confirmPassword) {
                     mostrarModalErrorContrasena();
                 } else {
                     this.submit();
                 }
             });
-
+        
             function mostrarModalErrorContrasena() {
                 var modal = document.getElementById("modalErrorContrasena");
                 modal.style.display = "block";
             }
-
+        
             function cerrarModalErrorContrasena() {
                 var modal = document.getElementById("modalErrorContrasena");
                 modal.style.display = "none";
             }
-
-
+        
             document.getElementById("changeEmailForm").addEventListener("submit", function (event) {
                 event.preventDefault();
-
+        
                 var oldPasswordEmail = document.getElementById("oldPasswordEmail").value;
                 var email = document.getElementById("email").value;
-
+        
                 this.submit();
             });
-
+        
             function desactivarCuenta() {
                 document.getElementById('modalDesactivarCuenta').style.display = 'flex';
             }
-
+        
             function cancelarDesactivacion() {
                 document.getElementById('modalDesactivarCuenta').style.display = 'none';
             }
-
+        
             function confirmarDesactivacion() {
                 fetch(`/users/deactivate/${id}`, {
                     method: 'POST',
@@ -531,11 +547,10 @@
                         alert("Hubo un error al intentar desactivar tu cuenta. Por favor, intenta nuevamente más tarde.");
                     });
             }
-
+        
             function redireccionarLogin() {
                 window.location.href = '/users/login';
             }
-
         </script>
 </body>
 
