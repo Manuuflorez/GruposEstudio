@@ -228,6 +228,16 @@
 
     <div id="publicaciones" class="container2" style="display: none;">
         <h1 style="text-align: center;margin-top: 25px;">Listado de tus publicaciones</h1>
+        <h2 style="text-align: center; margin-top: 25px;">Solicitadas</h2>
+        <div id="solicitadas" style="margin-bottom: 50px;">
+            <!-- Contenedor para las publicaciones solicitadas -->
+        </div>
+        
+        
+        <h2 style="text-align: center; margin-top: 25px;">Ofrecidas</h2>
+        <div id="ofrecidas" style="margin-bottom: 50px;">
+            <!-- Contenedor para las publicaciones ofrecidas -->
+        </div>
 
         <div id="modalContainer"
             style="z-index: 1000; display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
@@ -287,113 +297,124 @@
             password = '<%= user.password %>';
         
             fetch(`/api/publicaciones-usuario/${id}`)
-                .then(response => response.json())
-                .then(async data => {
-                    const container = document.querySelector('.container2');
-                    for (const publicacion of data) {
-                        const div = document.createElement('div');
-                        div.classList.add('recuadro-publicacion'); 
-                        const titulo = document.createElement('h3');
-                        const br = document.createElement('br');
-                        const br2 = document.createElement('br');
-                        const materia = document.createElement('p');
-                        const tema = document.createElement('p');
-                        const fecha = document.createElement('p');
-                        const agendaUsuarios = document.createElement('p');
-                        const editButton = document.createElement('button');
-                        const deleteButton = document.createElement('button');
-            
-                        titulo.textContent = publicacion.tipo_servicio === 'solicitar' ? `Solicitud: ${publicacion.materia}` : `Oferta: ${publicacion.materia}`;
-            
-                        materia.textContent = `Materia: ${publicacion.materia}`;
-                        tema.textContent = `Tema: ${publicacion.tema_interes}`;
-                        fecha.textContent = `Fecha de reunión: ${formatDate(publicacion.fecha_reunion)}`;
-            
-                        // Fetching user names who scheduled the publication
-                        try {
-                            const agendasResponse = await fetch(`/api/agendas-publicacion/${publicacion.solicitud_id}`);
-                            const agendasData = await agendasResponse.json();
-                            const usuariosAgendados = agendasData.map(agenda => {
-                                const userData = agenda.user_data;
-                                return `${userData.name} ${userData.lastname}`;
-                            }).join(', ');
-                            agendaUsuarios.textContent = `Usuarios que han agendado: ${usuariosAgendados}`;
-                        } catch (error) {
-                            console.error("Error al obtener las agendas de la publicación:", error);
-                            agendaUsuarios.textContent = `Error al obtener los usuarios que han agendado.`;
-                        }
-            
-                        editButton.textContent = 'Editar';
-                        deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
-                        deleteButton.setAttribute('data-id', publicacion.solicitud_id);
-            
-                        deleteButton.classList.add('delete-button');
-                        editButton.classList.add('edit-button');
-                        editButton.setAttribute('data-id', publicacion.solicitud_id);
-            
-                        editButton.addEventListener('click', () => {
-                            const fechaReunion = new Date(publicacion.fecha_reunion);
-                            const fechaFormateada = fechaReunion.toISOString().split('T')[0];
-                            document.getElementById('tipo').value = publicacion.tipo_servicio;
-                            document.getElementById('materia').value = publicacion.materia;
-                            document.getElementById('fecha').value = fechaFormateada;
-                            document.getElementById('tema').value = publicacion.tema_interes;
-                            document.getElementById('editForm').action = `/api/publicacion/${publicacion.solicitud_id}`;
-                            openEditForm();
-                        });
-            
-                        deleteButton.addEventListener('click', () => {
-                            showDeleteConfirmation();
-                            const modalContainer = document.getElementById("modalContainer");
-                            const confirmDeleteButton = document.querySelector("#modalContainer button:last-child");
-                            confirmDeleteButton.onclick = async () => {
-                                try {
-                                    const response = await fetch(`/api/eliminar-publicacion/${publicacion.solicitud_id}`, {
-                                        method: 'DELETE'
-                                    });
-                                    if (response.ok) {
-                                        document.getElementById('deleteSuccessMessage').style.display = 'block';
-                                        setTimeout(() => {
-                                            document.getElementById('deleteSuccessMessage').style.display = 'none';
-                                        }, 3000);
-            
-                                        // Actualizar la lista de publicaciones después de eliminar una
-                                        container.removeChild(div);
-                                    } else {
-                                        console.error("Error al intentar eliminar la publicación");
-                                    }
-                                } catch (error) {
-                                    console.error("Error en la solicitud de eliminación:", error);
-                                } finally {
-                                    modalContainer.style.display = "none";
-                                }
-                            };
-                        });
-            
-                        div.appendChild(titulo);
-                        div.appendChild(br);
-                        div.appendChild(materia);
-                        div.appendChild(tema);
-                        div.appendChild(fecha);
-                        div.appendChild(agendaUsuarios);
-                        div.appendChild(br2);
-                        div.appendChild(editButton);
-                        div.appendChild(deleteButton);
-                        container.appendChild(div);
-                    }
-                })
-                .catch(error => console.error("Error al obtener las publicaciones del usuario:", error));
-            
-            function formatDate(dateString) {
-                const fechaReunion = new Date(dateString);
-                const options = {
-                    year: 'numeric',
-                    month: 'short',
-                    day: '2-digit',
-                    hour12: true
-                };
-                return fechaReunion.toLocaleString('en-US', options);
+    .then(response => response.json())
+    .then(async data => {
+        const solicitadasContainer = document.getElementById('solicitadas');
+        const ofrecidasContainer = document.getElementById('ofrecidas');
+        
+        for (const publicacion of data) {
+            const div = document.createElement('div');
+            div.classList.add('recuadro-publicacion'); 
+            const titulo = document.createElement('h3');
+            const br = document.createElement('br');
+            const br2 = document.createElement('br');
+            const materia = document.createElement('p');
+            const tema = document.createElement('p');
+            const fecha = document.createElement('p');
+            const agendaUsuarios = document.createElement('p');
+            const editButton = document.createElement('button');
+            const deleteButton = document.createElement('button');
+
+            titulo.textContent = publicacion.tipo_servicio === 'solicitar' ? `Solicitud: ${publicacion.materia}` : `Oferta: ${publicacion.materia}`;
+
+            materia.textContent = `Materia: ${publicacion.materia}`;
+            tema.textContent = `Tema: ${publicacion.tema_interes}`;
+            fecha.textContent = `Fecha de reunión: ${formatDate(publicacion.fecha_reunion)}`;
+
+            try {
+                const agendasResponse = await fetch(`/api/agendas-publicacion/${publicacion.solicitud_id}`);
+                const agendasData = await agendasResponse.json();
+                const usuariosAgendados = agendasData.map(agenda => {
+                    const userData = agenda.user_data;
+                    return `${userData.name} ${userData.lastname}`;
+                }).join(', ');
+                agendaUsuarios.textContent = `Usuarios que han agendado: ${usuariosAgendados}`;
+            } catch (error) {
+                console.error("Error al obtener las agendas de la publicación:", error);
+                agendaUsuarios.textContent = `Error al obtener los usuarios que han agendado.`;
             }
+
+            editButton.textContent = 'Editar';
+            deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
+            deleteButton.setAttribute('data-id', publicacion.solicitud_id);
+
+            deleteButton.classList.add('delete-button');
+            editButton.classList.add('edit-button');
+            editButton.setAttribute('data-id', publicacion.solicitud_id);
+
+            editButton.addEventListener('click', () => {
+                const fechaReunion = new Date(publicacion.fecha_reunion);
+                const fechaFormateada = fechaReunion.toISOString().split('T')[0];
+                document.getElementById('tipo').value = publicacion.tipo_servicio;
+                document.getElementById('materia').value = publicacion.materia;
+                document.getElementById('fecha').value = fechaFormateada;
+                document.getElementById('tema').value = publicacion.tema_interes;
+                document.getElementById('editForm').action = `/api/publicacion/${publicacion.solicitud_id}`;
+                openEditForm();
+            });
+
+            deleteButton.addEventListener('click', () => {
+                showDeleteConfirmation();
+                const modalContainer = document.getElementById("modalContainer");
+                const confirmDeleteButton = document.querySelector("#modalContainer button:last-child");
+                confirmDeleteButton.onclick = async () => {
+                    try {
+                        const response = await fetch(`/api/eliminar-publicacion/${publicacion.solicitud_id}`, {
+                            method: 'DELETE'
+                        });
+                        if (response.ok) {
+                            document.getElementById('deleteSuccessMessage').style.display = 'block';
+                            setTimeout(() => {
+                                document.getElementById('deleteSuccessMessage').style.display = 'none';
+                            }, 3000);
+
+                            // Actualizar la lista de publicaciones después de eliminar una
+                            if (publicacion.tipo_servicio === 'solicitar') {
+                                solicitadasContainer.removeChild(div);
+                            } else {
+                                ofrecidasContainer.removeChild(div);
+                            }
+                        } else {
+                            console.error("Error al intentar eliminar la publicación");
+                        }
+                    } catch (error) {
+                        console.error("Error en la solicitud de eliminación:", error);
+                    } finally {
+                        modalContainer.style.display = "none";
+                    }
+                };
+            });
+
+            div.appendChild(titulo);
+            div.appendChild(br);
+            div.appendChild(materia);
+            div.appendChild(tema);
+            div.appendChild(fecha);
+            div.appendChild(agendaUsuarios);
+            div.appendChild(br2);
+            div.appendChild(editButton);
+            div.appendChild(deleteButton);
+
+            // Agregar la publicación al contenedor adecuado
+            if (publicacion.tipo_servicio === 'solicitar') {
+                solicitadasContainer.appendChild(div);
+            } else {
+                ofrecidasContainer.appendChild(div);
+            }
+        }
+    })
+    .catch(error => console.error("Error al obtener las publicaciones del usuario:", error));
+
+function formatDate(dateString) {
+    const fechaReunion = new Date(dateString);
+    const options = {
+        year: 'numeric',
+        month: 'short',
+        day: '2-digit',
+        hour12: true
+    };
+    return fechaReunion.toLocaleString('en-US', options);
+}
         
 
         
@@ -553,7 +574,7 @@
             }
         </script>
 </body>
-
+    <!-- Contenedor para las publicaciones ofrecidas -->
 </html>
 
 <style>

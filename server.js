@@ -689,12 +689,25 @@ app.get("/api/solicitudById/:id", async (req, res) => {
 });
 
 app.post('/agendar', async (req, res) => {
-  const { user_data, tema, fecha, hora, tutor, pago, solicitud_id } = req.body;
+  const { tema, fecha, hora, tutor, pago, solicitud_id } = req.body;
+
+
+  // Construir el objeto JSON con los datos del usuario
+  const userData = {
+    id: req.user.id,
+    name: req.user.name,
+    lastname: req.user.lastname,
+    email: req.user.email,
+    document_type: req.user.document_type,
+    id_number: req.user.id_number,
+    program: req.user.program,
+    // Agrega mÃ¡s datos del usuario si es necesario
+  };
 
   try {
     // Verificar si el usuario ya ha agendado esta solicitud
     const checkQuery = `SELECT * FROM agendas WHERE user_data->>'email' = $1 AND tema = $2 AND fecha = $3 AND hora = $4`;
-    const checkResult = await pool.query(checkQuery, [user_data.email, tema, fecha, hora]);
+    const checkResult = await pool.query(checkQuery, [userData.email, tema, fecha, hora]);
 
     if (checkResult.rows.length > 0) {
       return res.json({ success: false, error: 'already_scheduled' });
@@ -702,7 +715,7 @@ app.post('/agendar', async (req, res) => {
 
     // Insertar en la tabla agendas incluyendo solicitud_id
     const insertQuery = `INSERT INTO agendas (user_data, tema, fecha, hora, tutor, pago, solicitud_id) VALUES ($1, $2, $3, $4, $5, $6, $7)`;
-    await pool.query(insertQuery, [user_data, tema, fecha, hora, tutor, pago, solicitud_id]);
+    await pool.query(insertQuery, [userData, tema, fecha, hora, tutor, pago, solicitud_id]);
 
     res.json({ success: true });
   } catch (error) {
@@ -735,33 +748,4 @@ app.post('/agendar', async (req, res) => {
   }
 });*/
 
-// Endpoint para obtener las calificaciones y comentarios
-app.get("/api/calificaciones/:solicitud_id", async (req, res) => {
-  const { solicitud_id } = req.params;
-  try {
-    const result = await pool.query(
-      "SELECT comentario, calificacion, user_name FROM agendas_finalizadas WHERE solicitud_id = $1",
-      [solicitud_id]
-    );
-    res.json(result.rows);
-  } catch (err) {
-    console.error("Error al obtener las calificaciones y comentarios:", err);
-    res.status(500).send("Error al obtener las calificaciones y comentarios");
-  }
-});
-
-// Endpoint para guardar calificaciones y comentarios
-app.post("/api/calificar", async (req, res) => {
-  const { solicitud_id, comentario, calificacion, user_name, user_email, tema, fecha, tutor, pago, hora } = req.body;
-  try {
-    const result = await pool.query(
-      "INSERT INTO agendas_finalizadas (solicitud_id, comentario, calificacion, user_name, user_email, tema, fecha, tutor, pago, hora) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
-      [solicitud_id, comentario, calificacion, user_name, user_email, tema, fecha, tutor, pago, hora]
-    );
-    res.status(201).json({ message: "Calificación y comentario guardados exitosamente" });
-  } catch (err) {
-    console.error("Error al guardar la calificación y comentario:", err);
-    res.status(500).send("Error al guardar la calificación y comentario");
-  }
-});
 
