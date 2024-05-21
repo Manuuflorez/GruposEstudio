@@ -24,7 +24,7 @@ function initialize(passport) {
               return done(null, user);
             } else {
               //password is incorrect
-              return done(null, false, { message: "Password is incorrect" });
+              return done(null, false, { message: "Contraseña incorrecta" });
             }
           });
         } else {
