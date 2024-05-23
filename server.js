@@ -70,19 +70,7 @@ app.get("/users/profile", checkNotAuthenticated, (req, res) => {
 });
 
 // Endpoint para obtener las agendas de una publicación específica
-app.get('/api/agendas-publicacion/:solicitud_id', async (req, res) => {
-    const { solicitud_id } = req.params;
-    try {
-        const result = await pool.query(
-            "SELECT user_data FROM agendas WHERE solicitud_id = $1",
-            [solicitud_id]
-        );
-        res.json(result.rows);
-    } catch (err) {
-        console.error("Error al obtener las agendas de la publicación:", err);
-        res.status(500).send("Error al obtener las agendas de la publicación");
-    }
-});
+
 
 
 app.get("/users/reservas/:id", async (req, res) => {
@@ -748,4 +736,32 @@ app.post('/agendar', async (req, res) => {
   }
 });*/
 
+app.get('/api/agendas-publicacion/:user_id', async (req, res) => {
+  const { user_id } = req.params;
+  try {
+      const result = await pool.query(
+          "SELECT * FROM agendas WHERE user_data->>'id' = $1",
+          [user_id]
+      );
+      res.json(result.rows);
+  } catch (err) {
+      console.error("Error al obtener las agendas de la publicación:", err);
+      res.status(500).send("Error al obtener las agendas de la publicación");
+  }
+});
 
+
+app.get("/users/agendamientos", checkNotAuthenticated, async (req, res) => {
+  try {
+      const userId = req.user.id;
+      const result = await pool.query(
+          "SELECT * FROM agendas WHERE solicitud_id = $1",
+          [userId]
+      );
+      const agendamientos = result.rows;
+      res.render("profile.ejs", { user: req.user, agendamientos });
+  } catch (error) {
+      console.error('Error fetching agendamientos:', error);
+      res.status(500).send("Error fetching agendamientos");
+  }
+});

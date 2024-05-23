@@ -45,6 +45,7 @@
         <a id="desactivarCuentaLink" onclick="desactivarCuenta('modalDesactivarCuenta')"> <i
                 class="fas fa-user-times"></i> Desactivar
             cuenta</a>
+            <a id="agendamientosLink" onclick="mostrarSeccion('agendamientos')"><i class="fas fa-calendar-alt"></i> Agendamientos</a>
     </div>
 
     <div id="modalDesactivarCuenta" class="modal">
@@ -87,6 +88,12 @@
             <button type="submit" style="width: 53%; padding: 15px; background-color: #4d4d5c; color: white; border: none; border-radius: 5px; 
                 cursor: pointer;">Cambiar contraseña</button>
         </form>
+    </div>
+    <div id="agendamientos" class="container" style="display: none;">
+        <h1 style="margin-top: 25px;">Tus Agendamientos</h1>
+        <div id="agendamientosLista">
+            <!-- Aquí se cargarán los agendamientos -->
+        </div>
     </div>
 
     <div id="modalErrorContrasena" class="modal">
@@ -489,24 +496,73 @@ function formatDate(dateString) {
             function closeEditForm() {
                 document.getElementById('editarUsuarioForm').style.display = 'none';
             }
-        
             function mostrarSeccion(seccion) {
-                var secciones = document.querySelectorAll('.container, .container2');
-                secciones.forEach(function (seccion) {
-                    seccion.style.display = 'none';
-                });
-        
-                document.getElementById(seccion).style.display = 'block';
-        
-                // Remueve la clase 'active' de todos los enlaces
-                var links = document.querySelectorAll('.sidebar a');
-                links.forEach(function (link) {
-                    link.classList.remove('active');
-                });
-        
-                // Agrega la clase 'active' solo al enlace correspondiente a la sección seleccionada
-                document.getElementById(seccion + 'Link').classList.add('active');
+    var secciones = ['general', 'publicaciones', 'cambiarContrasena', 'cambiarCorreo', 'agendamientos'];
+    for (var i = 0; i < secciones.length; i++) {
+        var elem = document.getElementById(secciones[i]);
+        var link = document.getElementById(secciones[i] + 'Link');
+        if (secciones[i] === seccion) {
+            elem.style.display = 'block';
+            link.classList.add('active');
+            if (seccion === 'agendamientos') {
+                fetchAgendamientos();
             }
+        } else {
+            elem.style.display = 'none';
+            link.classList.remove('active');
+        }
+    }
+}
+
+
+        
+            document.addEventListener("DOMContentLoaded", function() {
+    mostrarSeccion('general'); // Cambia 'general' por la sección que desees mostrar por defecto
+});
+
+    document.addEventListener("DOMContentLoaded", function() {
+    const userId = '<%= user.id %>';
+    fetch(`/api/agendas-publicacion/${userId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const agendamientosLista = document.getElementById('agendamientosLista');
+            agendamientosLista.innerHTML = ''; // Limpiar contenido previo
+            if (data.length === 0) {
+                agendamientosLista.innerHTML = '<p>No se encontraron agendas.</p>';
+            } else {
+                data.forEach(agenda => {
+                    const agendaItem = document.createElement('div');
+                    agendaItem.className = 'agenda-item';
+                    
+                    const fecha = new Date(agenda.fecha);
+                    const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+                    const fechaFormateada = fecha.toLocaleDateString('es-ES', options);
+
+                    agendaItem.innerHTML = `
+                    
+                        <p><strong>Tema:</strong> ${agenda.tema}</p>
+                        <p><strong>Fecha:</strong> ${fechaFormateada}</p>
+                        <p><strong>Tutor:</strong> ${agenda.tutor}</p>
+                        <p><strong>Pago:</strong> ${agenda.pago}</p>
+                        <p><strong>Hora:</strong> ${agenda.hora}</p>
+                    `;
+                    agendamientosLista.appendChild(agendaItem);
+                });
+            }
+        })
+        .catch(error => console.error('Error fetching profile agendamientos:', error));
+});
+
+
+
+
+
+
         
             document.getElementById("changePasswordForm").addEventListener("submit", function (event) {
                 event.preventDefault();
@@ -938,4 +994,17 @@ function formatDate(dateString) {
         background-color: #f9f9f9;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
+    
+    .agenda-item {
+    border: 1px solid #ccc;
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.agenda-item p {
+    margin: 5px 0;
+}
 </style>
