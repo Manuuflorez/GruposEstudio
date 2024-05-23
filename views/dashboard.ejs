@@ -188,11 +188,15 @@
                 const usuario = document.createElement("p");
                 usuario.textContent = `Publicado por: ${publicacion.user_data.name} ${publicacion.user_data.lastname}`;
 
+                const horario = document.createElement("p");
+                horario.textContent = `Horario: ${publicacion.hora}`;
+
                 detallesContenido.appendChild(titulo);
                 detallesContenido.appendChild(usuario);
                 detallesContenido.appendChild(materia);
                 detallesContenido.appendChild(contenido);
                 detallesContenido.appendChild(info);
+                detallesContenido.appendChild(horario)
 
                 const botonAgendar = document.createElement("button");
                 botonAgendar.textContent = "Agendar Servicio";
