@@ -135,7 +135,7 @@
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
-    left: -160px;
+    left: -140px;
     /* Ajuste para que el menú se abra hacia la izquierda */
   }
 
@@ -175,25 +175,75 @@
     width: 35%;
   }
 
-  .user-details,
-  .shopping-details {
+  .shopping-details-container {
+    display: flex;
+    align-items: center;
+    /* Alinea el contenido verticalmente */
+    background-color: #f9f9f9;
+    /* Fondo opcional */
+    padding: 20px;
+    /* Añade padding para un mejor diseño */
+    border-radius: 20px;
+    /* Bordes redondeados */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    /* Sombra opcional */
+    width: 700px;
+    /* Sombra opcional para mayor efecto */
+    margin: 20px 0;
+    /* Espaciado opcional entre elementos */
+
+  }
+
+  .icono-grande {
+    font-size: 70px;
+    /* Tamaño del icono */
+    margin-right: 20px;
+    margin-top: -50px;
+    /* Espaciado entre el icono y el contenido */
+    color: #555;
+    /* Color del icono */
+  }
+
+  .advisor-info p {
+    margin: 10px 0;
+    /* Espaciado entre los párrafos */
+  }
+
+  .payment-info input {
+    width: 100%;
+    /* Ajusta el ancho del input */
+  }
+
+  .user-details {
     background-color: white;
     padding: 20px;
     margin-top: 30px;
     margin-bottom: 20px;
     flex: 1;
-    float: left;
-
+    width: 700px;
+    border-radius: 20px;
+    /* Ajusta el valor según tus necesidades */
+    padding: 20px;
+    /* Añade padding para un mejor diseño */
+    background-color: #f9f9f9;
+    /* Fondo opcional para resaltar el borde redondeado */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    /* Sombra opcional para mayor efecto */
+    margin: 20px 0;
+    /* Espaciado opcional entre elementos */
   }
 
   .summary {
-    margin-top: 180px;
+    margin-top: 100px;
     background-color: white;
     padding: 20px;
-    margin-right: 100px;
-    width: 35%;
+    margin-right: 70px;
+    width: 30%;
     float: right;
-
+    border-radius: 20px;
+    /* Ajusta el valor según tus necesidades */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    /* Sombra opcional para mayor efecto */
   }
 
   .schedule-btn {
@@ -208,27 +258,28 @@
   }
 
 
-.confirmation-modal {
-  background-color: rgba(255, 255, 255, 0.95);
-  color: black;
-  padding: 30px;
-  text-align: center;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 10px;
-  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
-}
-.confirmation-modal button {
-  padding: 10px 20px;
-  background-color: #4d4d5c;
-  border: none;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 20px;
-}
+  .confirmation-modal {
+    background-color: rgba(255, 255, 255, 0.95);
+    color: black;
+    padding: 30px;
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
+  }
+
+  .confirmation-modal button {
+    padding: 10px 20px;
+    background-color: #4d4d5c;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
 
   #boton-empezar:hover {
     background-color: grey;
@@ -289,6 +340,16 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    border-radius: 20px;
+    /* Ajusta el valor según tus necesidades */
+    padding: 20px;
+    /* Añade padding para un mejor diseño */
+    background-color: #f9f9f9;
+    /* Fondo opcional para resaltar el borde redondeado */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    /* Sombra opcional para mayor efecto */
+    margin: 20px 0;
+    /* Espaciado opcional entre elementos */
   }
 
   .user-info {
@@ -305,23 +366,18 @@
     width: 100%;
   }
 
-  .advisor-info {
-    text-align: left;
-  }
+
 
   .advisor-info p {
     margin-bottom: 10px;
   }
 
-  .advisor-info p strong {
-    display: inline-block;
-    width: 100px;
-    text-align: left;
-  }
+
 
   .payment-info {
     text-align: right;
   }
+
   .confirmation-modal {
     display: flex;
     flex-direction: column;
@@ -353,40 +409,74 @@
         </div>
       </div>
       <label for="check" class="esconder-menu">&#215</label>
-    </nav>  
+    </nav>
   </header>
-
+  <div>
+    <h1 style="text-align: center; margin-top: 50px; margin-bottom: 0px; color: #3c3c45;">Reserva</h1>
+  </div>
   <div id="principal">
     <div class="background-container">
       <div class="user-details">
-        <h3><i class="fas fa-user"></i> <%= user.name %> <%= user.lastname %></h3>
+        <h3><i class="fas fa-user"></i>
+          <%= user.name %>
+            <%= user.lastname %>
+        </h3>
         <div class="user-info">
-          <p>Programa: <%= user.program %></p>
-          <p>Email: <%= user.email %></p>
+          <p><strong><br>Programa:</strong>
+            <%= user.program %>
+          </p>
+          <p><strong><br> &emsp; &emsp; &emsp; &emsp; &emsp;Email:</strong>
+            <%= user.email %>
+          </p>
         </div>
       </div>
 
-      <div class="shopping-details">
-        <h3>Detalles del servicio</h3>
-        <div class="advisor-info">
-          <p><strong>Asesoría:</strong> <%= solicitud.materia %></p>
-          <p><strong>Día:</strong> <%= new Date(solicitud.fecha_reunion).toLocaleDateString('es-ES', { weekday: 'long' }) %></p>
-          <p><strong>Horario:</strong> <%= solicitud.hora %></p>
-          <p class="payment-info"><strong>Forma de pago:</strong> <input type="text" id="payment-input"></p>
-          <button id="change-btn" class="change-btn">Aceptar</button>
+      <div class="shopping-details-container">
+        <i class="fas fa-calendar-alt icono-grande"></i>
+        <div class="shopping-details">
+          <h3>Detalles del servicio</h3>
+          <div class="advisor-info">
+            <p><strong><br>Asesoría:</strong>
+              <%= solicitud.materia %>
+            </p>
+            <p><strong>Día:</strong>
+              <%= new Date(solicitud.fecha_reunion).toLocaleDateString('es-ES', { weekday: 'long' }) %>
+            </p>
+            <p><strong>Horario:</strong>
+              <%= solicitud.hora %>
+            </p>
+            <p class="payment-info"><strong> &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp;
+                &emsp; &emsp;Forma de pago:</strong> <input type="text" id="payment-input"
+                style="width: 30%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+            </p>
+            <button id="change-btn" class="change-btn">Aceptar</button>
+          </div>
         </div>
       </div>
+
     </div>
 
     <div class="summary">
       <h3>Resumen</h3>
       <div class="reservation-info">
-        <p><strong>Día:</strong> <%= new Date(solicitud.fecha_reunion).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) %></p>
-        <p><strong>Horario:</strong> <%= solicitud.hora %></p>
-        <p><strong>Categoría:</strong> <%= solicitud.materia %></p>
-        <p><strong>Tutor:</strong> <%= solicitud.user_data.name %> <%= solicitud.user_data.lastname %></p>
+        <p><strong>Día:</strong>
+          <%= new Date(solicitud.fecha_reunion).toLocaleDateString('es-ES', { day: 'numeric' , month: 'long' ,
+            year: 'numeric' }) %>
+        </p>
+        <p><strong>Horario:</strong>
+          <%= solicitud.hora %>
+        </p>
+        <p><strong>Categoría:</strong>
+          <%= solicitud.materia %>
+        </p>
+        <p><strong>Tutor:</strong>
+          <%= solicitud.user_data.name %>
+            <%= solicitud.user_data.lastname %>
+        </p><br>
       </div>
       <hr>
+      <br>
+
       <p><strong>Pago:</strong> <span id="payment-display"></span></p>
       <button id="schedule-btn" class="schedule-btn">Agendar espacio</button>
     </div>

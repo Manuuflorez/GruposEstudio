@@ -52,11 +52,11 @@
         <div id="resultado-materia" style="display: none;">
             <!-- Aquí se mostrarán los resultados según la materia seleccionada -->
         </div>
-    
+
         <ul id="ultimas-ofrecer">
             <!-- Aquí se mostrarán las últimas solicitudes -->
         </ul>
-    
+
         <!-- Script para obtener las últimas solicitudes -->
         <script>
             document.addEventListener("DOMContentLoaded", () => {
@@ -85,40 +85,40 @@
             });
         </script>
     </div>
-    
+
     <div id="Solicitudes" class="tabcontent">
         <!-- Bloque de Resultado según materia -->
         <div id="resultado-materia" style="display: none;">
             <!-- Aquí se mostrarán los resultados según la materia seleccionada -->
         </div>
-    
+
         <ul id="ultimas-solicitudes">
             <!-- Aquí se mostrarán las últimas solicitudes -->
         </ul>
-    
+
         <!-- Script para obtener las últimas solicitudes -->
         <script>
             var scrollInterval;
-        
+
             document.addEventListener("DOMContentLoaded", () => {
                 fetch("/api/ultimas-publicaciones") // Cambia la ruta de la solicitud
                     .then(response => response.json())
                     .then(data => {
                         const listaPublicaciones = document.getElementById("publicaciones-lista");
                         listaPublicaciones.innerHTML = ""; // Limpiamos la lista antes de agregar las publicaciones
-        
+
                         data.forEach(publicacion => {
                             const div = document.createElement("div");
                             div.className = "publicacion-container";
                             div.setAttribute("data-category", publicacion.materia); // Añadimos el atributo data-category
-        
+
                             const titulo = document.createElement("h3");
                             if (publicacion.tipo_servicio == "solicitar") {
                                 titulo.textContent = "Solicitud " + publicacion.materia;
                             } else {
                                 titulo.textContent = "Asesoría " + publicacion.materia; // Corregimos el texto "Asesoria" a "Asesoría"
                             }
-        
+
                             const info = document.createElement("p");
                             // Convertir la fecha en un objeto de fecha
                             const fecha = new Date(publicacion.fecha_reunion);
@@ -132,7 +132,7 @@
                             const fechaFormateada = `${diaSemana} ${diaMes} de ${nombreMes}`;
                             // Utilizar la fecha formateada en el contenido del párrafo
                             info.textContent = `Día: ${fechaFormateada}`;
-        
+
                             const botonDetalle = document.createElement("button");
                             botonDetalle.textContent = "Ver Detalles";
                             botonDetalle.className = "boton-detalles";
@@ -140,10 +140,10 @@
                                 verDetallesPublicacion(publicacion);
                                 // Puedes agregar aquí la lógica para redirigir al usuario a la página de detalles de la publicación
                             };
-        
+
                             const tema = document.createElement("p");
                             tema.textContent = `Tema: ${publicacion.tema_interes}`;
-        
+
                             div.appendChild(titulo);
                             div.appendChild(info);
                             div.appendChild(tema);
@@ -153,21 +153,21 @@
                     })
                     .catch(error => console.error("Error al obtener las publicaciones:", error));
             });
-        
+
             function verDetallesPublicacion(publicacion) {
                 const detallesContenido = document.getElementById("detallesContenido");
                 detallesContenido.innerHTML = ""; // Limpiamos el contenido antes de agregar los detalles
-        
+
                 const titulo = document.createElement("h3");
                 if (publicacion.tipo_servicio == "solicitar") {
                     titulo.textContent = "Solicitud " + publicacion.materia;
                 } else {
                     titulo.textContent = "Asesoría " + publicacion.materia;
                 }
-        
+
                 const materia = document.createElement("p");
                 materia.textContent = `Materia: ${publicacion.materia}`;
-        
+
                 const fecha = new Date(publicacion.fecha_reunion);
                 // Obtener el día de la semana
                 const diaSemana = obtenerNombreDiaSemana(fecha.getDay());
@@ -181,13 +181,13 @@
                 const fechaFormateada = `${diaSemana} ${diaMes} de ${nombreMes}`;
                 const info = document.createElement("p");
                 info.textContent = `Fecha: ${fechaFormateada}`;
-        
+
                 const contenido = document.createElement("p");
                 contenido.textContent = `Tema: ${publicacion.tema_interes}`;
-        
+
                 const usuario = document.createElement("p");
                 usuario.textContent = `Publicado por: ${publicacion.user_data.name} ${publicacion.user_data.lastname}`;
-        
+
                 detallesContenido.appendChild(titulo);
                 detallesContenido.appendChild(usuario);
                 detallesContenido.appendChild(materia);
@@ -227,29 +227,29 @@
                 botonCerrar.onclick = function () {
                     cerrarDetalles();
                 };
-        
+
                 const verDetalles = document.getElementById("verDetalles");
                 verDetalles.style.display = "block"; // Mostramos los detalles
             }
-        
+
             // Función para cerrar los detalles de la publicación
             function cerrarDetalles() {
                 const verDetalles = document.getElementById("verDetalles");
                 verDetalles.style.display = "none"; // Ocultamos los detalles
             }
-        
+
             // Función para iniciar el desplazamiento continuo
             function startScrolling(amount) {
                 scrollInterval = setInterval(function () {
                     scrollCategorias(amount);
                 }, 100); // Intervalo de tiempo en milisegundos
             }
-        
+
             // Función para detener el desplazamiento continuo
             function stopScrolling() {
                 clearInterval(scrollInterval);
             }
-        
+
             function openTab(evt, tabName) {
                 var i, tabcontent, tablinks;
                 tabcontent = document.getElementsByClassName("tabcontent");
@@ -263,7 +263,7 @@
                 document.getElementById(tabName).style.display = "block";
                 evt.currentTarget.className += " active";
             }
-        
+
             function toggleForm() {
                 var form = document.getElementById("publicarForm");
                 if (form.style.display === "none") {
@@ -272,59 +272,59 @@
                     form.style.display = "none";
                 }
             }
-        
+
             function scrollCategorias(amount) {
                 const container = document.querySelector('.categorias-container2');
                 container.scrollBy({ left: amount, behavior: 'smooth' });
             }
-        
+
             var categorias = ["Matemáticas", "Física", "Programación", "Idiomas", "Derecho", "Pedagogía",
                 "Comunicación", "Administración", "Estadística", "Otros"]; // Corregimos "Administración " a "Administración" y "Estadistica" a "Estadística"
-        
+
             // Función para generar las categorías dinámicamente
             function generarCategorias() {
                 var listaCategorias = document.getElementById("categorias-lista");
                 listaCategorias.innerHTML = ""; // Limpiamos la lista antes de agregar las categorías
-        
+
                 categorias.forEach(function (categoria) {
                     var li = document.createElement("li");
                     li.textContent = categoria;
                     li.className = "categoria";
-                    li.addEventListener("click", function() {
+                    li.addEventListener("click", function () {
                         filtrarPorCategoria(categoria);
                     });
                     listaCategorias.appendChild(li);
                 });
             }
-        
+
             function filtrarPorCategoria(categoria) {
-    // Mostrar solo las publicaciones de la categoría seleccionada
-    const publicaciones = document.querySelectorAll(".publicacion-container");
-    const listaPublicaciones = document.getElementById("publicaciones-lista");
-    listaPublicaciones.innerHTML = ""; // Limpiamos la lista antes de agregar las publicaciones filtradas
+                // Mostrar solo las publicaciones de la categoría seleccionada
+                const publicaciones = document.querySelectorAll(".publicacion-container");
+                const listaPublicaciones = document.getElementById("publicaciones-lista");
+                listaPublicaciones.innerHTML = ""; // Limpiamos la lista antes de agregar las publicaciones filtradas
 
-    publicaciones.forEach(publicacion => {
-        if (publicacion.getAttribute("data-category") === categoria) {
-            listaPublicaciones.appendChild(publicacion); // Agregamos las publicaciones filtradas al principio de la lista
-        }
-    });
+                publicaciones.forEach(publicacion => {
+                    if (publicacion.getAttribute("data-category") === categoria) {
+                        listaPublicaciones.appendChild(publicacion); // Agregamos las publicaciones filtradas al principio de la lista
+                    }
+                });
 
-    // Mostrar el resultado según la materia
-    const resultadoMateria = document.getElementById("resultadoMateria");
-    resultadoMateria.style.display = "block";
-}
-        
-                   function agendarServicio(solicitudId) {
-                        window.location.href = `/users/reservas/${solicitudId}`;
-                }
-        
+                // Mostrar el resultado según la materia
+                const resultadoMateria = document.getElementById("resultadoMateria");
+                resultadoMateria.style.display = "block";
+            }
+
+            function agendarServicio(solicitudId) {
+                window.location.href = `/users/reservas/${solicitudId}`;
+            }
+
             // Función para generar las opciones del select de materias dinámicamente
             function generarOpcionesMaterias() {
                 var selectMateria = document.getElementById("materia");
-        
+
                 // Limpiamos las opciones existentes antes de agregar las nuevas
                 selectMateria.innerHTML = "";
-        
+
                 // Agregamos la opción predeterminada deshabilitada y seleccionada
                 var defaultOption = document.createElement("option");
                 defaultOption.value = "";
@@ -332,7 +332,7 @@
                 defaultOption.disabled = true;
                 defaultOption.selected = true;
                 selectMateria.appendChild(defaultOption);
-        
+
                 // Iteramos sobre las categorías y agregamos cada una como una opción
                 categorias.forEach(function (categoria) {
                     var option = document.createElement("option");
@@ -341,33 +341,33 @@
                     selectMateria.appendChild(option);
                 });
             }
-        
+
             // Llamamos a la función para generar las opciones de materias al cargar la página
             window.onload = function () {
                 generarCategorias();
                 generarOpcionesMaterias();
             };
-        
+
             // Función para obtener el nombre del día de la semana
             function obtenerNombreDiaSemana(diaSemana) {
                 const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
                 return diasSemana[diaSemana];
             }
-        
+
             // Función para obtener el nombre del mes
             function obtenerNombreMes(numeroMes) {
                 const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
                 return nombresMeses[numeroMes];
             }
-        
+
             document.addEventListener("DOMContentLoaded", () => {
                 // Evento para manejar la búsqueda
-                document.getElementById("searchForm").addEventListener("submit", function(event) {
+                document.getElementById("searchForm").addEventListener("submit", function (event) {
                     event.preventDefault(); // Prevenir el envío del formulario
                     const query = document.getElementById("search").value;
                     fetchSearchResults(query);
                 });
-            
+
                 // Función para obtener resultados de búsqueda
                 function fetchSearchResults(query) {
                     fetch(`/api/search?query=${encodeURIComponent(query)}`)
@@ -377,38 +377,67 @@
                         })
                         .catch(error => console.error("Error al buscar:", error));
                 }
-            
+
                 // Función para actualizar los resultados de búsqueda en la interfaz de usuario
                 function updateSearchResults(data) {
                     // Actualizar la lista de servicios y solicitudes con los resultados de búsqueda
                     const serviciosList = document.getElementById("ultimas-ofrecer");
                     const solicitudesList = document.getElementById("ultimas-solicitudes");
-            
+
                     serviciosList.innerHTML = '';
                     solicitudesList.innerHTML = '';
-            
+
                     data.forEach(solicitud => {
-                        const listItem = document.createElement("li");
-                        listItem.innerHTML = `
-                            <div class="solicitud-item">
-                                <p><strong>Tipo de Servicio:</strong> ${solicitud.tipo_servicio}</p>
-                                <p><strong>Materia:</strong> ${solicitud.materia}</p>
-                                <p><strong>Tema de Interés:</strong> ${solicitud.tema_interes}</p>
-                                <p><strong>Fecha de Reunión:</strong> ${solicitud.fecha_reunion}</p>
-                            </div>
-                            <hr>
-                        `;
+                        // Crear el contenedor del cuadro
+                        const div = document.createElement('div');
+                        div.classList.add('recuadro-publicacion');
+
+                        // Crear y añadir los elementos
+                        const titulo = document.createElement('h3');
+                        titulo.textContent = solicitud.tipo_servicio === 'solicitar' ? `Solicitud: ${solicitud.materia}` : `Oferta: ${solicitud.materia}`;
+                        div.appendChild(titulo);
+
+                        const materia = document.createElement('p');
+                        materia.textContent = `Materia: ${solicitud.materia}`;
+                        div.appendChild(materia);
+
+                        const tema = document.createElement('p');
+                        tema.textContent = `Tema: ${solicitud.tema_interes}`;
+                        div.appendChild(tema);
+
+                        const fecha = document.createElement('p');
+                        fecha.textContent = `Fecha de reunión: ${formatDate(solicitud.fecha_reunion)}`;
+                        div.appendChild(fecha);
+
+                        // Añadir botón de "Ver detalles"
+                        const detallesButton = document.createElement('button');
+                        detallesButton.textContent = 'Ver detalles';
+                        detallesButton.className = "boton-detalles";
+                        detallesButton.onclick = () => verDetallesPublicacion(solicitud);
+                        div.appendChild(detallesButton);
+
+                        // Añadir el contenedor al lugar adecuado
                         if (solicitud.tipo_servicio === 'ofrecer') {
-                            serviciosList.appendChild(listItem);
+                            serviciosList.appendChild(div);
                         } else if (solicitud.tipo_servicio === 'solicitar') {
-                            solicitudesList.appendChild(listItem);
+                            solicitudesList.appendChild(div);
                         }
                     });
+
+                    function formatDate(fecha) {
+                        const date = new Date(fecha);
+                        return date.toLocaleDateString('es-ES', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                    }
+
                 }
             });
         </script>
     </div>
-    
+
     <h1 style="text-align: center; margin-top: 50px; margin-bottom: 70px; color: #3c3c45;">Ofrece tus servicios o
         Solicita uno</h1>
 
@@ -419,44 +448,44 @@
 
     <!-- Formulario de Publicación -->
     <div id="publicarForm" class="publicar-form"
-    style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
-    <h2 style="text-align: center; margin-bottom: 20px;">Formulario de Publicación</h2>
-    <button onclick="toggleForm()"
-        style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #555;cursor: pointer;">&times;</button>
-    <form action="/dashboard/publicar" method="post">
-        <input type="hidden" id="user_data" name="user_data" value="<%= user %>">
-        <label for="tipo">Tipo de Publicación:</label><br>
-        <select id="tipo" name="tipo"
-            style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
-            <option value="solicitar">Solicitar Servicio</option>
-            <option value="ofrecer">Ofrecer Servicio</option>
-        </select><br>
-        <label for="materia">Materia:</label><br>
-        <select id="materia" name="materia"
-            style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
-            <option value="" disabled selected>Selecciona una materia</option>
-        </select><br>
-        <label for="fecha">Fecha:</label><br>
-        <input type="date" id="fecha" name="fecha"
-            style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
-        <label for="hora">Hora:</label><br>
-        <select id="hora" name="hora"
-            style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
-            <option value="8-10">8-10</option>
-            <option value="10-12">10-12</option>
-            <option value="12-14">12-14</option>
-            <option value="14-16">14-16</option>
-            <option value="16-18">16-18</option>
-        </select><br><br>
-        <label for="tema">Tema:</label><br>
-        <input type="text" id="tema" name="tema"
-            style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br><br>
-        <button type="submit" onclick="toggleForm()"
-            style="width: 100%; padding: 15px; background-color: #4d4d5c; color: white; border: none; border-radius: 5px; cursor: pointer;">Enviar</button>
-    </form>
-    <button onclick="toggleForm()"
-        style="margin-top: 20px; padding: 15px; width: 100%; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
-</div>
+        style="display: none; background-color: rgba(255, 255, 255, 0.95); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; border-radius: 20px; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);">
+        <h2 style="text-align: center; margin-bottom: 20px;">Formulario de Publicación</h2>
+        <button onclick="toggleForm()"
+            style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #555;cursor: pointer;">&times;</button>
+        <form action="/dashboard/publicar" method="post">
+            <input type="hidden" id="user_data" name="user_data" value="<%= user %>">
+            <label for="tipo">Tipo de Publicación:</label><br>
+            <select id="tipo" name="tipo"
+                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+                <option value="solicitar">Solicitar Servicio</option>
+                <option value="ofrecer">Ofrecer Servicio</option>
+            </select><br>
+            <label for="materia">Materia:</label><br>
+            <select id="materia" name="materia"
+                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+                <option value="" disabled selected>Selecciona una materia</option>
+            </select><br>
+            <label for="fecha">Fecha:</label><br>
+            <input type="date" id="fecha" name="fecha"
+                style="width: 94%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+            <label for="hora">Hora:</label><br>
+            <select id="hora" name="hora"
+                style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+                <option value="8-10">8-10</option>
+                <option value="10-12">10-12</option>
+                <option value="12-14">12-14</option>
+                <option value="14-16">14-16</option>
+                <option value="16-18">16-18</option>
+            </select><br><br>
+            <label for="tema">Tema:</label><br>
+            <input type="text" id="tema" name="tema"
+                style="width: 94%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br><br>
+            <button type="submit" onclick="toggleForm()"
+                style="width: 100%; padding: 15px; background-color: #4d4d5c; color: white; border: none; border-radius: 5px; cursor: pointer;">Enviar</button>
+        </form>
+        <button onclick="toggleForm()"
+            style="margin-top: 20px; padding: 15px; width: 100%; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
+    </div>
     <hr style="margin-top: 20px; border: none;margin-bottom: 30px; border-top: 1px solid #ccc;">
 
     <!-- Detalles de la publicación -->
@@ -468,7 +497,7 @@
             style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #555;cursor: pointer;">&times;</button>
         <!-- Fin del botón de cerrar -->
         <div id="detallesContenido" style="margin-bottom: 20px;"></div>
-    
+
     </div>
 
     <!-- Espacio para categorías -->
@@ -484,7 +513,7 @@
 
     <hr style="margin-top: 15px; border: none; border-top: 1px solid #ccc;">
 
-    
+
 
     <div id="publicaciones-lista" class="publicaciones-filtradas">
         <!-- Contenido de las publicaciones filtradas -->
@@ -501,152 +530,152 @@
             <!-- Las publicaciones recientes se agregarán aquí dinámicamente -->
         </div>
     </div>
-</div>
+    </div>
 
-<!-- Contenido posterior -->
+    <!-- Contenido posterior -->
 
-<script>
-    // Función para iniciar el desplazamiento continuo
-    var scrollInterval;
+    <script>
+        // Función para iniciar el desplazamiento continuo
+        var scrollInterval;
 
-    function startScrolling(amount) {
-        scrollInterval = setInterval(function () {
-            scrollCategorias(amount);
-        }, 100); // Intervalo de tiempo en milisegundos
-    }
+        function startScrolling(amount) {
+            scrollInterval = setInterval(function () {
+                scrollCategorias(amount);
+            }, 100); // Intervalo de tiempo en milisegundos
+        }
 
-    // Función para detener el desplazamiento continuo
-    function stopScrolling() {
-        clearInterval(scrollInterval);
-    }
+        // Función para detener el desplazamiento continuo
+        function stopScrolling() {
+            clearInterval(scrollInterval);
+        }
 
-    var categorias = ["Matemáticas", "Física", "Programación", "Idiomas", "Derecho", "Pedagogía",
-        "Comunicación", "Administración", "Estadística", "Otros"];
+        var categorias = ["Matemáticas", "Física", "Programación", "Idiomas", "Derecho", "Pedagogía",
+            "Comunicación", "Administración", "Estadística", "Otros"];
 
-    // Función para generar las categorías dinámicamente
-    function generarCategorias() {
-        var listaCategorias = document.getElementById("categorias-lista");
-        listaCategorias.innerHTML = ""; // Limpiamos la lista antes de agregar las categorías
+        // Función para generar las categorías dinámicamente
+        function generarCategorias() {
+            var listaCategorias = document.getElementById("categorias-lista");
+            listaCategorias.innerHTML = ""; // Limpiamos la lista antes de agregar las categorías
 
-        categorias.forEach(function (categoria) {
-            var li = document.createElement("li");
-            li.textContent = categoria;
-            li.className = "categoria";
-            li.addEventListener("click", function () {
-                filtrarPorCategoria(categoria);
-            });
-            listaCategorias.appendChild(li);
-        });
-    }
-
-    // Función para generar las opciones del select de materias dinámicamente
-    function generarOpcionesMaterias() {
-        var selectMateria = document.getElementById("materia");
-
-        // Limpiamos las opciones existentes antes de agregar las nuevas
-        selectMateria.innerHTML = "";
-
-        // Agregamos la opción predeterminada deshabilitada y seleccionada
-        var defaultOption = document.createElement("option");
-        defaultOption.value = "";
-        defaultOption.textContent = "Selecciona una materia";
-        defaultOption.disabled = true;
-        defaultOption.selected = true;
-        selectMateria.appendChild(defaultOption);
-
-        // Iteramos sobre las categorías y agregamos cada una como una opción
-        categorias.forEach(function (categoria) {
-            var option = document.createElement("option");
-            option.value = categoria;
-            option.textContent = categoria;
-            selectMateria.appendChild(option);
-        });
-    }
-
-    // Llamamos a las funciones para generar las categorías y opciones de materias al cargar la página
-    window.onload = function () {
-        generarCategorias();
-        generarOpcionesMaterias();
-        obtenerPublicacionesRecientes();
-    };
-
-    // Función para obtener y mostrar las publicaciones más recientes
-    function obtenerPublicacionesRecientes() {
-        fetch("/api/ultimas-publicaciones")
-            .then(response => response.json())
-            .then(data => {
-                const listaPublicaciones = document.getElementById("publicaciones-recientes");
-                listaPublicaciones.innerHTML = ""; // Limpiamos la lista antes de agregar las publicaciones
-
-                data.forEach(publicacion => {
-                    const div = document.createElement("div");
-                    div.className = "publicacion-container";
-                    div.setAttribute("data-category", publicacion.materia);
-
-                    const titulo = document.createElement("h3");
-                    if (publicacion.tipo_servicio == "solicitar") {
-                        titulo.textContent = "Solicitud " + publicacion.materia;
-                    } else {
-                        titulo.textContent = "Asesoría " + publicacion.materia;
-                    }
-
-                    const info = document.createElement("p");
-                    const fecha = new Date(publicacion.fecha_reunion);
-                    const diaSemana = obtenerNombreDiaSemana(fecha.getDay());
-                    const diaMes = fecha.getDate();
-                    const nombreMes = obtenerNombreMes(fecha.getMonth());
-                    const fechaFormateada = `${diaSemana} ${diaMes} de ${nombreMes}`;
-                    info.textContent = `Día: ${fechaFormateada}`;
-
-                    const botonDetalle = document.createElement("button");
-                    botonDetalle.textContent = "Ver Detalles";
-                    botonDetalle.className = "boton-detalles";
-                    botonDetalle.onclick = function () {
-                        verDetallesPublicacion(publicacion);
-                    };
-
-                    const tema = document.createElement("p");
-                    tema.textContent = `Tema: ${publicacion.tema_interes}`;
-
-                    div.appendChild(titulo);
-                    div.appendChild(info);
-                    div.appendChild(tema);
-                    div.appendChild(botonDetalle);
-                    listaPublicaciones.appendChild(div);
+            categorias.forEach(function (categoria) {
+                var li = document.createElement("li");
+                li.textContent = categoria;
+                li.className = "categoria";
+                li.addEventListener("click", function () {
+                    filtrarPorCategoria(categoria);
                 });
-            })
-            .catch(error => console.error("Error al obtener las publicaciones:", error));
-    }
+                listaCategorias.appendChild(li);
+            });
+        }
 
-    // Función para filtrar las publicaciones por categoría
-    function filtrarPorCategoria(categoria) {
-        const publicaciones = document.querySelectorAll(".publicacion-container");
-        publicaciones.forEach(publicacion => {
-            // Verificamos si la publicación está dentro del contenedor de las últimas publicaciones recientes
-            if (!publicacion.closest("#publicaciones-recientes")) {
-                // Si no está dentro del contenedor de las últimas publicaciones recientes, aplicamos el filtro
-                if (publicacion.getAttribute("data-category") === categoria) {
-                    publicacion.style.display = "block";
-                } else {
-                    publicacion.style.display = "none";
+        // Función para generar las opciones del select de materias dinámicamente
+        function generarOpcionesMaterias() {
+            var selectMateria = document.getElementById("materia");
+
+            // Limpiamos las opciones existentes antes de agregar las nuevas
+            selectMateria.innerHTML = "";
+
+            // Agregamos la opción predeterminada deshabilitada y seleccionada
+            var defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.textContent = "Selecciona una materia";
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
+            selectMateria.appendChild(defaultOption);
+
+            // Iteramos sobre las categorías y agregamos cada una como una opción
+            categorias.forEach(function (categoria) {
+                var option = document.createElement("option");
+                option.value = categoria;
+                option.textContent = categoria;
+                selectMateria.appendChild(option);
+            });
+        }
+
+        // Llamamos a las funciones para generar las categorías y opciones de materias al cargar la página
+        window.onload = function () {
+            generarCategorias();
+            generarOpcionesMaterias();
+            obtenerPublicacionesRecientes();
+        };
+
+        // Función para obtener y mostrar las publicaciones más recientes
+        function obtenerPublicacionesRecientes() {
+            fetch("/api/ultimas-publicaciones")
+                .then(response => response.json())
+                .then(data => {
+                    const listaPublicaciones = document.getElementById("publicaciones-recientes");
+                    listaPublicaciones.innerHTML = ""; // Limpiamos la lista antes de agregar las publicaciones
+
+                    data.forEach(publicacion => {
+                        const div = document.createElement("div");
+                        div.className = "publicacion-container";
+                        div.setAttribute("data-category", publicacion.materia);
+
+                        const titulo = document.createElement("h3");
+                        if (publicacion.tipo_servicio == "solicitar") {
+                            titulo.textContent = "Solicitud " + publicacion.materia;
+                        } else {
+                            titulo.textContent = "Asesoría " + publicacion.materia;
+                        }
+
+                        const info = document.createElement("p");
+                        const fecha = new Date(publicacion.fecha_reunion);
+                        const diaSemana = obtenerNombreDiaSemana(fecha.getDay());
+                        const diaMes = fecha.getDate();
+                        const nombreMes = obtenerNombreMes(fecha.getMonth());
+                        const fechaFormateada = `${diaSemana} ${diaMes} de ${nombreMes}`;
+                        info.textContent = `Día: ${fechaFormateada}`;
+
+                        const botonDetalle = document.createElement("button");
+                        botonDetalle.textContent = "Ver Detalles";
+                        botonDetalle.className = "boton-detalles";
+                        botonDetalle.onclick = function () {
+                            verDetallesPublicacion(publicacion);
+                        };
+
+                        const tema = document.createElement("p");
+                        tema.textContent = `Tema: ${publicacion.tema_interes}`;
+
+                        div.appendChild(titulo);
+                        div.appendChild(info);
+                        div.appendChild(tema);
+                        div.appendChild(botonDetalle);
+                        listaPublicaciones.appendChild(div);
+                    });
+                })
+                .catch(error => console.error("Error al obtener las publicaciones:", error));
+        }
+
+        // Función para filtrar las publicaciones por categoría
+        function filtrarPorCategoria(categoria) {
+            const publicaciones = document.querySelectorAll(".publicacion-container");
+            publicaciones.forEach(publicacion => {
+                // Verificamos si la publicación está dentro del contenedor de las últimas publicaciones recientes
+                if (!publicacion.closest("#publicaciones-recientes")) {
+                    // Si no está dentro del contenedor de las últimas publicaciones recientes, aplicamos el filtro
+                    if (publicacion.getAttribute("data-category") === categoria) {
+                        publicacion.style.display = "block";
+                    } else {
+                        publicacion.style.display = "none";
+                    }
                 }
-            }
-        });
-    }
+            });
+        }
 
-    // Función para obtener el nombre del día de la semana
-    function obtenerNombreDiaSemana(diaSemana) {
-        const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-        return diasSemana[diaSemana];
-    }
+        // Función para obtener el nombre del día de la semana
+        function obtenerNombreDiaSemana(diaSemana) {
+            const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+            return diasSemana[diaSemana];
+        }
 
-    // Función para obtener el nombre del mes
-    function obtenerNombreMes(numeroMes) {
-        const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-        return nombresMeses[numeroMes];
-    }
-</script>
-        
+        // Función para obtener el nombre del mes
+        function obtenerNombreMes(numeroMes) {
+            const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+            return nombresMeses[numeroMes];
+        }
+    </script>
+
 
 </body>
 
@@ -663,46 +692,49 @@
     }
 
     .dropdown {
-            position: relative;
-            display: inline-block;
-        }
+        position: relative;
+        display: inline-block;
+    }
 
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-            left: -160px; /* Ajuste para que el menú se abra hacia la izquierda */
-        }
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        left: -140px;
+        /* Ajuste para que el menú se abra hacia la izquierda */
+    }
 
-        .dropdown-content a {
-            color: #4d4d5c !important;
-            padding: 12px 16px !important; 
-            text-decoration: none !important;
-            display: block !important;
-        }
+    .dropdown-content a {
+        color: #4d4d5c !important;
+        padding: 12px 16px !important;
+        text-decoration: none !important;
+        display: block !important;
+    }
 
-        .dropdown-content a:hover {
-            background-color: #f1f1f1e1;
-        }
+    .dropdown-content a:hover {
+        background-color: #f1f1f1e1;
+    }
 
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
 
     .publicaciones-container {
         overflow-x: auto;
         white-space: nowrap;
         padding: 10px 0;
     }
-   
+
     /* Estilo CSS para el contenedor de publicaciones filtradas */
     .publicaciones-filtradas {
         display: flex;
-        flex-wrap: nowrap; /* Para que las publicaciones no se envuelvan */
-        overflow-x: auto; /* Para habilitar el desplazamiento horizontal */
+        flex-wrap: nowrap;
+        /* Para que las publicaciones no se envuelvan */
+        overflow-x: auto;
+        /* Para habilitar el desplazamiento horizontal */
     }
 
 

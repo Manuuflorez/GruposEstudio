@@ -42,10 +42,11 @@
             contraseña</a>
         <a id="cambiarCorreoLink" onclick="mostrarSeccion('cambiarCorreo')"><i class="fas fa-envelope"></i> Cambiar
             correo</a>
+        <a id="agendamientosLink" onclick="mostrarSeccion('agendamientos')"><i class="fas fa-calendar-alt"></i>
+            Agendamientos</a>
         <a id="desactivarCuentaLink" onclick="desactivarCuenta('modalDesactivarCuenta')"> <i
                 class="fas fa-user-times"></i> Desactivar
             cuenta</a>
-            <a id="agendamientosLink" onclick="mostrarSeccion('agendamientos')"><i class="fas fa-calendar-alt"></i> Agendamientos</a>
     </div>
 
     <div id="modalDesactivarCuenta" class="modal">
@@ -79,8 +80,7 @@
                 style="width: 50%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
             <label for="newPassword">Nueva contraseña:</label><br>
             <input type="password" id="newPassword" name="newPassword" required minlength="8"
-            
-            title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial"
+                title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial"
                 style="width: 50%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
             <label for="confirmPassword">Confirmar nueva contraseña:</label><br>
             <input type="password" id="confirmPassword" name="confirmPassword" required
@@ -145,10 +145,10 @@
             <form id="editUserForm" method="POST" action="/users/update/<%= user.id %>">
                 <label for="name" style="margin-bottom: 10px;">Nombre:</label><br>
                 <input type="text" id="name" name="name" value="<%= user.name %>" required
-                    style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+                    style="width: 92%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
                 <label for="lastname" style="margin-bottom: 10px;">Apellido:</label><br>
                 <input type="text" id="lastname" name="lastname" value="<%= user.lastname %>" required
-                    style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+                    style="width: 92%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
                 <label for="document_type" style="margin-bottom: 10px;">Tipo de Documento:</label><br>
                 <div style="position: relative;">
                     <select id="document_type" name="document_type" required
@@ -163,7 +163,7 @@
                 </div>
                 <label for="id_number" style="margin-bottom: 10px;">Número de Documento:</label><br>
                 <input type="text" id="id_number" name="id_number" value="<%= user.id_number %>" required
-                    style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+                    style="width: 92%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
                 <label for="program" style="margin-bottom: 10px;">Programa:</label><br>
                 <div style="position: relative;">
                     <select id="program" name="program" required
@@ -239,8 +239,8 @@
         <div id="solicitadas" style="margin-bottom: 50px;">
             <!-- Contenedor para las publicaciones solicitadas -->
         </div>
-        
-        
+
+
         <h2 style="text-align: center; margin-top: 25px;">Ofrecidas</h2>
         <div id="ofrecidas" style="margin-bottom: 50px;">
             <!-- Contenedor para las publicaciones ofrecidas -->
@@ -287,10 +287,10 @@
                 </select><br>
                 <label for="fecha">Fecha:</label><br>
                 <input type="date" id="fecha" name="fecha"
-                    style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
+                    style="width: 92%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br>
                 <label for="tema">Tema:</label><br>
                 <input type="text" id="tema" name="tema"
-                    style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br><br>
+                    style="width: 92%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;"><br><br>
                 <button type="submit"
                     style="width: 100%; padding: 15px; background-color: #4d4d5c; color: white; border: none; border-radius: 5px; cursor: pointer;">Actualizar</button>
             </form>
@@ -302,177 +302,116 @@
             var categorias = ["Matemáticas", "Física", "Programación", "Idiomas", "Derecho", "Pedagogía", "Comunicación", "Administración ", "Estadistica", "Otros"];
             id = '<%= user.id %>';
             password = '<%= user.password %>';
-        
+
             fetch(`/api/publicaciones-usuario/${id}`)
-    .then(response => response.json())
-    .then(async data => {
-        const solicitadasContainer = document.getElementById('solicitadas');
-        const ofrecidasContainer = document.getElementById('ofrecidas');
-        
-        for (const publicacion of data) {
-            const div = document.createElement('div');
-            div.classList.add('recuadro-publicacion'); 
-            const titulo = document.createElement('h3');
-            const br = document.createElement('br');
-            const br2 = document.createElement('br');
-            const materia = document.createElement('p');
-            const tema = document.createElement('p');
-            const fecha = document.createElement('p');
-            const agendaUsuarios = document.createElement('p');
-            const editButton = document.createElement('button');
-            const deleteButton = document.createElement('button');
+                .then(response => response.json())
+                .then(async data => {
+                    const solicitadasContainer = document.getElementById('solicitadas');
+                    const ofrecidasContainer = document.getElementById('ofrecidas');
 
-            titulo.textContent = publicacion.tipo_servicio === 'solicitar' ? `Solicitud: ${publicacion.materia}` : `Oferta: ${publicacion.materia}`;
+                    for (const publicacion of data) {
+                        const div = document.createElement('div');
+                        div.classList.add('recuadro-publicacion');
+                        const titulo = document.createElement('h3');
+                        const br = document.createElement('br');
+                        const br2 = document.createElement('br');
+                        const materia = document.createElement('p');
+                        const tema = document.createElement('p');
+                        const fecha = document.createElement('p');
+                        const agendaUsuarios = document.createElement('p');
+                        const editButton = document.createElement('button');
+                        const deleteButton = document.createElement('button');
 
-            materia.textContent = `Materia: ${publicacion.materia}`;
-            tema.textContent = `Tema: ${publicacion.tema_interes}`;
-            fecha.textContent = `Fecha de reunión: ${formatDate(publicacion.fecha_reunion)}`;
+                        titulo.textContent = publicacion.tipo_servicio === 'solicitar' ? `Solicitud: ${publicacion.materia}` : `Oferta: ${publicacion.materia}`;
 
-            try {
-                const agendasResponse = await fetch(`/api/agendas-publicacion/${publicacion.solicitud_id}`);
-                const agendasData = await agendasResponse.json();
-                const usuariosAgendados = agendasData.map(agenda => {
-                    const userData = agenda.user_data;
-                    return `${userData.name} ${userData.lastname}`;
-                }).join(', ');
-                agendaUsuarios.textContent = `Usuarios que han agendado: ${usuariosAgendados}`;
-            } catch (error) {
-                console.error("Error al obtener las agendas de la publicación:", error);
-                agendaUsuarios.textContent = `Error al obtener los usuarios que han agendado.`;
-            }
+                        materia.textContent = `Materia: ${publicacion.materia}`;
+                        tema.textContent = `Tema: ${publicacion.tema_interes}`;
+                        fecha.textContent = `Fecha de reunión: ${formatDate(publicacion.fecha_reunion)}`;
 
-            editButton.textContent = 'Editar';
-            deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
-            deleteButton.setAttribute('data-id', publicacion.solicitud_id);
-
-            deleteButton.classList.add('delete-button');
-            editButton.classList.add('edit-button');
-            editButton.setAttribute('data-id', publicacion.solicitud_id);
-
-            editButton.addEventListener('click', () => {
-                const fechaReunion = new Date(publicacion.fecha_reunion);
-                const fechaFormateada = fechaReunion.toISOString().split('T')[0];
-                document.getElementById('tipo').value = publicacion.tipo_servicio;
-                document.getElementById('materia').value = publicacion.materia;
-                document.getElementById('fecha').value = fechaFormateada;
-                document.getElementById('tema').value = publicacion.tema_interes;
-                document.getElementById('editForm').action = `/api/publicacion/${publicacion.solicitud_id}`;
-                openEditForm();
-            });
-
-            deleteButton.addEventListener('click', () => {
-                showDeleteConfirmation();
-                const modalContainer = document.getElementById("modalContainer");
-                const confirmDeleteButton = document.querySelector("#modalContainer button:last-child");
-                confirmDeleteButton.onclick = async () => {
-                    try {
-                        const response = await fetch(`/api/eliminar-publicacion/${publicacion.solicitud_id}`, {
-                            method: 'DELETE'
-                        });
-                        if (response.ok) {
-                            document.getElementById('deleteSuccessMessage').style.display = 'block';
-                            setTimeout(() => {
-                                document.getElementById('deleteSuccessMessage').style.display = 'none';
-                            }, 3000);
-
-                            // Actualizar la lista de publicaciones después de eliminar una
-                            if (publicacion.tipo_servicio === 'solicitar') {
-                                solicitadasContainer.removeChild(div);
-                            } else {
-                                ofrecidasContainer.removeChild(div);
-                            }
-                        } else {
-                            console.error("Error al intentar eliminar la publicación");
+                        try {
+                            const agendasResponse = await fetch(`/api/agendas-publicacion/${publicacion.solicitud_id}`);
+                            const agendasData = await agendasResponse.json();
+                            const usuariosAgendados = agendasData.map(agenda => {
+                                const userData = agenda.user_data;
+                                return `${userData.name} ${userData.lastname}`;
+                            }).join(', ');
+                            agendaUsuarios.textContent = `Usuarios que han agendado: ${usuariosAgendados}`;
+                        } catch (error) {
+                            console.error("Error al obtener las agendas de la publicación:", error);
+                            agendaUsuarios.textContent = `Error al obtener los usuarios que han agendado.`;
                         }
-                    } catch (error) {
-                        console.error("Error en la solicitud de eliminación:", error);
-                    } finally {
-                        modalContainer.style.display = "none";
+
+                        editButton.textContent = 'Editar';
+                        deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
+                        deleteButton.setAttribute('data-id', publicacion.solicitud_id);
+
+                        deleteButton.classList.add('delete-button');
+                        editButton.classList.add('edit-button');
+                        editButton.setAttribute('data-id', publicacion.solicitud_id);
+
+                        editButton.addEventListener('click', () => {
+                            const fechaReunion = new Date(publicacion.fecha_reunion);
+                            const fechaFormateada = fechaReunion.toISOString().split('T')[0];
+                            document.getElementById('tipo').value = publicacion.tipo_servicio;
+                            document.getElementById('materia').value = publicacion.materia;
+                            document.getElementById('fecha').value = fechaFormateada;
+                            document.getElementById('tema').value = publicacion.tema_interes;
+                            document.getElementById('editForm').action = `/api/publicacion/${publicacion.solicitud_id}`;
+                            openEditForm();
+                        });
+
+                        deleteButton.addEventListener('click', () => {
+                            showDeleteConfirmation();
+                            const modalContainer = document.getElementById("modalContainer");
+                            const confirmDeleteButton = document.querySelector("#modalContainer button:last-child");
+                            confirmDeleteButton.onclick = async () => {
+                                try {
+                                    const response = await fetch(`/api/eliminar-publicacion/${publicacion.solicitud_id}`, {
+                                        method: 'DELETE'
+                                    });
+                                    if (response.ok) {
+                                        document.getElementById('deleteSuccessMessage').style.display = 'block';
+                                        setTimeout(() => {
+                                            document.getElementById('deleteSuccessMessage').style.display = 'none';
+                                        }, 3000);
+
+                                        // Actualizar la lista de publicaciones después de eliminar una
+                                        if (publicacion.tipo_servicio === 'solicitar') {
+                                            solicitadasContainer.removeChild(div);
+                                        } else {
+                                            ofrecidasContainer.removeChild(div);
+                                        }
+                                    } else {
+                                        console.error("Error al intentar eliminar la publicación");
+                                    }
+                                } catch (error) {
+                                    console.error("Error en la solicitud de eliminación:", error);
+                                } finally {
+                                    modalContainer.style.display = "none";
+                                }
+                            };
+                        });
+
+                        div.appendChild(titulo);
+                        div.appendChild(br);
+                        div.appendChild(materia);
+                        div.appendChild(tema);
+                        div.appendChild(fecha);
+                        div.appendChild(agendaUsuarios);
+                        div.appendChild(br2);
+                        div.appendChild(editButton);
+                        div.appendChild(deleteButton);
+
+                        // Agregar la publicación al contenedor adecuado
+                        if (publicacion.tipo_servicio === 'solicitar') {
+                            solicitadasContainer.appendChild(div);
+                        } else {
+                            ofrecidasContainer.appendChild(div);
+                        }
                     }
-                };
-            });
+                })
+                .catch(error => console.error("Error al obtener las publicaciones del usuario:", error));
 
-            div.appendChild(titulo);
-            div.appendChild(br);
-            div.appendChild(materia);
-            div.appendChild(tema);
-            div.appendChild(fecha);
-            div.appendChild(agendaUsuarios);
-            div.appendChild(br2);
-            div.appendChild(editButton);
-            div.appendChild(deleteButton);
-
-            // Agregar la publicación al contenedor adecuado
-            if (publicacion.tipo_servicio === 'solicitar') {
-                solicitadasContainer.appendChild(div);
-            } else {
-                ofrecidasContainer.appendChild(div);
-            }
-        }
-    })
-    .catch(error => console.error("Error al obtener las publicaciones del usuario:", error));
-
-function formatDate(dateString) {
-    const fechaReunion = new Date(dateString);
-    const options = {
-        year: 'numeric',
-        month: 'short',
-        day: '2-digit',
-        hour12: true
-    };
-    return fechaReunion.toLocaleString('en-US', options);
-}
-        
-
-        
-            function openEditForm() {
-                var editForm = document.getElementById("editarForm");
-                if (editForm.style.display === "none") {
-                    editForm.style.display = "block";
-                } else {
-                    editForm.style.display = "none";
-                }
-            }
-        
-            function cancelDelete() {
-                var modalContainer = document.getElementById("modalContainer");
-                modalContainer.style.display = "none";
-            }
-        
-            function confirmDelete() {
-                var modalContainer = document.getElementById("modalContainer");
-                modalContainer.style.display = "none";
-            }
-        
-            function showDeleteConfirmation() {
-                var modalContainer = document.getElementById("modalContainer");
-                modalContainer.style.display = "block";
-            }
-        
-            function generarOpcionesMaterias() {
-                var selectMateria = document.getElementById("materia");
-        
-                selectMateria.innerHTML = "";
-        
-                var defaultOption = document.createElement("option");
-                defaultOption.value = "";
-                defaultOption.textContent = "Selecciona una materia";
-                defaultOption.disabled = true;
-                defaultOption.selected = true;
-                selectMateria.appendChild(defaultOption);
-        
-                categorias.forEach(function (categoria) {
-                    var option = document.createElement("option");
-                    option.value = categoria;
-                    option.textContent = categoria;
-                    selectMateria.appendChild(option);
-                });
-            }
-        
-            window.onload = function () {
-                generarOpcionesMaterias();
-            }
-        
             function formatDate(dateString) {
                 const fechaReunion = new Date(dateString);
                 const options = {
@@ -483,7 +422,68 @@ function formatDate(dateString) {
                 };
                 return fechaReunion.toLocaleString('en-US', options);
             }
-        
+
+
+
+            function openEditForm() {
+                var editForm = document.getElementById("editarForm");
+                if (editForm.style.display === "none") {
+                    editForm.style.display = "block";
+                } else {
+                    editForm.style.display = "none";
+                }
+            }
+
+            function cancelDelete() {
+                var modalContainer = document.getElementById("modalContainer");
+                modalContainer.style.display = "none";
+            }
+
+            function confirmDelete() {
+                var modalContainer = document.getElementById("modalContainer");
+                modalContainer.style.display = "none";
+            }
+
+            function showDeleteConfirmation() {
+                var modalContainer = document.getElementById("modalContainer");
+                modalContainer.style.display = "block";
+            }
+
+            function generarOpcionesMaterias() {
+                var selectMateria = document.getElementById("materia");
+
+                selectMateria.innerHTML = "";
+
+                var defaultOption = document.createElement("option");
+                defaultOption.value = "";
+                defaultOption.textContent = "Selecciona una materia";
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                selectMateria.appendChild(defaultOption);
+
+                categorias.forEach(function (categoria) {
+                    var option = document.createElement("option");
+                    option.value = categoria;
+                    option.textContent = categoria;
+                    selectMateria.appendChild(option);
+                });
+            }
+
+            window.onload = function () {
+                generarOpcionesMaterias();
+            }
+
+            function formatDate(dateString) {
+                const fechaReunion = new Date(dateString);
+                const options = {
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit',
+                    hour12: true
+                };
+                return fechaReunion.toLocaleString('en-US', options);
+            }
+
             function editUser() {
                 var editForm = document.getElementById("editarUsuarioForm");
                 if (editForm.style.display === "none") {
@@ -492,58 +492,58 @@ function formatDate(dateString) {
                     editForm.style.display = "none";
                 }
             }
-        
+
             function closeEditForm() {
                 document.getElementById('editarUsuarioForm').style.display = 'none';
             }
             function mostrarSeccion(seccion) {
-    var secciones = ['general', 'publicaciones', 'cambiarContrasena', 'cambiarCorreo', 'agendamientos'];
-    for (var i = 0; i < secciones.length; i++) {
-        var elem = document.getElementById(secciones[i]);
-        var link = document.getElementById(secciones[i] + 'Link');
-        if (secciones[i] === seccion) {
-            elem.style.display = 'block';
-            link.classList.add('active');
-            if (seccion === 'agendamientos') {
-                fetchAgendamientos();
+                var secciones = ['general', 'publicaciones', 'cambiarContrasena', 'cambiarCorreo', 'agendamientos'];
+                for (var i = 0; i < secciones.length; i++) {
+                    var elem = document.getElementById(secciones[i]);
+                    var link = document.getElementById(secciones[i] + 'Link');
+                    if (secciones[i] === seccion) {
+                        elem.style.display = 'block';
+                        link.classList.add('active');
+                        if (seccion === 'agendamientos') {
+                            fetchAgendamientos();
+                        }
+                    } else {
+                        elem.style.display = 'none';
+                        link.classList.remove('active');
+                    }
+                }
             }
-        } else {
-            elem.style.display = 'none';
-            link.classList.remove('active');
-        }
-    }
-}
 
 
-        
-            document.addEventListener("DOMContentLoaded", function() {
-    mostrarSeccion('general'); // Cambia 'general' por la sección que desees mostrar por defecto
-});
 
-    document.addEventListener("DOMContentLoaded", function() {
-    const userId = '<%= user.id %>';
-    fetch(`/api/agendas-publicacion/${userId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            const agendamientosLista = document.getElementById('agendamientosLista');
-            agendamientosLista.innerHTML = ''; // Limpiar contenido previo
-            if (data.length === 0) {
-                agendamientosLista.innerHTML = '<p>No se encontraron agendas.</p>';
-            } else {
-                data.forEach(agenda => {
-                    const agendaItem = document.createElement('div');
-                    agendaItem.className = 'agenda-item';
-                    
-                    const fecha = new Date(agenda.fecha);
-                    const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
-                    const fechaFormateada = fecha.toLocaleDateString('es-ES', options);
+            document.addEventListener("DOMContentLoaded", function () {
+                mostrarSeccion('general'); // Cambia 'general' por la sección que desees mostrar por defecto
+            });
 
-                    agendaItem.innerHTML = `
+            document.addEventListener("DOMContentLoaded", function () {
+                const userId = '<%= user.id %>';
+                fetch(`/api/agendas-publicacion/${userId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const agendamientosLista = document.getElementById('agendamientosLista');
+                        agendamientosLista.innerHTML = ''; // Limpiar contenido previo
+                        if (data.length === 0) {
+                            agendamientosLista.innerHTML = '<p>No se encontraron agendas.</p>';
+                        } else {
+                            data.forEach(agenda => {
+                                const agendaItem = document.createElement('div');
+                                agendaItem.className = 'agenda-item';
+
+                                const fecha = new Date(agenda.fecha);
+                                const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+                                const fechaFormateada = fecha.toLocaleDateString('es-ES', options);
+
+                                agendaItem.innerHTML = `
                     
                         <p><strong>Tema:</strong> ${agenda.tema}</p>
                         <p><strong>Fecha:</strong> ${fechaFormateada}</p>
@@ -551,59 +551,59 @@ function formatDate(dateString) {
                         <p><strong>Pago:</strong> ${agenda.pago}</p>
                         <p><strong>Hora:</strong> ${agenda.hora}</p>
                     `;
-                    agendamientosLista.appendChild(agendaItem);
-                });
-            }
-        })
-        .catch(error => console.error('Error fetching profile agendamientos:', error));
-});
+                                agendamientosLista.appendChild(agendaItem);
+                            });
+                        }
+                    })
+                    .catch(error => console.error('Error fetching profile agendamientos:', error));
+            });
 
 
 
 
 
 
-        
+
             document.getElementById("changePasswordForm").addEventListener("submit", function (event) {
                 event.preventDefault();
-        
+
                 var newPassword = document.getElementById("newPassword").value;
                 var confirmPassword = document.getElementById("confirmPassword").value;
-        
+
                 if (newPassword !== confirmPassword) {
                     mostrarModalErrorContrasena();
                 } else {
                     this.submit();
                 }
             });
-        
+
             function mostrarModalErrorContrasena() {
                 var modal = document.getElementById("modalErrorContrasena");
                 modal.style.display = "block";
             }
-        
+
             function cerrarModalErrorContrasena() {
                 var modal = document.getElementById("modalErrorContrasena");
                 modal.style.display = "none";
             }
-        
+
             document.getElementById("changeEmailForm").addEventListener("submit", function (event) {
                 event.preventDefault();
-        
+
                 var oldPasswordEmail = document.getElementById("oldPasswordEmail").value;
                 var email = document.getElementById("email").value;
-        
+
                 this.submit();
             });
-        
+
             function desactivarCuenta() {
                 document.getElementById('modalDesactivarCuenta').style.display = 'flex';
             }
-        
+
             function cancelarDesactivacion() {
                 document.getElementById('modalDesactivarCuenta').style.display = 'none';
             }
-        
+
             function confirmarDesactivacion() {
                 fetch(`/users/deactivate/${id}`, {
                     method: 'POST',
@@ -624,13 +624,14 @@ function formatDate(dateString) {
                         alert("Hubo un error al intentar desactivar tu cuenta. Por favor, intenta nuevamente más tarde.");
                     });
             }
-        
+
             function redireccionarLogin() {
                 window.location.href = '/users/login';
             }
         </script>
 </body>
-    <!-- Contenedor para las publicaciones ofrecidas -->
+<!-- Contenedor para las publicaciones ofrecidas -->
+
 </html>
 
 <style>
@@ -994,17 +995,17 @@ function formatDate(dateString) {
         background-color: #f9f9f9;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    
-    .agenda-item {
-    border: 1px solid #ccc;
-    padding: 16px;
-    margin-bottom: 16px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
-.agenda-item p {
-    margin: 5px 0;
-}
+    .agenda-item {
+        border: 1px solid #ccc;
+        padding: 16px;
+        margin-bottom: 16px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .agenda-item p {
+        margin: 5px 0;
+    }
 </style>
